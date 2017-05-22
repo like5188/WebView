@@ -36,7 +36,7 @@ public class CustomWebChromeClient extends WebChromeClient {
 
     @Override
     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-        Logger.d("HyBridChromeClient onConsoleMessage=" + consoleMessage.message());
+        Logger.d("WebView", "HyBridChromeClient onConsoleMessage=" + consoleMessage.message());
         return super.onConsoleMessage(consoleMessage);
     }
 

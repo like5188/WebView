@@ -121,7 +121,7 @@ public class CustomWebViewClient extends WebViewClient {
 
         // 对网页中超链接按钮的响应。当按下某个连接时WebViewClient会调用这个方法，并传递参数：按下的url。
         String url = request.toString();
-        Logger.w("CustomWebViewClient shouldOverrideUrlLoading url=" + url);
+        Logger.d("WebView", "CustomWebViewClient shouldOverrideUrlLoading url=" + url);
         Uri uri = Uri.parse(url);
         String scheme = uri.getScheme();
 
@@ -137,7 +137,7 @@ public class CustomWebViewClient extends WebViewClient {
             }
             return super.shouldOverrideUrlLoading(view, url);
         } else if (UrlHandler.HTTP.equalsIgnoreCase(scheme) || UrlHandler.HTTPS.equalsIgnoreCase(scheme)) {
-            Logger.d("shouldOverrideUrlLoading = " + url);
+            Logger.d("WebView", "shouldOverrideUrlLoading = " + url);
             view.loadUrl(url);
             return true;
         } else if (UrlHandler.TEL.equalsIgnoreCase(scheme)) {
@@ -152,7 +152,7 @@ public class CustomWebViewClient extends WebViewClient {
             sendToEmail(addresses, null);
             return true;
         } else if (url.equals("file:///android_asset/reload")) {
-            Logger.d("webview reload");
+            Logger.d("WebView", "webview reload");
             if (!TextUtils.isEmpty(sCurUrl)) {
                 view.loadUrl(sCurUrl);
                 // 延迟清空历史纪录，就能把错误页面清空。
