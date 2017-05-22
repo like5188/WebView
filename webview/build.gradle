@@ -54,3 +54,6 @@ dependencies {
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')
+
+// 未解决bug
+// 1、华为32位手机在加载腾讯x5内核浏览器的.so文件是报错
