@@ -23,3 +23,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#TBS浏览器服务
+-dontwarn com.tencent.smtt.sdk.**
+#WebView中，解决混淆后导致的问题
+-keepclassmembers class * extends android.webkit.WebChromeClient {
+   public void openFileChooser(...);
+}
+-keep class android.webkit.JavascriptInterface {*;}
+-keep public class com.like.commonlib.JavascriptObject{
+    public void gotoOrderConfirm(...);
+}
