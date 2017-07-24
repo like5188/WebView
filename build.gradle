@@ -2,11 +2,11 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
-        classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'// 上传jitPack
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -16,7 +16,9 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }

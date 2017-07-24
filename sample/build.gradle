@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -35,7 +34,7 @@ dependencies {
     compile rootProject.ext.deps.appcompat_v7
     testCompile rootProject.ext.deps.junit
 
-    annotationProcessor rootProject.ext.deps.rxbus_compiler
+    annotationProcessor 'com.github.like5188.RxBus:rxbus-compiler:1.0.1'
 
     compile project(':webview')
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -21,15 +20,6 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
-
-    dataBinding {
-        enabled true
-    }
     compileOptions {
         sourceCompatibility rootProject.ext.sourceCompatibility
         targetCompatibility rootProject.ext.targetCompatibility
@@ -49,11 +39,11 @@ dependencies {
     compile rootProject.ext.deps.appcompat_v7
     testCompile rootProject.ext.deps.junit
 
-    compile rootProject.ext.deps.Logger
-    compile rootProject.ext.deps.rxbus
+    compile 'com.github.like5188:Logger:1.0.3'
+    compile 'com.github.like5188.RxBus:rxbus:1.0.1'
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')
 
 // 未解决bug
-// 1、华为32位手机在加载腾讯x5内核浏览器的.so文件是报错
+// 1、华为32位手机在加载腾讯x5内核浏览器的.so文件时报错

@@ -1,19 +1,14 @@
 ext {
     minSdkVersion = 16
-    targetSdkVersion = 25
-    compileSdkVersion = 25
-    buildToolsVersion = "25.0.2"
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.0"
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
     deps = [
             appcompat_v7            : "com.android.support:appcompat-v7:${compileSdkVersion}.+",
             junit                   : "junit:junit:4.12",
-
-            // 自己写的库
-            rxbus_compiler          : "com.github.like5188.RxBus:rxbus-compiler:1.0.0",
-            rxbus                   : "com.github.like5188.RxBus:rxbus:1.0.0",
-            Logger                  : "com.github.like5188:Logger:1.0.0",
     ]
 
 }
