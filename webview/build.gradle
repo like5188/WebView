@@ -1,14 +1,23 @@
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 16
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
+        // Specifies the ABI configurations of your native
+        // libraries Gradle should build and package with your APK.
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -20,14 +29,14 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility rootProject.ext.sourceCompatibility
-        targetCompatibility rootProject.ext.targetCompatibility
-    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -36,11 +45,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile rootProject.ext.deps.appcompat_v7
-    testCompile rootProject.ext.deps.junit
+    compile "com.android.support:appcompat-v7:26.0.0-alpha1"
+    testCompile "junit:junit:4.12"
 
-    compile 'com.github.like5188:Logger:1.0.3'
-    compile 'com.github.like5188.RxBus:rxbus:1.0.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    kapt 'com.android.databinding:compiler:2.3.3'
+
+    compile 'com.github.like5188:Logger:2.0.0'
+    compile 'com.github.like5188.RxBus:rxbus:2.0.1'
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')

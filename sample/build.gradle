@@ -1,12 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.like.webview.sample"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 16
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -21,8 +24,8 @@ android {
         enabled true
     }
     compileOptions {
-        sourceCompatibility rootProject.ext.sourceCompatibility
-        targetCompatibility rootProject.ext.targetCompatibility
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -31,10 +34,13 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile rootProject.ext.deps.appcompat_v7
-    testCompile rootProject.ext.deps.junit
+    compile "com.android.support:appcompat-v7:26.0.0-alpha1"
+    testCompile "junit:junit:4.12"
 
-    annotationProcessor 'com.github.like5188.RxBus:rxbus-compiler:1.0.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    kapt 'com.android.databinding:compiler:2.3.3'
+
+    kapt 'com.github.like5188.RxBus:rxbus-compiler:2.0.1'
 
     compile project(':webview')
 }
