@@ -70,6 +70,7 @@ public class CustomWebView extends WebView {
     public static final String TAG_WEBVIEW_RECEIVED_TITLE = "WebView_onReceivedTitle";
     public static final String TAG_WEBVIEW_PAGE_STARTED = "WebView_onPageStarted";
     public static final String TAG_WEBVIEW_PAGE_FINISHED = "WebView_onPageFinished";
+    public Context mContext;
 
     public CustomWebView(Context context) {
         this(context, null);
@@ -77,17 +78,14 @@ public class CustomWebView extends WebView {
 
     public CustomWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-        initWebSettings();// 初始化WebSettings
-        setWebViewClient(new CustomWebViewClient((Activity) context));
-        setWebChromeClient(new CustomWebChromeClient());
+        this.mContext = context;
     }
 
-    @SuppressLint("AddJavascriptInterface")
-    private void init() {
+    @SuppressLint({"AddJavascriptInterface", "JavascriptInterface"})
+    public void init(Object JavascriptObject) {
         // 支持获取手势焦点
         requestFocusFromTouch();
-        addJavascriptInterface(new JavascriptObject(this), "androidAPI");
+        addJavascriptInterface(JavascriptObject, "androidAPI");
         setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && CustomWebView.this.canGoBack()) {
                 CustomWebView.this.goBack();
@@ -95,6 +93,9 @@ public class CustomWebView extends WebView {
             }
             return false;
         });
+        initWebSettings();// 初始化WebSettings
+        setWebViewClient(new CustomWebViewClient((Activity) mContext));
+        setWebChromeClient(new CustomWebChromeClient());
     }
 
     @SuppressLint("SetJavaScriptEnabled")

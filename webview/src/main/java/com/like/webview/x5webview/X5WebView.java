@@ -17,6 +17,7 @@ public class X5WebView extends WebView {
     public static final String TAG_WEBVIEW_RECEIVED_TITLE = "WebView_onReceivedTitle";
     public static final String TAG_WEBVIEW_PAGE_STARTED = "WebView_onPageStarted";
     public static final String TAG_WEBVIEW_PAGE_FINISHED = "WebView_onPageFinished";
+    public Context mContext;
 
     public X5WebView(Context context) {
         this(context, null);
@@ -24,16 +25,13 @@ public class X5WebView extends WebView {
 
     public X5WebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-        initWebSettings();// 初始化WebSettings
-        setWebViewClient(new X5WebViewClient());
-        setWebChromeClient(new X5WebChromeClient((Activity) context));
+        this.mContext = context;
     }
 
-    private void init() {
+    public void init(Object JavascriptObject) {
         // 支持获取手势焦点
         requestFocusFromTouch();
-        addJavascriptInterface(new X5JavascriptObject(this), "androidAPI");
+        addJavascriptInterface(JavascriptObject, "androidAPI");
         getView().setOnKeyListener((v, keyCode, event) -> {// 此处必须用getView()，因为TBS对WebView进行了封装
             if (keyCode == KeyEvent.KEYCODE_BACK && X5WebView.this.canGoBack()) {
                 X5WebView.this.goBack();
@@ -41,6 +39,9 @@ public class X5WebView extends WebView {
             }
             return false;
         });
+        initWebSettings();// 初始化WebSettings
+        setWebViewClient(new X5WebViewClient());
+        setWebChromeClient(new X5WebChromeClient((Activity) mContext));
     }
 
     @SuppressLint("SetJavaScriptEnabled")

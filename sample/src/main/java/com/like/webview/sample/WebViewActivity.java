@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.like.webview.androidwebview.JavascriptObject;
 import com.like.webview.sample.databinding.ActivityWebviewBinding;
 import com.tencent.smtt.sdk.QbSdk;
 
@@ -18,6 +19,7 @@ public class WebViewActivity extends AppCompatActivity {
         QbSdk.initX5Environment(this, null);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         viewModel = new WebViewViewModel(mBinding);
+        mBinding.webView.init(new JavascriptObject(mBinding.webView));
         String url = "https://www.baidu.com";
         mBinding.webView.loadUrl(url);
 
