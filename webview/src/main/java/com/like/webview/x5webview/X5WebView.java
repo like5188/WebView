@@ -26,12 +26,12 @@ public class X5WebView extends WebView {
     public X5WebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
+        init();
     }
 
-    public void init(Object JavascriptObject) {
+    public void init() {
         // 支持获取手势焦点
         requestFocusFromTouch();
-        addJavascriptInterface(JavascriptObject, "androidAPI");
         getView().setOnKeyListener((v, keyCode, event) -> {// 此处必须用getView()，因为TBS对WebView进行了封装
             if (keyCode == KeyEvent.KEYCODE_BACK && X5WebView.this.canGoBack()) {
                 X5WebView.this.goBack();

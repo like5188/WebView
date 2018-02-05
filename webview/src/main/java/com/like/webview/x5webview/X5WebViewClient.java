@@ -3,6 +3,8 @@ package com.like.webview.x5webview;
 import android.graphics.Bitmap;
 
 import com.like.rxbus.RxBus;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -28,6 +30,31 @@ public class X5WebViewClient extends WebViewClient {
         // 我们可以可以在此时关闭加载动画，进行其他操作。
         // 注意：由于浏览器内核有可能导致该结束的时候不结束，不该结束的时候提前结束。可以用
         RxBus.post(X5WebView.TAG_WEBVIEW_PAGE_FINISHED, url);
+    }
+
+    //网络错误时回调的方法
+    @Override
+    public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
+        super.onReceivedError(webView, webResourceRequest, webResourceError);
+        // 该方法在web页面加载错误时回调，这些错误通常都是由无法与服务器正常连接引起的，最常见的就是网络问题。
+        // 在这里写网络错误时的逻辑,比如显示一个错误页面
+        // 这个方法有两个地方需要注意：
+        // 1.这个方法只在与服务器无法正常连接时调用，类似于服务器返回错误码的那种错误（即HTTP ERROR），该方法是不会回调的，
+        // 因为你已经和服务器正常连接上了（全怪官方文档(︶^︶)）；
+        // 2.这个方法是新版本的onReceivedError()方法，从API23开始引进，
+        // 与旧方法onReceivedError(WebView view,int errorCode,String description,String failingUrl)不同的是，
+        // 新方法在页面局部加载发生错误时也会被调用（比如页面里两个子Tab或者一张图片）。
+        // 这就意味着该方法的调用频率可能会更加频繁，所以我们应该在该方法里执行尽量少的操作。
+
+        webView.stopLoading();
+        webView.loadUrl("file:///android_asset/loadfailed.html");
+        // 延迟清空历史纪录，就能把错误页面清空。
+        webView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                webView.clearHistory();
+            }
+        }, 1000);
     }
 
     @Override

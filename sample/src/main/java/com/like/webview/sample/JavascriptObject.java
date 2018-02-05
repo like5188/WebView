@@ -1,14 +1,16 @@
-package com.like.webview.x5webview;
+package com.like.webview.sample;
 
 import android.webkit.JavascriptInterface;
 
+import com.like.webview.x5webview.X5WebView;
+
 /**
- * 用于与web页面进行交互
+ * 用于与web页面进行交互的实例代码
  */
-public class X5JavascriptObject {
+public class JavascriptObject {
     private X5WebView mWebView;
 
-    public X5JavascriptObject(X5WebView webView) {
+    public JavascriptObject(X5WebView webView) {
         mWebView = webView;
     }
 

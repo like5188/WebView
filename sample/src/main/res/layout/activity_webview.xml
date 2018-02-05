@@ -54,21 +54,10 @@
                 android:text="刷新" />
         </LinearLayout>
 
-        <FrameLayout
+        <com.like.webview.x5webview.X5ProgressBarWebView
+            android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <com.like.webview.androidwebview.CustomWebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:visibility="gone" />
-        </FrameLayout>
     </LinearLayout>
 </layout>

@@ -79,13 +79,12 @@ public class CustomWebView extends WebView {
     public CustomWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
+        init();
     }
 
-    @SuppressLint({"AddJavascriptInterface", "JavascriptInterface"})
-    public void init(Object JavascriptObject) {
+    public void init() {
         // 支持获取手势焦点
         requestFocusFromTouch();
-        addJavascriptInterface(JavascriptObject, "androidAPI");
         setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK && CustomWebView.this.canGoBack()) {
                 CustomWebView.this.goBack();
