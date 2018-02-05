@@ -19,7 +19,6 @@ class X5WebView extends FrameLayout {
     private Context mContext;
     private View mErrorView;
     private WebView mWebView;
-    private X5WebViewClient mX5WebViewClient;
 
     public X5WebView(Context context) {
         this(context, null);
@@ -45,8 +44,8 @@ class X5WebView extends FrameLayout {
             return false;
         });
         initWebSettings();// 初始化WebSettings
-        mX5WebViewClient = new X5WebViewClient(this);
-        mWebView.setWebViewClient(mX5WebViewClient);
+        mWebView.setWebViewClient(new X5WebViewClient());
+        mWebView.setWebChromeClient(new X5WebChromeClient((Activity) mContext));
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -109,29 +108,29 @@ class X5WebView extends FrameLayout {
         settings.setDefaultTextEncodingName("UTF-8");
     }
 
-    public X5WebView setX5ProgressBarWebView(X5ProgressBarWebView x5ProgressBarWebView) {
-        mWebView.setWebChromeClient(new X5WebChromeClient((Activity) mContext, mX5WebViewClient, x5ProgressBarWebView));
-        return this;
-    }
-
     public X5WebView setErrorView(View view) {
         mErrorView = view;
         mErrorView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         addView(mErrorView, 0);
+        mErrorView.setVisibility(View.GONE);
         return this;
     }
 
     public void showErrorView() {
-        if (mErrorView != null && mWebView != null) {
-            mWebView.setVisibility(View.GONE);
+        if (mErrorView != null && mErrorView.getVisibility() != View.VISIBLE) {
             mErrorView.setVisibility(View.VISIBLE);
+        }
+        if (mWebView != null && mWebView.getVisibility() != View.GONE) {
+            mWebView.setVisibility(View.GONE);
         }
     }
 
     public void showWebView() {
-        if (mErrorView != null && mWebView != null) {
-            mWebView.setVisibility(View.VISIBLE);
+        if (mErrorView != null && mErrorView.getVisibility() != View.GONE) {
             mErrorView.setVisibility(View.GONE);
+        }
+        if (mWebView != null && mWebView.getVisibility() != View.VISIBLE) {
+            mWebView.setVisibility(View.VISIBLE);
         }
     }
 

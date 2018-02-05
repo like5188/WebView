@@ -20,8 +20,7 @@ public class WebViewActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         viewModel = new WebViewViewModel(mBinding);
 //        getWebView().addJavascriptInterface(new JavascriptObject(getWebView()), "androidAPI");
-        mBinding.webView.setErrorView(View.inflate(this, R.layout.error, null));
-        String url = "https://www.baidu.com";
+        String url = "http://www.haodf.com/";
         getWebView().loadUrl(url);
 
     }

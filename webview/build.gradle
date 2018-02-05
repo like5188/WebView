@@ -53,6 +53,7 @@ dependencies {
 
     compile 'com.github.like5188:Logger:2.0.0'
     compile 'com.github.like5188.RxBus:rxbus:2.0.1'
+    kapt 'com.github.like5188.RxBus:rxbus-compiler:2.0.1'
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')

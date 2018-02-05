@@ -12,11 +12,8 @@ import com.tencent.smtt.sdk.WebViewClient;
  * 帮助WebView处理各种通知和请求事件的
  */
 public class X5WebViewClient extends WebViewClient {
-    private X5WebView mX5WebView;
-    private boolean isErrorPage;
 
-    public X5WebViewClient(X5WebView x5WebView) {
-        mX5WebView = x5WebView;
+    public X5WebViewClient() {
     }
 
     //页面开始加载时
@@ -35,10 +32,6 @@ public class X5WebViewClient extends WebViewClient {
         // 该方法只在WebView完成一个页面加载时调用一次（同样也只在Main frame loading时调用），
         // 我们可以可以在此时关闭加载动画，进行其他操作。
         // 注意：由于浏览器内核有可能导致该结束的时候不结束，不该结束的时候提前结束。可以用
-        if (!isErrorPage) {
-            webView.clearHistory();
-            mX5WebView.showWebView();
-        }
         RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_FINISHED, url);
     }
 
@@ -55,7 +48,7 @@ public class X5WebViewClient extends WebViewClient {
         // 与旧方法onReceivedError(WebView view,int errorCode,String description,String failingUrl)不同的是，
         // 新方法在页面局部加载发生错误时也会被调用（比如页面里两个子Tab或者一张图片）。
         // 这就意味着该方法的调用频率可能会更加频繁，所以我们应该在该方法里执行尽量少的操作。
-        showErrorView(webView);
+        RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
     }
 
     @Override
@@ -68,16 +61,4 @@ public class X5WebViewClient extends WebViewClient {
         return true;
     }
 
-    public void showErrorView(WebView webView) {
-        if (!mX5WebView.isErrorViewShow()) {
-            mX5WebView.showErrorView();
-            mX5WebView.getErrorView().setOnClickListener(v -> {
-                isErrorPage = false;
-                webView.reload();
-            });
-        }
-        webView.stopLoading();
-        webView.clearHistory();
-        isErrorPage = true;
-    }
 }

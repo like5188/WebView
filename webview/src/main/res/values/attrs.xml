@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="X5ProgressBarWebView">
+        <attr name="error_view_res_id" format="reference|integer" />
+    </declare-styleable>
+
+</resources>

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +25,9 @@ public class X5WebChromeClient extends WebChromeClient {
     private FrameLayout mDecorView;
     private FrameLayout mFullscreenContainer;
     private IX5WebChromeClient.CustomViewCallback mCustomViewCallback;
-    private X5WebViewClient mX5WebViewClient;
-    private X5ProgressBarWebView mX5ProgressBarWebView;
 
-    public X5WebChromeClient(Activity activity, X5WebViewClient x5WebViewClient, X5ProgressBarWebView x5ProgressBarWebView) {
+    public X5WebChromeClient(Activity activity) {
         mActivity = activity;
-        mX5WebViewClient = x5WebViewClient;
-        mX5ProgressBarWebView = x5ProgressBarWebView;
         mDecorView = (FrameLayout) activity.getWindow().getDecorView();
     }
 
@@ -54,10 +48,7 @@ public class X5WebChromeClient extends WebChromeClient {
     @Override
     public void onProgressChanged(WebView webView, int i) {
         super.onProgressChanged(webView, i);
-        if (!isNetworkAvailable(webView.getContext())) {
-            mX5WebViewClient.showErrorView(webView);
-        }
-        mX5ProgressBarWebView.onProgressChanged(i);
+        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_ON_PROGRESS_CHANGED, i);
     }
 
     /**
@@ -124,27 +115,6 @@ public class X5WebChromeClient extends WebChromeClient {
         public boolean onTouchEvent(MotionEvent evt) {
             return true;
         }
-    }
-
-    /**
-     * 获取网络类型
-     *
-     * @param context
-     * @return
-     */
-    private boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null && info.isConnected()) {
-                // 当前网络是连接的
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    // 当前所连接的网络可用
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 }
