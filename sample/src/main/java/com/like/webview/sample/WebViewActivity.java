@@ -19,7 +19,7 @@ public class WebViewActivity extends AppCompatActivity {
         QbSdk.initX5Environment(this, null);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         viewModel = new WebViewViewModel(mBinding);
-//        getWebView().addJavascriptInterface(new JavascriptObject(getWebView()), "androidAPI");
+        getWebView().addJavascriptInterface(new JavascriptObject(), "androidAPI");
         String url = "http://www.haodf.com/";
         getWebView().loadUrl(url);
 

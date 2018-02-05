@@ -47,6 +47,10 @@ public class X5ProgressBarWebView extends LinearLayout {
         return mWebView.getWebView();
     }
 
+    public void addJavascriptInterface(Object javascriptInterface, String name) {
+        getWebView().addJavascriptInterface(javascriptInterface, name);
+    }
+
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         RxBus.register(this);
         // 添加进度条
