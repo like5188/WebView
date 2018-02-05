@@ -70,6 +70,7 @@ public class CustomWebView extends WebView {
     public static final String TAG_WEBVIEW_RECEIVED_TITLE = "WebView_onReceivedTitle";
     public static final String TAG_WEBVIEW_PAGE_STARTED = "WebView_onPageStarted";
     public static final String TAG_WEBVIEW_PAGE_FINISHED = "WebView_onPageFinished";
+    public static final String TAG_WEBVIEW_ON_RECEIVED_ERROR = "WebView_onReceivedError";
     public Context mContext;
 
     public CustomWebView(Context context) {
@@ -82,7 +83,7 @@ public class CustomWebView extends WebView {
         init();
     }
 
-    public void init() {
+    private void init() {
         // 支持获取手势焦点
         requestFocusFromTouch();
         setOnKeyListener((v, keyCode, event) -> {

@@ -12,6 +12,12 @@ import com.tencent.smtt.sdk.WebViewClient;
  * 帮助WebView处理各种通知和请求事件的
  */
 public class X5WebViewClient extends WebViewClient {
+    private X5WebView mX5WebView;
+    private boolean isErrorPage;
+
+    public X5WebViewClient(X5WebView x5WebView) {
+        mX5WebView = x5WebView;
+    }
 
     //页面开始加载时
     @Override
@@ -19,7 +25,7 @@ public class X5WebViewClient extends WebViewClient {
         super.onPageStarted(webView, url, favicon);
         // 该方法在WebView开始加载页面且仅在Main frame loading（即整页加载）时回调，一次Main frame的加载只会回调该方法一次。
         // 我们可以在这个方法里设定开启一个加载的动画，告诉用户程序在等待网络的响应。CustomWebChromeClient里面的onProgressChanged()方法来取代。
-        RxBus.post(X5WebView.TAG_WEBVIEW_PAGE_STARTED, url);
+        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_STARTED, url);
     }
 
     //页面完成加载时
@@ -29,7 +35,11 @@ public class X5WebViewClient extends WebViewClient {
         // 该方法只在WebView完成一个页面加载时调用一次（同样也只在Main frame loading时调用），
         // 我们可以可以在此时关闭加载动画，进行其他操作。
         // 注意：由于浏览器内核有可能导致该结束的时候不结束，不该结束的时候提前结束。可以用
-        RxBus.post(X5WebView.TAG_WEBVIEW_PAGE_FINISHED, url);
+        if (!isErrorPage) {
+            webView.clearHistory();
+            mX5WebView.showWebView();
+        }
+        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_FINISHED, url);
     }
 
     //网络错误时回调的方法
@@ -45,16 +55,7 @@ public class X5WebViewClient extends WebViewClient {
         // 与旧方法onReceivedError(WebView view,int errorCode,String description,String failingUrl)不同的是，
         // 新方法在页面局部加载发生错误时也会被调用（比如页面里两个子Tab或者一张图片）。
         // 这就意味着该方法的调用频率可能会更加频繁，所以我们应该在该方法里执行尽量少的操作。
-
-        webView.stopLoading();
-        webView.loadUrl("file:///android_asset/loadfailed.html");
-        // 延迟清空历史纪录，就能把错误页面清空。
-        webView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                webView.clearHistory();
-            }
-        }, 1000);
+        showErrorView(webView);
     }
 
     @Override
@@ -65,5 +66,18 @@ public class X5WebViewClient extends WebViewClient {
         // 这时便可以实现在app内访问网页。
         webView.loadUrl(s);
         return true;
+    }
+
+    public void showErrorView(WebView webView) {
+        if (!mX5WebView.isErrorViewShow()) {
+            mX5WebView.showErrorView();
+            mX5WebView.getErrorView().setOnClickListener(v -> {
+                isErrorPage = false;
+                webView.reload();
+            });
+        }
+        webView.stopLoading();
+        webView.clearHistory();
+        isErrorPage = true;
     }
 }

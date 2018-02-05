@@ -6,18 +6,20 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 
 import static android.webkit.WebSettings.LOAD_DEFAULT;
 
-public class X5WebView extends WebView {
-    public static final String TAG_WEBVIEW_RECEIVED_ICON = "WebView_onReceivedIcon";
-    public static final String TAG_WEBVIEW_RECEIVED_TITLE = "WebView_onReceivedTitle";
-    public static final String TAG_WEBVIEW_PAGE_STARTED = "WebView_onPageStarted";
-    public static final String TAG_WEBVIEW_PAGE_FINISHED = "WebView_onPageFinished";
-    public Context mContext;
+class X5WebView extends FrameLayout {
+    private Context mContext;
+    private View mErrorView;
+    private WebView mWebView;
+    private X5WebViewClient mX5WebViewClient;
 
     public X5WebView(Context context) {
         this(context, null);
@@ -29,24 +31,27 @@ public class X5WebView extends WebView {
         init();
     }
 
-    public void init() {
+    private void init() {
+        mWebView = new WebView(mContext);
+        mWebView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        addView(mWebView);
         // 支持获取手势焦点
         requestFocusFromTouch();
-        getView().setOnKeyListener((v, keyCode, event) -> {// 此处必须用getView()，因为TBS对WebView进行了封装
-            if (keyCode == KeyEvent.KEYCODE_BACK && X5WebView.this.canGoBack()) {
-                X5WebView.this.goBack();
+        mWebView.getView().setOnKeyListener((v, keyCode, event) -> {// 此处必须用getView()，因为TBS对WebView进行了封装
+            if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()) {
+                mWebView.goBack();
                 return true;
             }
             return false;
         });
         initWebSettings();// 初始化WebSettings
-        setWebViewClient(new X5WebViewClient());
-        setWebChromeClient(new X5WebChromeClient((Activity) mContext));
+        mX5WebViewClient = new X5WebViewClient(this);
+        mWebView.setWebViewClient(mX5WebViewClient);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebSettings() {
-        WebSettings settings = this.getSettings();
+        WebSettings settings = mWebView.getSettings();
         // 支持JS
         settings.setJavaScriptEnabled(true);
         // 设置WebView是否可以由JavaScript自动打开窗口，默认为false，通常与JavaScript的window.open()配合使用。
@@ -104,4 +109,41 @@ public class X5WebView extends WebView {
         settings.setDefaultTextEncodingName("UTF-8");
     }
 
+    public X5WebView setX5ProgressBarWebView(X5ProgressBarWebView x5ProgressBarWebView) {
+        mWebView.setWebChromeClient(new X5WebChromeClient((Activity) mContext, mX5WebViewClient, x5ProgressBarWebView));
+        return this;
+    }
+
+    public X5WebView setErrorView(View view) {
+        mErrorView = view;
+        mErrorView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        addView(mErrorView, 0);
+        return this;
+    }
+
+    public void showErrorView() {
+        if (mErrorView != null && mWebView != null) {
+            mWebView.setVisibility(View.GONE);
+            mErrorView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showWebView() {
+        if (mErrorView != null && mWebView != null) {
+            mWebView.setVisibility(View.VISIBLE);
+            mErrorView.setVisibility(View.GONE);
+        }
+    }
+
+    public boolean isErrorViewShow() {
+        return mErrorView != null && mErrorView.getVisibility() == View.VISIBLE;
+    }
+
+    public View getErrorView() {
+        return mErrorView;
+    }
+
+    public WebView getWebView() {
+        return mWebView;
+    }
 }

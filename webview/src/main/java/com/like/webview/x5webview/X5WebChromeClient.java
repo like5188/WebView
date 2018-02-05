@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +21,19 @@ import com.tencent.smtt.sdk.WebView;
  * 帮助WebView处理Javascript的对话框，网站图标，网站title，加载进度
  */
 public class X5WebChromeClient extends WebChromeClient {
-    protected static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    private static final FrameLayout.LayoutParams COVER_SCREEN_PARAMS = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     private Activity mActivity;
     private View mCustomView;
     private FrameLayout mDecorView;
     private FrameLayout mFullscreenContainer;
     private IX5WebChromeClient.CustomViewCallback mCustomViewCallback;
+    private X5WebViewClient mX5WebViewClient;
+    private X5ProgressBarWebView mX5ProgressBarWebView;
 
-    public X5WebChromeClient(Activity activity) {
+    public X5WebChromeClient(Activity activity, X5WebViewClient x5WebViewClient, X5ProgressBarWebView x5ProgressBarWebView) {
         mActivity = activity;
+        mX5WebViewClient = x5WebViewClient;
+        mX5ProgressBarWebView = x5ProgressBarWebView;
         mDecorView = (FrameLayout) activity.getWindow().getDecorView();
     }
 
@@ -35,14 +41,23 @@ public class X5WebChromeClient extends WebChromeClient {
     public void onReceivedIcon(WebView webView, Bitmap icon) {
         super.onReceivedIcon(webView, icon);
         // 用来接收web页面的icon，我们可以在这里将该页面的icon设置到Toolbar。
-        RxBus.post(X5WebView.TAG_WEBVIEW_RECEIVED_ICON, icon);
+        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_ICON, icon);
     }
 
     @Override
     public void onReceivedTitle(WebView webView, String title) {
         super.onReceivedTitle(webView, title);
         // 用来接收web页面的title，我们可以在这里将页面的title设置到Toolbar。
-        RxBus.post(X5WebView.TAG_WEBVIEW_RECEIVED_TITLE, title);
+        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, title);
+    }
+
+    @Override
+    public void onProgressChanged(WebView webView, int i) {
+        super.onProgressChanged(webView, i);
+        if (!isNetworkAvailable(webView.getContext())) {
+            mX5WebViewClient.showErrorView(webView);
+        }
+        mX5ProgressBarWebView.onProgressChanged(i);
     }
 
     /**
@@ -109,6 +124,27 @@ public class X5WebChromeClient extends WebChromeClient {
         public boolean onTouchEvent(MotionEvent evt) {
             return true;
         }
+    }
+
+    /**
+     * 获取网络类型
+     *
+     * @param context
+     * @return
+     */
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                // 当前网络是连接的
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    // 当前所连接的网络可用
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

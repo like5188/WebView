@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.like.webview.sample.databinding.ActivityWebviewBinding;
 import com.tencent.smtt.sdk.QbSdk;
+import com.tencent.smtt.sdk.WebView;
 
 public class WebViewActivity extends AppCompatActivity {
     private ActivityWebviewBinding mBinding;
@@ -18,27 +19,33 @@ public class WebViewActivity extends AppCompatActivity {
         QbSdk.initX5Environment(this, null);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         viewModel = new WebViewViewModel(mBinding);
-        mBinding.webView.getWebView().addJavascriptInterface(new JavascriptObject(mBinding.webView.getWebView()), "androidAPI");
+//        getWebView().addJavascriptInterface(new JavascriptObject(getWebView()), "androidAPI");
+        mBinding.webView.setErrorView(View.inflate(this, R.layout.error, null));
         String url = "https://www.baidu.com";
-        mBinding.webView.getWebView().loadUrl(url);
+        getWebView().loadUrl(url);
 
+    }
+
+    public WebView getWebView() {
+        return mBinding.webView.getWebView();
     }
 
     public void pageUp(View view) {
-        mBinding.webView.getWebView().pageUp(true);
+        getWebView().pageUp(true);
     }
 
     public void pageDown(View view) {
-        mBinding.webView.getWebView().pageDown(true);
+        getWebView().pageDown(true);
     }
 
     public void refresh(View view) {
-        mBinding.webView.getWebView().reload();
+        getWebView().reload();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
+        mBinding.webView.onDestroy();
     }
 }
