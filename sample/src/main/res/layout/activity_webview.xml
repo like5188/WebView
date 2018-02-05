@@ -59,7 +59,9 @@
             android:id="@+id/web_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:error_view_res_id="@layout/webview_error_view" />
+            app:error_view_res_id="@layout/webview_error_view"
+            app:progress_bar_bg_color="@color/colorPrimary"
+            app:progress_bar_progress_color="@color/colorAccent" />
 
     </LinearLayout>
 </layout>

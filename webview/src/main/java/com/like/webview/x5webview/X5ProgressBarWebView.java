@@ -2,9 +2,13 @@ package com.like.webview.x5webview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -62,16 +66,24 @@ public class X5ProgressBarWebView extends LinearLayout {
         mWebView = new X5WebView(context);
         mWebView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         addView(mWebView);
-        // 为X5WebView添加错误页面
+        // 获取自定义的属性
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.X5ProgressBarWebView, defStyleAttr, 0);
         int errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1);
+        int progressBarBgColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_bg_color, Color.parseColor("#3F51B5"));
+        int progressBarProgressColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_progress_color, Color.parseColor("#FFFFFF"));
         a.recycle();
+        // 为X5WebView添加错误页面
         if (errorViewResId != -1) {
             View errorView = View.inflate(context, errorViewResId, null);
             if (errorView != null) {
                 mWebView.setErrorView(errorView);
             }
         }
+        // 为进度条设置背景颜色
+        mProgressBar.setBackgroundColor(progressBarBgColor);
+        // 为进度条设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
+        ClipDrawable d = new ClipDrawable(new ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL);
+        mProgressBar.setProgressDrawable(d);
     }
 
     @RxBusSubscribe(TAG_WEBVIEW_ON_PROGRESS_CHANGED)
