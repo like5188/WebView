@@ -48,7 +48,13 @@ public class X5WebViewClient extends WebViewClient {
         // 与旧方法onReceivedError(WebView view,int errorCode,String description,String failingUrl)不同的是，
         // 新方法在页面局部加载发生错误时也会被调用（比如页面里两个子Tab或者一张图片）。
         // 这就意味着该方法的调用频率可能会更加频繁，所以我们应该在该方法里执行尽量少的操作。
-        RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+
+
+        // 在Android6.0以上的机器上，网页中的任意一个资源获取不到（比如字体），网页就很可能显示自定义的错误界面。尤其是如果Html用了本地化技术，’ERR_FILE_NOT_FOUND’开始变得特别常见。
+        // 为了避免这样的错误。获取当前的网络请求是否是为main frame创建的。
+        if (webResourceRequest.isForMainFrame()) {
+            RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+        }
     }
 
     @Override
