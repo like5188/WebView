@@ -55,11 +55,11 @@ public class WebViewViewModel {
     public void onPageFinished(String url) {
 //        mBinding.progressBar.setVisibility(View.GONE);
         // 此处必须设置标题，避免回退时，不能正常显示当前页面的标题
-        String title = getWebView().getTitle();
-        if (title != null && title.length() > 6)
-            mBinding.tvTitle.setText(title.subSequence(0, 6) + "...");
-        else
-            mBinding.tvTitle.setText(title);
+//        String title = getWebView().getTitle();
+//        if (title != null && title.length() > 6)
+//            mBinding.tvTitle.setText(title.subSequence(0, 6) + "...");
+//        else
+//            mBinding.tvTitle.setText(title);
     }
 
 }

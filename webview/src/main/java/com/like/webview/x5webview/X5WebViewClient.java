@@ -2,11 +2,9 @@ package com.like.webview.x5webview;
 
 import android.graphics.Bitmap;
 
-import com.like.logger.Logger;
 import com.like.rxbus.RxBus;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
-import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -55,19 +53,6 @@ public class X5WebViewClient extends WebViewClient {
         // 为了避免这样的错误。获取当前的网络请求是否是为main frame创建的。
         if (webResourceRequest.isForMainFrame()) {
             RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
-            RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
-        }
-    }
-
-    @Override
-    public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest, WebResourceResponse webResourceResponse) {
-        super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
-        // 这个方法在6.0才出现，6.0以下根据title来判断
-        int statusCode = webResourceResponse.getStatusCode();
-        Logger.e("onReceivedHttpError code = " + statusCode);
-        if (404 == statusCode || 500 == statusCode) {
-            RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
-            RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
         }
     }
 
