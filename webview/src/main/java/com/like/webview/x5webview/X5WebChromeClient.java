@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,14 @@ public class X5WebChromeClient extends WebChromeClient {
     @Override
     public void onReceivedTitle(WebView webView, String title) {
         super.onReceivedTitle(webView, title);
+        // android 6.0 以下通过title获取
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (title.contains("404") || title.contains("500") || title.contains("Error")) {
+                RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+                RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
+                return;
+            }
+        }
         // 用来接收web页面的title，我们可以在这里将页面的title设置到Toolbar。
         RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, title);
     }

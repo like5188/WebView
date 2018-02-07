@@ -2,9 +2,11 @@ package com.like.webview.x5webview;
 
 import android.graphics.Bitmap;
 
+import com.like.logger.Logger;
 import com.like.rxbus.RxBus;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
@@ -39,7 +41,7 @@ public class X5WebViewClient extends WebViewClient {
     @Override
     public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
         super.onReceivedError(webView, webResourceRequest, webResourceError);
-        // 该方法在web页面加载错误时回调，这些错误通常都是由无法与服务器正常连接引起的，最常见的就是网络问题。
+        // 该方法在web页面加载错误时回调，这些错误通常都是由无法与服务器正常连接引起的，最常见的就是网络问题。但是捕获不到404、500等错误
         // 在这里写网络错误时的逻辑,比如显示一个错误页面
         // 这个方法有两个地方需要注意：
         // 1.这个方法只在与服务器无法正常连接时调用，类似于服务器返回错误码的那种错误（即HTTP ERROR），该方法是不会回调的，
@@ -49,11 +51,23 @@ public class X5WebViewClient extends WebViewClient {
         // 新方法在页面局部加载发生错误时也会被调用（比如页面里两个子Tab或者一张图片）。
         // 这就意味着该方法的调用频率可能会更加频繁，所以我们应该在该方法里执行尽量少的操作。
 
-
         // 在Android6.0以上的机器上，网页中的任意一个资源获取不到（比如字体），网页就很可能显示自定义的错误界面。尤其是如果Html用了本地化技术，’ERR_FILE_NOT_FOUND’开始变得特别常见。
         // 为了避免这样的错误。获取当前的网络请求是否是为main frame创建的。
         if (webResourceRequest.isForMainFrame()) {
             RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+            RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
+        }
+    }
+
+    @Override
+    public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest, WebResourceResponse webResourceResponse) {
+        super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
+        // 这个方法在6.0才出现，6.0以下根据title来判断
+        int statusCode = webResourceResponse.getStatusCode();
+        Logger.e("onReceivedHttpError code = " + statusCode);
+        if (404 == statusCode || 500 == statusCode) {
+            RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+            RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
         }
     }
 
