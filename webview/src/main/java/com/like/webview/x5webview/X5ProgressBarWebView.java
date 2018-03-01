@@ -46,13 +46,11 @@ public class X5ProgressBarWebView extends LinearLayout {
     }
 
     public void addJavascriptInterface(Object javascriptInterface, String name) {
-        if (javascriptInterface != null && name != null && !name.isEmpty())
-            getWebView().addJavascriptInterface(javascriptInterface, name);
+        getWebView().addJavascriptInterface(javascriptInterface, name);
     }
 
     public void loadUrl(String url) {
-        if (url != null && !url.isEmpty())
-            getWebView().loadUrl(url);
+        getWebView().loadUrl(url);
     }
 
     public void addListener(X5Listener listener) {
