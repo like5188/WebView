@@ -16,7 +16,7 @@ public class WebViewViewModel {
 
     public WebViewViewModel(ActivityWebviewBinding binding) {
         mBinding = binding;
-        mBinding.webView.setListener(new X5Listener() {
+        mBinding.webView.addListener(new X5Listener() {
             @Override
             public void onReceivedIcon(WebView webView, Bitmap icon) {
                 mBinding.ivIcon.setImageBitmap(icon);

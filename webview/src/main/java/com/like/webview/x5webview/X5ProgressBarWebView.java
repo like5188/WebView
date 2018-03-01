@@ -26,66 +26,7 @@ public class X5ProgressBarWebView extends LinearLayout {
     private ProgressBar mProgressBar;
     private X5WebView mWebView;
     private boolean isErrorPage;
-    private X5Listener mDeliverListener;
-    private X5Listener mListener = new X5Listener() {
-        @Override
-        public void onReceivedIcon(WebView webView, Bitmap icon) {
-            if (mDeliverListener != null) {
-                mDeliverListener.onReceivedIcon(webView, icon);
-            }
-        }
-
-        @Override
-        public void onReceivedTitle(WebView webView, String title) {
-            if (mDeliverListener != null) {
-                mDeliverListener.onReceivedTitle(webView, title);
-            }
-        }
-
-        @Override
-        public void onProgressChanged(WebView webView, Integer progress) {
-            if (mProgressBar == null) {
-                return;
-            }
-            mProgressBar.setProgress(progress);
-            if (progress != 100) {
-                mProgressBar.setVisibility(View.VISIBLE);
-            } else {
-                mProgressBar.setVisibility(View.GONE);
-            }
-            if (!isNetworkAvailable(getContext())) {
-                showErrorView();
-            }
-            if (mDeliverListener != null) {
-                mDeliverListener.onProgressChanged(webView, progress);
-            }
-        }
-
-        @Override
-        public void onPageStarted(WebView webView, String url, Bitmap favicon) {
-            if (mDeliverListener != null) {
-                mDeliverListener.onPageStarted(webView, url, favicon);
-            }
-        }
-
-        @Override
-        public void onPageFinished(WebView webView, String url) {
-            if (!isErrorPage) {
-                mWebView.showWebView();
-            }
-            if (mDeliverListener != null) {
-                mDeliverListener.onPageFinished(webView, url);
-            }
-        }
-
-        @Override
-        public void onReceivedError(WebView webView) {
-            showErrorView();
-            if (mDeliverListener != null) {
-                mDeliverListener.onReceivedError(webView);
-            }
-        }
-    };
+    private X5Listener mListener;
 
     public X5ProgressBarWebView(Context context) {
         this(context, null);
@@ -105,12 +46,17 @@ public class X5ProgressBarWebView extends LinearLayout {
     }
 
     public void addJavascriptInterface(Object javascriptInterface, String name) {
-        getWebView().addJavascriptInterface(javascriptInterface, name);
+        if (javascriptInterface != null && name != null && !name.isEmpty())
+            getWebView().addJavascriptInterface(javascriptInterface, name);
     }
 
-    public void setListener(X5Listener listener) {
-        mDeliverListener = listener;
-        mWebView.setListener(mListener);
+    public void loadUrl(String url) {
+        if (url != null && !url.isEmpty())
+            getWebView().loadUrl(url);
+    }
+
+    public void addListener(X5Listener listener) {
+        mListener = listener;
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -121,7 +67,65 @@ public class X5ProgressBarWebView extends LinearLayout {
         mProgressBar.setMax(100);
         addView(mProgressBar);
         // 添加X5WebView
-        mWebView = new X5WebView(context);
+        mWebView = new X5WebView(context, new X5Listener() {
+            @Override
+            public void onReceivedIcon(WebView webView, Bitmap icon) {
+                if (mListener != null) {
+                    mListener.onReceivedIcon(webView, icon);
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView webView, String title) {
+                if (mListener != null) {
+                    mListener.onReceivedTitle(webView, title);
+                }
+            }
+
+            @Override
+            public void onProgressChanged(WebView webView, Integer progress) {
+                if (mProgressBar == null) {
+                    return;
+                }
+                mProgressBar.setProgress(progress);
+                if (progress != 100) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                } else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
+                if (!isNetworkAvailable(getContext())) {
+                    showErrorView();
+                }
+                if (mListener != null) {
+                    mListener.onProgressChanged(webView, progress);
+                }
+            }
+
+            @Override
+            public void onPageStarted(WebView webView, String url, Bitmap favicon) {
+                if (mListener != null) {
+                    mListener.onPageStarted(webView, url, favicon);
+                }
+            }
+
+            @Override
+            public void onPageFinished(WebView webView, String url) {
+                if (!isErrorPage) {
+                    mWebView.showWebView();
+                }
+                if (mListener != null) {
+                    mListener.onPageFinished(webView, url);
+                }
+            }
+
+            @Override
+            public void onReceivedError(WebView webView) {
+                showErrorView();
+                if (mListener != null) {
+                    mListener.onReceivedError(webView);
+                }
+            }
+        });
         mWebView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         addView(mWebView);
         // 获取自定义的属性

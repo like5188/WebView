@@ -21,16 +21,13 @@ class X5WebView extends FrameLayout {
     private WebView mWebView;
     private X5Listener mListener;
 
-    public X5WebView(Context context) {
-        this(context, null);
+    public X5WebView(Context context, X5Listener listener) {
+        this(context, null, listener);
     }
 
-    public X5WebView(Context context, AttributeSet attrs) {
+    public X5WebView(Context context, AttributeSet attrs, X5Listener listener) {
         super(context, attrs);
         this.mContext = context;
-    }
-
-    public void setListener(X5Listener listener) {
         this.mListener = listener;
         init();
     }
