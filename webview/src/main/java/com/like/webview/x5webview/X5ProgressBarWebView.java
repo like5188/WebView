@@ -2,6 +2,7 @@ package com.like.webview.x5webview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -14,9 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.like.logger.Logger;
 import com.like.rxbus.RxBus;
-import com.like.rxbus.annotations.RxBusSubscribe;
 import com.like.webview.R;
 import com.tencent.smtt.sdk.WebView;
 
@@ -24,15 +23,69 @@ import com.tencent.smtt.sdk.WebView;
  * 包含进度条、WebView、errorView(webview_error_view.xml)
  */
 public class X5ProgressBarWebView extends LinearLayout {
-    public static final String TAG_WEBVIEW_RECEIVED_ICON = "WebView_onReceivedIcon";
-    public static final String TAG_WEBVIEW_RECEIVED_TITLE = "WebView_onReceivedTitle";
-    public static final String TAG_WEBVIEW_PAGE_STARTED = "WebView_onPageStarted";
-    public static final String TAG_WEBVIEW_PAGE_FINISHED = "WebView_onPageFinished";
-    public static final String TAG_WEBVIEW_ON_RECEIVED_ERROR = "WebView_onReceivedError";
-    public static final String TAG_WEBVIEW_ON_PROGRESS_CHANGED = "WebView_onProgressChanged";
     private ProgressBar mProgressBar;
     private X5WebView mWebView;
     private boolean isErrorPage;
+    private X5Listener mDeliverListener;
+    private X5Listener mListener = new X5Listener() {
+        @Override
+        public void onReceivedIcon(WebView webView, Bitmap icon) {
+            if (mDeliverListener != null) {
+                mDeliverListener.onReceivedIcon(webView, icon);
+            }
+        }
+
+        @Override
+        public void onReceivedTitle(WebView webView, String title) {
+            if (mDeliverListener != null) {
+                mDeliverListener.onReceivedTitle(webView, title);
+            }
+        }
+
+        @Override
+        public void onProgressChanged(WebView webView, Integer progress) {
+            if (mProgressBar == null) {
+                return;
+            }
+            mProgressBar.setProgress(progress);
+            if (progress != 100) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            } else {
+                mProgressBar.setVisibility(View.GONE);
+            }
+            if (!isNetworkAvailable(getContext())) {
+                showErrorView();
+            }
+            if (mDeliverListener != null) {
+                mDeliverListener.onProgressChanged(webView, progress);
+            }
+        }
+
+        @Override
+        public void onPageStarted(WebView webView, String url, Bitmap favicon) {
+            if (mDeliverListener != null) {
+                mDeliverListener.onPageStarted(webView, url, favicon);
+            }
+        }
+
+        @Override
+        public void onPageFinished(WebView webView, String url) {
+            if (!isErrorPage) {
+                mWebView.showWebView();
+            }
+            if (mDeliverListener != null) {
+                mDeliverListener.onPageFinished(webView, url);
+            }
+        }
+
+        @Override
+        public void onReceivedError(WebView webView) {
+            showErrorView();
+            if (mDeliverListener != null) {
+                mDeliverListener.onReceivedError(webView);
+            }
+        }
+    };
 
     public X5ProgressBarWebView(Context context) {
         this(context, null);
@@ -53,6 +106,11 @@ public class X5ProgressBarWebView extends LinearLayout {
 
     public void addJavascriptInterface(Object javascriptInterface, String name) {
         getWebView().addJavascriptInterface(javascriptInterface, name);
+    }
+
+    public void setListener(X5Listener listener) {
+        mDeliverListener = listener;
+        mWebView.setListener(mListener);
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -84,37 +142,6 @@ public class X5ProgressBarWebView extends LinearLayout {
         // 为进度条设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
         ClipDrawable d = new ClipDrawable(new ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL);
         mProgressBar.setProgressDrawable(d);
-    }
-
-    @RxBusSubscribe(TAG_WEBVIEW_ON_PROGRESS_CHANGED)
-    public void TAG_WEBVIEW_ON_PROGRESS_CHANGED(int progress) {
-        Logger.i("TAG_WEBVIEW_ON_PROGRESS_CHANGED");
-        if (mProgressBar == null) {
-            return;
-        }
-        mProgressBar.setProgress(progress);
-        if (progress != 100) {
-            mProgressBar.setVisibility(View.VISIBLE);
-        } else {
-            mProgressBar.setVisibility(View.GONE);
-        }
-        if (!isNetworkAvailable(getContext())) {
-            showErrorView();
-        }
-    }
-
-    @RxBusSubscribe(TAG_WEBVIEW_ON_RECEIVED_ERROR)
-    public void TAG_WEBVIEW_ON_RECEIVED_ERROR() {
-        Logger.d("TAG_WEBVIEW_ON_RECEIVED_ERROR");
-        showErrorView();
-    }
-
-    @RxBusSubscribe(TAG_WEBVIEW_PAGE_FINISHED)
-    public void TAG_WEBVIEW_PAGE_FINISHED(String url) {
-        Logger.v("TAG_WEBVIEW_PAGE_FINISHED");
-        if (!isErrorPage) {
-            mWebView.showWebView();
-        }
     }
 
     private void showErrorView() {

@@ -19,6 +19,7 @@ class X5WebView extends FrameLayout {
     private Context mContext;
     private View mErrorView;
     private WebView mWebView;
+    private X5Listener mListener;
 
     public X5WebView(Context context) {
         this(context, null);
@@ -27,6 +28,10 @@ class X5WebView extends FrameLayout {
     public X5WebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
+    }
+
+    public void setListener(X5Listener listener) {
+        this.mListener = listener;
         init();
     }
 
@@ -44,8 +49,8 @@ class X5WebView extends FrameLayout {
             return false;
         });
         initWebSettings();// 初始化WebSettings
-        mWebView.setWebViewClient(new X5WebViewClient());
-        mWebView.setWebChromeClient(new X5WebChromeClient((Activity) mContext));
+        mWebView.setWebViewClient(new X5WebViewClient(mListener));
+        mWebView.setWebChromeClient(new X5WebChromeClient((Activity) mContext, mListener));
     }
 
     @SuppressLint("SetJavaScriptEnabled")

@@ -3,9 +3,8 @@ package com.like.webview.sample;
 import android.graphics.Bitmap;
 
 import com.like.rxbus.RxBus;
-import com.like.rxbus.annotations.RxBusSubscribe;
 import com.like.webview.sample.databinding.ActivityWebviewBinding;
-import com.like.webview.x5webview.X5ProgressBarWebView;
+import com.like.webview.x5webview.X5Listener;
 import com.tencent.smtt.sdk.WebView;
 
 /**
@@ -17,6 +16,40 @@ public class WebViewViewModel {
 
     public WebViewViewModel(ActivityWebviewBinding binding) {
         mBinding = binding;
+        mBinding.webView.setListener(new X5Listener() {
+            @Override
+            public void onReceivedIcon(WebView webView, Bitmap icon) {
+                mBinding.ivIcon.setImageBitmap(icon);
+            }
+
+            @Override
+            public void onReceivedTitle(WebView webView, String title) {
+                if (title != null && title.length() > 6)
+                    mBinding.tvTitle.setText(title.subSequence(0, 6) + "...");
+                else
+                    mBinding.tvTitle.setText(title);
+            }
+
+            @Override
+            public void onProgressChanged(WebView webView, Integer progress) {
+                super.onProgressChanged(webView, progress);
+            }
+
+            @Override
+            public void onPageStarted(WebView webView, String url, Bitmap favicon) {
+                super.onPageStarted(webView, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView webView, String url) {
+                super.onPageFinished(webView, url);
+            }
+
+            @Override
+            public void onReceivedError(WebView webView) {
+                super.onReceivedError(webView);
+            }
+        });
         RxBus.register(this);
     }
 
@@ -26,40 +59,6 @@ public class WebViewViewModel {
 
     public void onDestroy() {
         RxBus.unregister(this);
-    }
-
-
-    // 收到web页面传来的icon
-    @RxBusSubscribe(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_ICON)
-    public void onReceivedIcon(Bitmap icon) {
-        mBinding.ivIcon.setImageBitmap(icon);
-    }
-
-    // 收到web页面传来的title
-    @RxBusSubscribe(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE)
-    public void onReceivedTitle(String title) {
-        if (title != null && title.length() > 6)
-            mBinding.tvTitle.setText(title.subSequence(0, 6) + "...");
-        else
-            mBinding.tvTitle.setText(title);
-    }
-
-    // web页面开始加载
-    @RxBusSubscribe(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_STARTED)
-    public void onPageStarted(String url) {
-//        mBinding.progressBar.setVisibility(View.VISIBLE);
-    }
-
-    // web页面加载完毕
-    @RxBusSubscribe(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_FINISHED)
-    public void onPageFinished(String url) {
-//        mBinding.progressBar.setVisibility(View.GONE);
-        // 此处必须设置标题，避免回退时，不能正常显示当前页面的标题
-//        String title = getWebView().getTitle();
-//        if (title != null && title.length() > 6)
-//            mBinding.tvTitle.setText(title.subSequence(0, 6) + "...");
-//        else
-//            mBinding.tvTitle.setText(title);
     }
 
 }

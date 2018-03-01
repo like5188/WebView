@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.like.rxbus.RxBus;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
@@ -25,9 +24,11 @@ public class X5WebChromeClient extends WebChromeClient {
     private FrameLayout mDecorView;
     private FrameLayout mFullscreenContainer;
     private IX5WebChromeClient.CustomViewCallback mCustomViewCallback;
+    private X5Listener mListener;
 
-    public X5WebChromeClient(Activity activity) {
+    public X5WebChromeClient(Activity activity, X5Listener listener) {
         mActivity = activity;
+        mListener = listener;
         mDecorView = (FrameLayout) activity.getWindow().getDecorView();
     }
 
@@ -35,25 +36,33 @@ public class X5WebChromeClient extends WebChromeClient {
     public void onReceivedIcon(WebView webView, Bitmap icon) {
         super.onReceivedIcon(webView, icon);
         // 用来接收web页面的icon，我们可以在这里将该页面的icon设置到Toolbar。
-        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_ICON, icon);
+        if (mListener != null) {
+            mListener.onReceivedIcon(webView, icon);
+        }
     }
 
     @Override
     public void onReceivedTitle(WebView webView, String title) {
         super.onReceivedTitle(webView, title);
         if (title.contains("404") || title.contains("500") || title.contains("Error")) {
-            RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
-            RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, "");
+            if (mListener != null) {
+                mListener.onReceivedError(webView);
+                mListener.onReceivedTitle(webView, "");
+            }
             return;
         }
         // 用来接收web页面的title，我们可以在这里将页面的title设置到Toolbar。
-        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_RECEIVED_TITLE, title);
+        if (mListener != null) {
+            mListener.onReceivedTitle(webView, title);
+        }
     }
 
     @Override
     public void onProgressChanged(WebView webView, int i) {
         super.onProgressChanged(webView, i);
-        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_ON_PROGRESS_CHANGED, i);
+        if (mListener != null) {
+            mListener.onProgressChanged(webView, i);
+        }
     }
 
     /**

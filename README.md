@@ -18,6 +18,6 @@ WebView封装类。包含android系统自带的WebView的封装，也包含腾�
 在Module的gradle中加入：
 ```groovy
     dependencies {
-        compile 'com.github.like5188:WebView:2.0.3'
+        compile 'com.github.like5188:WebView:2.0.4'
     }
 ```

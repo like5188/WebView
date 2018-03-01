@@ -2,7 +2,6 @@ package com.like.webview.x5webview;
 
 import android.graphics.Bitmap;
 
-import com.like.rxbus.RxBus;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebView;
@@ -12,8 +11,10 @@ import com.tencent.smtt.sdk.WebViewClient;
  * 帮助WebView处理各种通知和请求事件的
  */
 public class X5WebViewClient extends WebViewClient {
+    private X5Listener mListener;
 
-    public X5WebViewClient() {
+    public X5WebViewClient(X5Listener listener) {
+        mListener = listener;
     }
 
     //页面开始加载时
@@ -22,7 +23,9 @@ public class X5WebViewClient extends WebViewClient {
         super.onPageStarted(webView, url, favicon);
         // 该方法在WebView开始加载页面且仅在Main frame loading（即整页加载）时回调，一次Main frame的加载只会回调该方法一次。
         // 我们可以在这个方法里设定开启一个加载的动画，告诉用户程序在等待网络的响应。CustomWebChromeClient里面的onProgressChanged()方法来取代。
-        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_STARTED, url);
+        if (mListener != null) {
+            mListener.onPageStarted(webView, url, favicon);
+        }
     }
 
     //页面完成加载时
@@ -32,7 +35,9 @@ public class X5WebViewClient extends WebViewClient {
         // 该方法只在WebView完成一个页面加载时调用一次（同样也只在Main frame loading时调用），
         // 我们可以可以在此时关闭加载动画，进行其他操作。
         // 注意：由于浏览器内核有可能导致该结束的时候不结束，不该结束的时候提前结束。可以用
-        RxBus.post(X5ProgressBarWebView.TAG_WEBVIEW_PAGE_FINISHED, url);
+        if (mListener != null) {
+            mListener.onPageFinished(webView, url);
+        }
     }
 
     //网络错误时回调的方法
@@ -52,7 +57,9 @@ public class X5WebViewClient extends WebViewClient {
         // 在Android6.0以上的机器上，网页中的任意一个资源获取不到（比如字体），网页就很可能显示自定义的错误界面。尤其是如果Html用了本地化技术，’ERR_FILE_NOT_FOUND’开始变得特别常见。
         // 为了避免这样的错误。获取当前的网络请求是否是为main frame创建的。
         if (webResourceRequest.isForMainFrame()) {
-            RxBus.postByTag(X5ProgressBarWebView.TAG_WEBVIEW_ON_RECEIVED_ERROR);
+            if (mListener != null) {
+                mListener.onReceivedError(webView);
+            }
         }
     }
 
