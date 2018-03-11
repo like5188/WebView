@@ -12,6 +12,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true // 65535限制
 
         // Specifies the ABI configurations of your native
         // libraries Gradle should build and package with your APK.
@@ -41,19 +42,21 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:26.0.0-alpha1"
-    testCompile "junit:junit:4.12"
-
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     kapt 'com.android.databinding:compiler:2.3.3'
-
+    compile 'com.github.like5188:Base:2.3.0'
     compile 'com.github.like5188:Logger:2.0.0'
     compile 'com.github.like5188.RxBus:rxbus:2.0.1'
     kapt 'com.github.like5188.RxBus:rxbus-compiler:2.0.1'
+    compile files('libs/umeng-analytics-v6.0.0.jar')
+    // Error:Conflict with dependency 'com.google.code.findbugs:jsr305' in project ':app'. Resolved versions for app (3.0.1) and test app (2.0.1) differ. See http://g.co/androidstudio/app-test-app-conflict for details.
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')

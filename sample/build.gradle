@@ -41,6 +41,8 @@ dependencies {
     kapt 'com.android.databinding:compiler:2.3.3'
 
     kapt 'com.github.like5188.RxBus:rxbus-compiler:2.0.1'
+    // Error:Conflict with dependency 'com.google.code.findbugs:jsr305' in project ':app'. Resolved versions for app (3.0.1) and test app (2.0.1) differ. See http://g.co/androidstudio/app-test-app-conflict for details.
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 
     compile project(':webview')
 }

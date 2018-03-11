@@ -1,11 +1,14 @@
 package com.like.webview.x5webview;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import com.like.base.context.BaseApplication;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 帮助WebView处理各种通知和请求事件的
@@ -35,6 +38,15 @@ public class X5WebViewClient extends WebViewClient {
         // 该方法只在WebView完成一个页面加载时调用一次（同样也只在Main frame loading时调用），
         // 我们可以可以在此时关闭加载动画，进行其他操作。
         // 注意：由于浏览器内核有可能导致该结束的时候不结束，不该结束的时候提前结束。可以用
+
+        if (BaseApplication.openUMeng) {
+            // 友盟统计：H5统计
+            webView.loadUrl("javascript:setWebViewFlag()");
+            if (url != null && !url.isEmpty()) {
+                MobclickAgent.onPageStart(url.substring(url.lastIndexOf("/") + 1));
+            }
+        }
+
         if (mListener != null) {
             mListener.onPageFinished(webView, url);
         }
@@ -64,13 +76,27 @@ public class X5WebViewClient extends WebViewClient {
     }
 
     @Override
-    public boolean shouldOverrideUrlLoading(WebView webView, String s) {
+    public boolean shouldOverrideUrlLoading(WebView webView, String url) {
         // 是否在WebView内加载新页面
         // 当我们没有给WebView提供WebViewClient时，WebView如果要加载一个url会向ActivityManager寻求一个适合的处理者来加载该url（比如系统自带的浏览器），
         // 这通常是我们不想看到的。于是我们需要给WebView提供一个WebViewClient，并重写该方法返回true来告知WebView url的加载就在app中进行。
         // 这时便可以实现在app内访问网页。
-        webView.loadUrl(s);
-        return true;
+
+        if (BaseApplication.openUMeng) {
+            // 友盟统计：H5统计
+            try {
+                Log.d("UMHybrid", "shouldOverrideUrlLoading url:" + url);
+                String decodedURL = java.net.URLDecoder.decode(url, "UTF-8");
+                UMHybrid.getInstance(webView.getContext()).execute(decodedURL, webView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        } else {
+            webView.loadUrl(url);
+            return true;
+        }
+
     }
 
 }
