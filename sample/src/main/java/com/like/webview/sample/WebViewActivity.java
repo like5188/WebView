@@ -42,7 +42,8 @@ public class WebViewActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
         viewModel = new WebViewViewModel(mBinding);
         getWebView().addJavascriptInterface(new JavascriptObject(), "androidAPI");
-        String url = "file:///android_asset/index.html";
+        String url = "http://172.16.103.71:8081/#!/hello";
+//        String url = "file:///android_asset/index.html";
         getWebView().loadUrl(url);
         return null;
     }
