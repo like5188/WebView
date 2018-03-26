@@ -101,6 +101,7 @@ public class X5ProgressBarWebView extends LinearLayout {
 
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap favicon) {
+                isErrorPage = false;
                 if (mListener != null) {
                     mListener.onPageStarted(webView, url, favicon);
                 }
