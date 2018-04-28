@@ -1,6 +1,8 @@
 package com.like.webview.x5webview;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import com.like.base.context.BaseApplication;
@@ -81,6 +83,15 @@ public class X5WebViewClient extends WebViewClient {
         // 当我们没有给WebView提供WebViewClient时，WebView如果要加载一个url会向ActivityManager寻求一个适合的处理者来加载该url（比如系统自带的浏览器），
         // 这通常是我们不想看到的。于是我们需要给WebView提供一个WebViewClient，并重写该方法返回true来告知WebView url的加载就在app中进行。
         // 这时便可以实现在app内访问网页。
+
+        // 如下方案可在非微信内部WebView的H5页面中调出微信支付
+        if (url.startsWith("weixin://wap/pay?")) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            webView.getContext().startActivity(intent);
+            return true;
+        }
 
         if (BaseApplication.openUMeng) {
             // 友盟统计：H5统计
