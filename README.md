@@ -39,5 +39,5 @@ com.like.webview.X5ProgressBarWebView。带进度条。持有com.like.webview.X5
 
 3、Proguard
 ```java
-
+    -dontwarn com.tencent.smtt.**
 ```
