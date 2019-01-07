@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.like.webview.X5Listener
 import com.like.webview.X5ProgressBarWebView
-import com.like.webview.X5WebView
 import com.like.webview.sample.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
