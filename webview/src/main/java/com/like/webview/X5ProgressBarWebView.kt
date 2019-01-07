@@ -86,8 +86,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         // 设置进度条背景颜色
         progressBar.setBackgroundColor(progressBarBgColor)
         // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
-        val d = ClipDrawable(ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL)
-        progressBar.progressDrawable = d
+        progressBar.progressDrawable = ClipDrawable(ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL)
         // 设置进度条高度
         progressBar.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
 
