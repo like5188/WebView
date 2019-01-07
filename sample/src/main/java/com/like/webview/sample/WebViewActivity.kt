@@ -26,7 +26,7 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         webView.addJavascriptInterface(JavascriptObject(webView), "androidAPI")
         val url = "file:///android_asset/index.html"
-//        val url = "www.baidu.com"
+//        val url = "http://www.sohu.com/"
         webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         x5WebView.mListener = object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
