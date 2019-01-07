@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebSettings.LOAD_DEFAULT
@@ -19,6 +20,10 @@ import com.tencent.smtt.sdk.WebView
  * 包含了tencent的WebView、errorView
  */
 class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+    companion object {
+        private val TAG = X5WebView::class.java.simpleName
+    }
+
     val tencentWebView: WebView by lazy {
         WebView(context).apply {
             layoutParams = FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -51,10 +56,12 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         val listener = object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mListener?.onReceivedIcon(webView, icon)
+                Log.w(TAG, "onReceivedIcon")
             }
 
             override fun onReceivedTitle(webView: WebView?, title: String?) {
                 mListener?.onReceivedTitle(webView, title)
+                Log.w(TAG, "onReceivedTitle")
             }
 
             override fun onProgressChanged(webView: WebView?, progress: Int?) {
@@ -62,11 +69,13 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     showErrorView()
                 }
                 mListener?.onProgressChanged(webView, progress)
+                Log.w(TAG, "onProgressChanged")
             }
 
             override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                 isErrorPage = false
                 mListener?.onPageStarted(webView, url, favicon)
+                Log.w(TAG, "onPageStarted")
             }
 
             override fun onPageFinished(webView: WebView?, url: String?) {
@@ -74,11 +83,13 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                     showWebView()
                 }
                 mListener?.onPageFinished(webView, url)
+                Log.w(TAG, "onPageFinished")
             }
 
             override fun onReceivedError(webView: WebView?) {
                 showErrorView()
                 mListener?.onReceivedError(webView)
+                Log.w(TAG, "onReceivedError")
             }
         }
         tencentWebView.webViewClient = X5WebViewClient(listener)
