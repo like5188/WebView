@@ -68,6 +68,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
     var mListener: X5Listener? = null
 
     init {
+        orientation = LinearLayout.VERTICAL
         // 获取自定义的属性
         val a = context.obtainStyledAttributes(attrs, R.styleable.X5ProgressBarWebView, defStyleAttr, 0)
         val errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1)
