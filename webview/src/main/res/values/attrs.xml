@@ -5,6 +5,7 @@
         <attr name="error_view_res_id" format="reference|integer" />
         <attr name="progress_bar_bg_color" format="reference|color" />
         <attr name="progress_bar_progress_color" format="reference|color" />
+        <attr name="progress_bar_height" format="dimension" />
     </declare-styleable>
 
 </resources>

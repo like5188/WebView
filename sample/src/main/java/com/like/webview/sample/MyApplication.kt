@@ -1,12 +1,13 @@
 package com.like.webview.sample
 
-import com.like.base.context.BaseApplication
-import com.umeng.analytics.MobclickAgent
+import android.app.Application
+import com.tencent.smtt.sdk.QbSdk
 
-class MyApplication : BaseApplication() {
+class MyApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
-        MobclickAgent.openActivityDurationTrack(false)
-        MobclickAgent.setSessionContinueMillis(1000)
+        QbSdk.initX5Environment(this, null)
     }
+
 }

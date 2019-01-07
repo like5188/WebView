@@ -1,15 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion 19
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         multiDexEnabled true // 65535限制
@@ -36,27 +34,24 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
+
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    testCompile 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.3.3'
-    compile 'com.github.like5188:Base:2.3.0'
-    compile 'com.github.like5188:Logger:2.0.0'
-    compile 'com.github.like5188.RxBus:rxbus:2.0.1'
-    kapt 'com.github.like5188.RxBus:rxbus-compiler:2.0.1'
-    compile files('libs/umeng-analytics-v6.0.0.jar')
-    // Error:Conflict with dependency 'com.google.code.findbugs:jsr305' in project ':app'. Resolved versions for app (3.0.1) and test app (2.0.1) differ. See http://g.co/androidstudio/app-test-app-conflict for details.
-    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.github.like5188.LiveDataBus:livedatabus:1.2.2'
+    kapt 'com.github.like5188.LiveDataBus:livedatabus_compiler:1.2.2'
+
+    api files('libs/tbs_sdk_thirdapp_v3.6.0.1371_43624_sharewithdownload_withoutGame_obfs_20181106_121046.jar')
 }
 
 apply from: rootProject.file('./gradle-mvn-push.gradle')

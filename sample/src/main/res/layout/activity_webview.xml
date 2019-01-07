@@ -55,11 +55,12 @@
                 android:text="刷新" />
         </LinearLayout>
 
-        <com.like.webview.x5webview.X5ProgressBarWebView
+        <com.like.webview.X5ProgressBarWebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:error_view_res_id="@layout/webview_error_view"
+            app:progress_bar_height="3dp"
             app:progress_bar_bg_color="@color/colorPrimary"
             app:progress_bar_progress_color="@color/colorAccent" />
 
