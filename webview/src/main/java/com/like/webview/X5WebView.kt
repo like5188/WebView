@@ -37,7 +37,6 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var isErrorPage = false
 
     init {
-        addView(tencentWebView)
         // 支持获取手势焦点
         requestFocusFromTouch()
         // 此处必须用getView()，因为TBS对WebView进行了封装
@@ -84,6 +83,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         }
         tencentWebView.webViewClient = X5WebViewClient(listener)
         tencentWebView.webChromeClient = X5WebChromeClient(context as Activity, listener)
+        addView(tencentWebView)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
