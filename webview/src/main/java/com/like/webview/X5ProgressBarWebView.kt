@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -23,10 +22,6 @@ import com.tencent.smtt.sdk.WebView
  * <attr name="progress_bar_height" format="dimension|integer" />
  */
 class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
-    companion object {
-        private val TAG = X5ProgressBarWebView::class.java.simpleName
-    }
-
     private val progressBar: ProgressBar by lazy {
         ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal).apply {
             max = 100
@@ -38,27 +33,22 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
             it.mListener = object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     mListener?.onReceivedIcon(webView, icon)
-                    Log.i(TAG, "onReceivedIcon")
                 }
 
                 override fun onReceivedTitle(webView: WebView?, title: String?) {
                     mListener?.onReceivedTitle(webView, title)
-                    Log.i(TAG, "onReceivedTitle")
                 }
 
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                     mListener?.onPageStarted(webView, url, favicon)
-                    Log.i(TAG, "onPageStarted")
                 }
 
                 override fun onPageFinished(webView: WebView?, url: String?) {
                     mListener?.onPageFinished(webView, url)
-                    Log.i(TAG, "onPageFinished")
                 }
 
                 override fun onReceivedError(webView: WebView?) {
                     mListener?.onReceivedError(webView)
-                    Log.i(TAG, "onReceivedError")
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {
@@ -69,7 +59,6 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                         progressBar.visibility = View.GONE
                     }
                     mListener?.onProgressChanged(webView, progress)
-                    Log.i(TAG, "onProgressChanged")
                 }
             }
         }
