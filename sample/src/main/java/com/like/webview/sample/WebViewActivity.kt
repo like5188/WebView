@@ -21,12 +21,13 @@ class WebViewActivity : AppCompatActivity() {
     private val webView: WebView by lazy {
         x5ProgressBarWebView.x5WebView.tencentWebView
     }
+    private val mJavascriptObject by lazy { JavascriptObject(webView) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        webView.addJavascriptInterface(JavascriptObject(webView), "androidAPI")
-//        val url = "file:///android_asset/index.html"
-        val url = "http://www.sohu.com/"
+        webView.addJavascriptInterface(mJavascriptObject, "androidAPI")
+        val url = "file:///android_asset/index.html"
+//        val url = "http://www.sohu.com/"
         webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         x5ProgressBarWebView.mListener = object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
@@ -54,6 +55,10 @@ class WebViewActivity : AppCompatActivity() {
         }
 
         webView.loadUrl(url)
+    }
+
+    fun callJS(view: View) {
+        mJavascriptObject.callJS(1, "2")
     }
 
     fun pageUp(view: View) {

@@ -53,6 +53,13 @@
                 android:layout_weight="1"
                 android:onClick="refresh"
                 android:text="刷新" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="callJS"
+                android:text="callJS" />
         </LinearLayout>
 
         <com.like.webview.X5ProgressBarWebView
