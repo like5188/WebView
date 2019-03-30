@@ -76,6 +76,9 @@ class X5WebViewClient(private val mListener: X5Listener?) : WebViewClient() {
 
         webView?.loadUrl(url)
         Log.v(TAG, "shouldOverrideUrlLoading url=$url")
+
+        // 1.返回true，即根据代码逻辑执行相应操作，webview不加载该url；
+        // 2.返回false，除执行相应代码外，webview加载该url；
         return true
     }
 
