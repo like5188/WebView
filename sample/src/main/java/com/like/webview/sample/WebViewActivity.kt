@@ -29,7 +29,7 @@ class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         webView.addJavascriptInterface(mJavascriptInterface, "androidAPI")
-        mJavascriptInterface.registerAndroidMethod("androidMethodName") {
+        mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
             try {
                 val jsonObject = JSONObject(it)
                 val name = jsonObject.optString("name")

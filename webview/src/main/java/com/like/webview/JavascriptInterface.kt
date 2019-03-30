@@ -7,7 +7,10 @@ import com.tencent.smtt.sdk.WebView
 class JavascriptInterface(private val webView: WebView) {
     private val androidMethodMap = mutableMapOf<String, (String) -> String>()
 
-    fun registerAndroidMethod(methodName: String, method: (String) -> String) {
+    /**
+     * 注册方法。这个方法会被JS调用。
+     */
+    fun registerAndroidMethodForJSCall(methodName: String, method: (String) -> String) {
         androidMethodMap[methodName] = method
     }
 
