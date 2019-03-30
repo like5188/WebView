@@ -11,8 +11,13 @@ class JavascriptObject(private val webView: WebView) {
     }
 
     // android调用js方法
-    @JavascriptInterface
     fun updateImage(position: Int, imagePath: String) {
-        webView.post { webView.loadUrl("javascript:serverid($position,'$imagePath')") }
+        val jsString = "javascript:serverid($position,'$imagePath')"
+        webView.post { webView.loadUrl(jsString) }
+        // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
+        // b)Android 4.4 后才可使用
+        webView.evaluateJavascript(jsString) {
+
+        }
     }
 }
