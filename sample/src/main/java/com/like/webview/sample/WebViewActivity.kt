@@ -4,12 +4,15 @@ import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import com.like.webview.JavascriptInterface
 import com.like.webview.X5Listener
 import com.like.webview.X5ProgressBarWebView
 import com.like.webview.sample.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
+import org.json.JSONObject
 
 class WebViewActivity : AppCompatActivity() {
     private val mBinding: ActivityWebviewBinding by lazy {
@@ -21,11 +24,22 @@ class WebViewActivity : AppCompatActivity() {
     private val webView: WebView by lazy {
         x5ProgressBarWebView.x5WebView.tencentWebView
     }
-    private val mJavascriptObject by lazy { JavascriptObject(webView) }
+    private val mJavascriptInterface by lazy { JavascriptInterface(webView) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        webView.addJavascriptInterface(mJavascriptObject, "androidAPI")
+        webView.addJavascriptInterface(mJavascriptInterface, "androidAPI")
+        mJavascriptInterface.registerAndroidMethod("androidMethodName") {
+            try {
+                val jsonObject = JSONObject(it)
+                val name = jsonObject.optString("name")
+                val age = jsonObject.optInt("age")
+                Log.d("WebViewActivity", "androidMethodName name=$name age=$age")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            "js调用android方法成功"
+        }
         val url = "file:///android_asset/index.html"
 //        val url = "http://www.sohu.com/"
         webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
@@ -58,7 +72,16 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     fun callJS(view: View) {
-        mJavascriptObject.callJS(1, "2")
+        try {
+            val params = JSONObject()
+            params.put("name", "like1")
+            params.put("age", 22)
+            mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
+                Log.d("WebViewActivity", "callJsMethod 返回值：$it")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun pageUp(view: View) {

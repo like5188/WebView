@@ -6,16 +6,24 @@
 
     // JS代码
     <script>
-		// Android需要调用的方法
-	   function jsMethodName(str, int){
-		  alert("Android调用了JS的callJS方法，传递的参数：" + str + int);
-		  return "3"
+	   function jsMethodName(str){
+		    alert("Android调用了JS的jsMethodName方法，传递的参数：" + str);
+		    return "3"
+	   }
+
+	   function jsMethodName1(){
+		    alert("Android调用了JS的jsMethodName1方法");
+		    return "4"
 	   }
 
 	   function callAndroid(){
-          var str=window.androidAPI.handleJS("1",2);
-          alert("调用了Android的handleJS方法，返回值：" + str);
+	        var user = {};
+            user.name= "like";
+            user.age = 36;
+            var str=window.androidAPI.callAndroidMethod("androidMethodName",JSON.stringify(user));
+            alert("调用了Android的callAndroidMethod方法，返回值：" + str);
        }
+
 
     </script>
 </head>
