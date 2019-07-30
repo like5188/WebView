@@ -29,8 +29,8 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
     }
     private val x5WebView: X5WebView by lazy {
         X5WebView(context).also {
-            it.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-            it.mListener = object : X5Listener {
+            it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            it.setListener(object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     mListener?.onReceivedIcon(webView, icon)
                 }
@@ -60,7 +60,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                     }
                     mListener?.onProgressChanged(webView, progress)
                 }
-            }
+            })
         }
     }
     private var mListener: X5Listener? = null
@@ -78,7 +78,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         if (errorViewResId != -1) {
             val errorView = View.inflate(context, errorViewResId, null)
             if (errorView != null) {
-                x5WebView.errorView = errorView
+                x5WebView.setErrorView(errorView)
             }
         }
         // 设置进度条背景颜色
@@ -94,7 +94,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         addView(x5WebView)
     }
 
-    fun getWebView() = x5WebView.tencentWebView
+    fun getWebView() = x5WebView.getWebView()
 
     fun setListener(listener: X5Listener) {
         mListener = listener

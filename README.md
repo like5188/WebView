@@ -35,9 +35,9 @@
 
 3、直接在xml布局文件中使用
 
-    com.like.webview.X5WebView。不带进度条。持有com.tencent.smtt.sdk.WebView的引用，可以设置X5Listener监听。
+    com.like.webview.X5WebView。不带进度条。
 
-    com.like.webview.X5ProgressBarWebView。带进度条。持有com.like.webview.X5WebView的引用，可以设置X5Listener监听。
+    com.like.webview.X5ProgressBarWebView。带进度条。
 
         进度条的属性可以通过下面四个自定义属性设置：
 
@@ -55,15 +55,12 @@
     private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
         mBinding.webView
     }
-    private val webView: WebView by lazy {
-        x5ProgressBarWebView.x5WebView.tencentWebView
-    }
-    private val mJavascriptInterface by lazy { JavascriptInterface(webView) }
+    private val mCall by lazy { CallHelper(x5ProgressBarWebView.getWebView()) }
 
-    webView.addJavascriptInterface(mJavascriptInterface, "androidAPI")
+    x5ProgressBarWebView.getWebView().addJavascriptInterface(mCall, "androidAPI")
 
-    js调用android
-    mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
+    // js调用android
+    mCall.registerAndroidMethodForJSCall("androidMethodName") {
         try {
             val jsonObject = JSONObject(it)
             val name = jsonObject.optString("name")
@@ -75,12 +72,12 @@
         "js调用android方法成功"
     }
 
-    android调用js
+    // android调用js
     try {
         val params = JSONObject()
         params.put("name", "like1")
         params.put("age", 22)
-        mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
+        mCall.callJsMethod("jsMethodName", params.toString()) {
             Log.d("WebViewActivity", "callJsMethod 返回值：$it")
         }
     } catch (e: Exception) {

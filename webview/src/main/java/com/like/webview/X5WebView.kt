@@ -16,25 +16,35 @@ import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 
 /**
- * 包含了tencent的WebView、errorView
+ * 包含了tencent的WebView、mErrorView
  */
-internal class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
-    val tencentWebView: WebView by lazy {
+class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+    private val tencentWebView: WebView by lazy {
         WebView(context).apply {
-            layoutParams = FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
     }
-    var errorView: View? = null
+    private var mErrorView: View? = null
         set(value) {
             value?.let {
-                it.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+                it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 addView(it, 0)
                 it.visibility = View.GONE
             }
             field = value
         }
-    var mListener: X5Listener? = null
+    private var mListener: X5Listener? = null
     private var isErrorPage = false
+
+    fun setErrorView(errorView: View) {
+        mErrorView = errorView
+    }
+
+    fun getWebView() = tencentWebView
+
+    fun setListener(listener: X5Listener) {
+        mListener = listener
+    }
 
     init {
         // 支持获取手势焦点
@@ -143,8 +153,8 @@ internal class X5WebView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    fun showWebView() {
-        errorView?.let {
+    private fun showWebView() {
+        mErrorView?.let {
             if (it.visibility != View.GONE) {
                 it.visibility = View.GONE
             }
@@ -154,10 +164,10 @@ internal class X5WebView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    fun showErrorView() {
+    private fun showErrorView() {
         if (!isErrorViewShow()) {
             tencentWebView.clearHistory()
-            errorView?.let {
+            mErrorView?.let {
                 if (it.visibility != View.VISIBLE) {
                     it.visibility = View.VISIBLE
                     it.setOnClickListener { v ->
@@ -174,7 +184,7 @@ internal class X5WebView @JvmOverloads constructor(context: Context, attrs: Attr
         isErrorPage = true
     }
 
-    private fun isErrorViewShow() = errorView != null && errorView!!.visibility == View.VISIBLE
+    private fun isErrorViewShow() = mErrorView != null && mErrorView!!.visibility == View.VISIBLE
 
     /**
      * 获取网络类型
