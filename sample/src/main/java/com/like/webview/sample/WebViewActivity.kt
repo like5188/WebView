@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import com.like.webview.CallHelper
+import com.like.webview.JavascriptInterface
 import com.like.webview.X5Listener
 import com.like.webview.X5ProgressBarWebView
 import com.like.webview.sample.databinding.ActivityWebviewBinding
@@ -21,12 +21,12 @@ class WebViewActivity : AppCompatActivity() {
     private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
         mBinding.webView
     }
-    private val mCall by lazy { CallHelper(x5ProgressBarWebView.getWebView()) }
+    private val mJavascriptInterface by lazy { JavascriptInterface(x5ProgressBarWebView.getWebView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        x5ProgressBarWebView.getWebView().addJavascriptInterface(mCall, "androidAPI")
-        mCall.registerAndroidMethodForJSCall("androidMethodName") {
+        x5ProgressBarWebView.getWebView().addJavascriptInterface(mJavascriptInterface, "androidAPI")
+        mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
             try {
                 val jsonObject = JSONObject(it)
                 val name = jsonObject.optString("name")
@@ -73,7 +73,7 @@ class WebViewActivity : AppCompatActivity() {
             val params = JSONObject()
             params.put("name", "like1")
             params.put("age", 22)
-            mCall.callJsMethod("jsMethodName", params.toString()) {
+            mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
                 Log.d("WebViewActivity", "callJsMethod 返回值：$it")
             }
         } catch (e: Exception) {

@@ -49,18 +49,18 @@
 
         app:progress_bar_progress_color="@color/colorAccent"
 
-4、js 和 android 的相互调用，使用 CallHelper 工具类
+4、js 和 android 的相互调用，使用 JavascriptInterface 帮助类
 ```java
     初始化webView
     private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
         mBinding.webView
     }
-    private val mCall by lazy { CallHelper(x5ProgressBarWebView.getWebView()) }
+    private val mJavascriptInterface by lazy { JavascriptInterface(x5ProgressBarWebView.getWebView()) }
 
-    x5ProgressBarWebView.getWebView().addJavascriptInterface(mCall, "androidAPI")
+    x5ProgressBarWebView.getWebView().addJavascriptInterface(mJavascriptInterface, "androidAPI")
 
     // js调用android
-    mCall.registerAndroidMethodForJSCall("androidMethodName") {
+    mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
         try {
             val jsonObject = JSONObject(it)
             val name = jsonObject.optString("name")
@@ -77,7 +77,7 @@
         val params = JSONObject()
         params.put("name", "like1")
         params.put("age", 22)
-        mCall.callJsMethod("jsMethodName", params.toString()) {
+        mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
             Log.d("WebViewActivity", "callJsMethod 返回值：$it")
         }
     } catch (e: Exception) {
