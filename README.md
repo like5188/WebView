@@ -49,7 +49,7 @@
 
         app:progress_bar_progress_color="@color/colorAccent"
 
-4、js和android的相互调用
+4、js 和 android 的相互调用，使用 CallHelper 工具类
 ```java
     初始化webView
     private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
