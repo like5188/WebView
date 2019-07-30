@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import com.like.webview.JavascriptInterface
+import com.like.webview.CallHelper
 import com.like.webview.X5Listener
 import com.like.webview.X5ProgressBarWebView
 import com.like.webview.sample.databinding.ActivityWebviewBinding
@@ -21,15 +21,12 @@ class WebViewActivity : AppCompatActivity() {
     private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
         mBinding.webView
     }
-    private val webView: WebView by lazy {
-        x5ProgressBarWebView.x5WebView.tencentWebView
-    }
-    private val mJavascriptInterface by lazy { JavascriptInterface(webView) }
+    private val mCall by lazy { CallHelper(x5ProgressBarWebView.getWebView()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        webView.addJavascriptInterface(mJavascriptInterface, "androidAPI")
-        mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
+        x5ProgressBarWebView.getWebView().addJavascriptInterface(mCall, "androidAPI")
+        mCall.registerAndroidMethodForJSCall("androidMethodName") {
             try {
                 val jsonObject = JSONObject(it)
                 val name = jsonObject.optString("name")
@@ -42,8 +39,8 @@ class WebViewActivity : AppCompatActivity() {
         }
         val url = "file:///android_asset/index.html"
 //        val url = "http://www.sohu.com/"
-        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-        x5ProgressBarWebView.mListener = object : X5Listener {
+        x5ProgressBarWebView.getWebView().settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+        x5ProgressBarWebView.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
             }
@@ -66,9 +63,9 @@ class WebViewActivity : AppCompatActivity() {
 
             override fun onReceivedError(webView: WebView?) {
             }
-        }
+        })
 
-        webView.loadUrl(url)
+        x5ProgressBarWebView.getWebView().loadUrl(url)
     }
 
     fun callJS(view: View) {
@@ -76,7 +73,7 @@ class WebViewActivity : AppCompatActivity() {
             val params = JSONObject()
             params.put("name", "like1")
             params.put("age", 22)
-            mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
+            mCall.callJsMethod("jsMethodName", params.toString()) {
                 Log.d("WebViewActivity", "callJsMethod 返回值：$it")
             }
         } catch (e: Exception) {
@@ -85,19 +82,19 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     fun pageUp(view: View) {
-        webView.pageUp(true)
+        x5ProgressBarWebView.getWebView().pageUp(true)
     }
 
     fun pageDown(view: View) {
-        webView.pageDown(true)
+        x5ProgressBarWebView.getWebView().pageDown(true)
     }
 
     fun refresh(view: View) {
-        webView.reload()
+        x5ProgressBarWebView.getWebView().reload()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        webView.destroy()
+        x5ProgressBarWebView.getWebView().destroy()
     }
 }

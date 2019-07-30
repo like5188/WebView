@@ -27,7 +27,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
             max = 100
         }
     }
-    val x5WebView: X5WebView by lazy {
+    private val x5WebView: X5WebView by lazy {
         X5WebView(context).also {
             it.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             it.mListener = object : X5Listener {
@@ -63,7 +63,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
             }
         }
     }
-    var mListener: X5Listener? = null
+    private var mListener: X5Listener? = null
 
     init {
         orientation = LinearLayout.VERTICAL
@@ -92,5 +92,11 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         addView(progressBar)
         // 添加X5WebView
         addView(x5WebView)
+    }
+
+    fun getWebView() = x5WebView.tencentWebView
+
+    fun setListener(listener: X5Listener) {
+        mListener = listener
     }
 }

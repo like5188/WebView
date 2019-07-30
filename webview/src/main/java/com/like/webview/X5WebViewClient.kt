@@ -13,7 +13,7 @@ import com.tencent.smtt.sdk.WebViewClient
 /**
  * 帮助WebView处理各种通知和请求事件的
  */
-class X5WebViewClient(private val mListener: X5Listener?) : WebViewClient() {
+internal class X5WebViewClient(private val mListener: X5Listener?) : WebViewClient() {
     companion object {
         private val TAG = X5WebViewClient::class.java.simpleName
     }

@@ -18,7 +18,7 @@ import com.tencent.smtt.sdk.WebView
 /**
  * 帮助WebView处理Javascript的对话框，网站图标，网站title，加载进度
  */
-class X5WebChromeClient(private val mActivity: Activity, private val mListener: X5Listener?) : WebChromeClient() {
+internal class X5WebChromeClient(private val mActivity: Activity, private val mListener: X5Listener?) : WebChromeClient() {
     companion object {
         private val TAG = X5WebChromeClient::class.java.simpleName
         private val COVER_SCREEN_PARAMS = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
