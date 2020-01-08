@@ -1,6 +1,7 @@
 package com.like.webview
 
 import android.graphics.Bitmap
+
 import com.tencent.smtt.sdk.WebView
 
 interface X5Listener {

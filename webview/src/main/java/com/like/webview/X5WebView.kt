@@ -9,9 +9,9 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import android.webkit.WebSettings.LOAD_DEFAULT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 
@@ -131,7 +131,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             // LOAD_CACHE_ELSE_NETWORK：只要缓存可用就加载缓存，哪怕它们已经过期失效。如果缓存不可用就从网络上加载数据。
             // LOAD_NO_CACHE：不加载缓存，只从网络加载数据。
             // LOAD_CACHE_ONLY：不从网络加载数据，只从缓存加载数据。
-            cacheMode = LOAD_DEFAULT
+            cacheMode = WebSettings.LOAD_DEFAULT
             domStorageEnabled = true// 启用或禁用DOM缓存。
             databaseEnabled = true// 启用或禁用数据库缓存。
             setAppCacheEnabled(true)// 启用或禁用应用缓存。
