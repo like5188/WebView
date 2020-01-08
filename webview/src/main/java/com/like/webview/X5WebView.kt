@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.tencent.smtt.sdk.TbsVideo
 
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView

@@ -16,7 +16,26 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
-
+        <!--Tbs视频播放器接入
+        public static boolean canUseTbsPlayer(Context context)
+        //判断当前Tbs播放器是否已经可以使用。
+        public static void openVideo(Context context, String videoUrl)
+        //直接调用播放接口，传入视频流的url
+        public static void openVideo(Context context, String videoUrl, Bundle extraData)
+        //extraData对象是根据定制需要传入约定的信息，没有需要可以传如null
+        //extraData可以传入key: "screenMode", 值: 102, 来控制默认的播放UI
+        //类似: extraData.putInt("screenMode", 102); 来实现默认全屏+控制栏等UI-->
+        <activity
+            android:name="com.tencent.smtt.sdk.VideoActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.tencent.smtt.tbs.video.PLAY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

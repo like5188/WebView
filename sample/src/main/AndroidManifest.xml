@@ -10,9 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--享受页面视频的完整播放体验需要做如下声明 android:configChanges="orientation|screenSize|keyboardHidden"-->
+        <!--避免输入法界面弹出后遮挡输入光标的问题 android:windowSoftInputMode="stateHidden|adjustResize"-->
         <activity
             android:name=".WebViewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

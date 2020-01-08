@@ -2,6 +2,7 @@ package com.like.webview.sample
 
 import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
+import android.graphics.PixelFormat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
@@ -25,6 +26,8 @@ class WebViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
+        window.setFormat(PixelFormat.TRANSLUCENT)
         x5ProgressBarWebView.getWebView().addJavascriptInterface(mJavascriptInterface, "androidAPI")
         mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
             try {
@@ -37,8 +40,8 @@ class WebViewActivity : AppCompatActivity() {
             }
             "js调用android方法成功"
         }
-        val url = "file:///android_asset/index.html"
-//        val url = "http://www.sohu.com/"
+//        val url = "file:///android_asset/index.html"
+        val url = "http://www.sohu.com/"
         x5ProgressBarWebView.getWebView().settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         x5ProgressBarWebView.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {

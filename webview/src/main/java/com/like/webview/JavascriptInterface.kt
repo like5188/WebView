@@ -12,7 +12,7 @@ class JavascriptInterface(private val webView: WebView) {
     private val androidMethodMap = mutableMapOf<String, (String) -> String>()
 
     /**
-     * 注册 android 方法。这个方法会被JS调用。
+     * 注册 android 方法。这个方法可以被JS调用。
      * js 调用如下：
      * function callAndroid(){// 方法名字随意
      *      var user = {};
@@ -46,6 +46,9 @@ class JavascriptInterface(private val webView: WebView) {
 
     /**
      * js 调用 android 方法
+     *
+     * @param methodName            android 方法名称
+     * @param paramsJsonString      android 方法参数
      */
     @JavascriptInterface // API17及以上的版本中，需要此注解才能调用下面的方法
     fun callAndroidMethod(methodName: String, paramsJsonString: String): String {
@@ -62,22 +65,22 @@ class JavascriptInterface(private val webView: WebView) {
     /**
      * android 调用 js 方法
      *
-     * @param jsMethodName      js 方法的名字
+     * @param methodName        js 方法的名字
      * @param paramsJsonString  js 方法的参数
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
-    fun callJsMethod(jsMethodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
-        if (jsMethodName.isEmpty()) return
+    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
+        if (methodName.isEmpty()) return
         val jsString = if (paramsJsonString.isNullOrEmpty()) {
-            "javascript:$jsMethodName()"
+            "javascript:$methodName()"
         } else {
-            "javascript:$jsMethodName('$paramsJsonString')"
+            "javascript:$methodName('$paramsJsonString')"
         }
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
         // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
         // b)Android 4.4 后才可使用
         webView.evaluateJavascript(jsString) {
-            Log.v("JavascriptInterface", "android调用js方法，方法名：$jsMethodName，传递的参数：paramsJsonString=$paramsJsonString，js方法的返回值：$it")
+            Log.v("JavascriptInterface", "android调用js方法，方法名：$methodName，传递的参数：paramsJsonString=$paramsJsonString，js方法的返回值：$it")
             callback?.invoke(it)
         }
     }
