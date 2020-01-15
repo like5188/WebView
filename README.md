@@ -8,9 +8,9 @@
 
 1、腾讯x5内核WebView的封装。基于版本：tbs_sdk_thirdapp_v3.6.0.1371_43624_sharewithdownload_withoutGame_obfs_20181106_121046.jar
 
-2、支持 ARouter 组件化架构。通过 WebViewService 接口获取 WebViewFragment 即可，详情见例子。
+2、支持 ARouter 组件化架构。
 
-## 使用方法：
+## 一、非组件化使用方法：
 
 1、引用
 
@@ -26,7 +26,7 @@
 在Module的gradle中加入：
 ```groovy
     dependencies {
-        implementation 'com.github.like5188:WebView:版本号'
+        implementation 'com.github.like5188.WebView:webview:版本号'
     }
 ```
 
@@ -86,3 +86,31 @@
         e.printStackTrace()
     }
 ```
+
+## 二、组件化使用方法：
+
+1、引用
+
+在Project的gradle中加入：
+```groovy
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
+```
+在Module的gradle中加入：
+```groovy
+    dependencies {
+        implementation 'com.github.like5188:Common:5.3.2'
+
+        implementation 'com.github.like5188.WebView:component:版本号'
+        implementation 'com.github.like5188.WebView:webview:版本号'
+        implementation 'com.github.like5188.WebView:service:版本号'
+
+        kapt 'com.alibaba:arouter-compiler:1.2.2'
+    }
+```
+
+2、通过 WebViewService 接口获取 WebViewFragment。然后可以通过 WebViewFragment 进行相关操作，详情见例子。

@@ -91,5 +91,4 @@ dependencies {
     implementation project(':component')
     implementation project(':webview')
     implementation project(':service')
-//    implementation 'com.github.like5188:WebView:版本号'
 }
