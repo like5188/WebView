@@ -8,7 +8,7 @@
 
 1、腾讯x5内核WebView的封装。基于版本：tbs_sdk_thirdapp_v3.6.0.1371_43624_sharewithdownload_withoutGame_obfs_20181106_121046.jar
 
-2、支持 ARouter 组件化架构。通过 WebViewService 接口获取 WebViewFragment 即可。
+2、支持 ARouter 组件化架构。通过 WebViewService 接口获取 WebViewFragment 即可，详情见例子。
 
 ## 使用方法：
 
