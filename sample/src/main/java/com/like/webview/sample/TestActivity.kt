@@ -1,49 +1,65 @@
 package com.like.webview.sample
 
-import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import com.like.webview.JavascriptInterface
+import androidx.databinding.DataBindingUtil
+import com.alibaba.android.arouter.facade.annotation.Autowired
+import com.alibaba.android.arouter.launcher.ARouter
+import com.like.common.base.BaseActivity
+import com.like.webview.component.WebViewFragment
 import com.like.webview.X5Listener
-import com.like.webview.X5ProgressBarWebView
-import com.like.webview.sample.databinding.ActivityWebviewBinding
-import com.tencent.smtt.sdk.WebSettings
+import com.like.webview.component.service.WebViewService
+import com.like.webview.sample.databinding.ActivityTestBinding
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
-class WebViewActivity : AppCompatActivity() {
-    private val mBinding: ActivityWebviewBinding by lazy {
-        DataBindingUtil.setContentView<ActivityWebviewBinding>(this, R.layout.activity_webview)
+class TestActivity : BaseActivity() {
+    private val mBinding by lazy {
+        DataBindingUtil.setContentView<ActivityTestBinding>(this, R.layout.activity_test)
     }
-    private val x5ProgressBarWebView: X5ProgressBarWebView by lazy {
-        mBinding.webView
-    }
-    private val mJavascriptInterface by lazy { JavascriptInterface(x5ProgressBarWebView.getWebView()) }
+    private var fragment: WebViewFragment? = null
+    @Autowired
+    @JvmField
+    var mWebViewService: WebViewService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-        x5ProgressBarWebView.getWebView().addJavascriptInterface(mJavascriptInterface, "androidAPI")
-        mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
+        ARouter.getInstance().inject(this)
+        mBinding
+        val url = "file:///android_asset/index.html"
+//        val url = "http://www.sohu.com/"
+        mWebViewService?.getWebViewFragment(url)?.let {
+            fragment = it as WebViewFragment
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragment_holder, it)
+            }.commit()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initWebViewFragment()
+    }
+
+    private fun initWebViewFragment() {
+        fragment?.setInterfaceName("androidAPI")
+        fragment?.registerAndroidMethodForJSCall("androidMethodName") {
             try {
                 val jsonObject = JSONObject(it)
                 val name = jsonObject.optString("name")
                 val age = jsonObject.optInt("age")
-                Log.d("WebViewActivity", "androidMethodName name=$name age=$age")
+                Log.d("WebViewFragment", "androidMethodName name=$name age=$age")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             "js调用android方法成功"
         }
-//        val url = "file:///android_asset/index.html"
-        val url = "http://www.sohu.com/"
-        x5ProgressBarWebView.getWebView().settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-        x5ProgressBarWebView.setListener(object : X5Listener {
+        fragment?.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
             }
@@ -67,37 +83,31 @@ class WebViewActivity : AppCompatActivity() {
             override fun onReceivedError(webView: WebView?) {
             }
         })
-
-        x5ProgressBarWebView.getWebView().loadUrl(url)
     }
 
-    fun callJS(view: View) {
+    fun pageUp(view: View) {
+        fragment?.pageUp()
+    }
+
+    fun pageDown(view: View) {
+        fragment?.pageDown()
+    }
+
+    fun reload(view: View) {
+        fragment?.reload()
+    }
+
+    fun callJSMethod(view: View) {
         try {
             val params = JSONObject()
             params.put("name", "like1")
             params.put("age", 22)
-            mJavascriptInterface.callJsMethod("jsMethodName", params.toString()) {
-                Log.d("WebViewActivity", "callJsMethod 返回值：$it")
+            fragment?.callJSMethod("jsMethodName", params.toString()) {
+                Log.d("TestActivity", "callJsMethod 返回值：$it")
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun pageUp(view: View) {
-        x5ProgressBarWebView.getWebView().pageUp(true)
-    }
-
-    fun pageDown(view: View) {
-        x5ProgressBarWebView.getWebView().pageDown(true)
-    }
-
-    fun refresh(view: View) {
-        x5ProgressBarWebView.getWebView().reload()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        x5ProgressBarWebView.getWebView().destroy()
-    }
 }

@@ -14,7 +14,17 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        // 生成的文档路径 : build/generated/source/(apt or kapt)/(debug or release)/com/alibaba/android/arouter/docs/arouter-map-of-${moduleName}.json
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
+            }
+        }
     }
+
     signingConfigs {
         debug {
             storeFile file("../like.jks")
@@ -51,6 +61,17 @@ android {
     dataBinding {
         enabled true
     }
+
+    // 解决debug状态下的bug：Invoke-customs are only supported starting with Android O (--min-api 26)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 解决 release 时集成的 FamilyWebView 编译报错的bug：More than one file was found with OS independent path 'META-INF/webview_release.kotlin_module'
+    packagingOptions {
+        pickFirst 'META-INF/*'
+    }
 }
 
 dependencies {
@@ -63,6 +84,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation 'com.github.like5188:Common:5.3.2'
+
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
+
+    implementation project(':component')
     implementation project(':webview')
+    implementation project(':service')
 //    implementation 'com.github.like5188:WebView:版本号'
 }
