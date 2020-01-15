@@ -2,13 +2,12 @@ package com.like.webview
 
 import android.util.Log
 import android.webkit.JavascriptInterface
-
 import com.tencent.smtt.sdk.WebView
 
 /**
  * android 和 js 相互调用的帮助类。
  */
-class JavascriptInterface(private val webView: WebView) {
+class JavascriptInterface {
     private val androidMethodMap = mutableMapOf<String, (String) -> String>()
 
     /**
@@ -69,7 +68,7 @@ class JavascriptInterface(private val webView: WebView) {
      * @param paramsJsonString  js 方法的参数
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
-    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
+    fun callJsMethod(webView: WebView, methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
         if (methodName.isEmpty()) return
         val jsString = if (paramsJsonString.isNullOrEmpty()) {
             "javascript:$methodName()"

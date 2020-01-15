@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.launcher.ARouter
 import com.like.common.base.BaseActivity
-import com.like.webview.component.WebViewFragment
 import com.like.webview.X5Listener
+import com.like.webview.component.WebViewFragment
 import com.like.webview.component.service.WebViewService
 import com.like.webview.sample.databinding.ActivityTestBinding
 import com.tencent.smtt.sdk.WebView
@@ -37,6 +37,9 @@ class TestActivity : BaseActivity() {
             fragment = it as WebViewFragment
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragment_holder, it)
+                // 触发BaseFragment的lazyLoadData()方法
+                hide(it)
+                show(it)
             }.commit()
         }
     }

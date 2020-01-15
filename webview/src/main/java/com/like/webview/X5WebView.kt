@@ -1,6 +1,5 @@
 package com.like.webview
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,8 +10,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import com.tencent.smtt.sdk.TbsVideo
-
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 
@@ -97,7 +94,6 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         addView(tencentWebView)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private fun initWebSettings() {
         tencentWebView.settings.apply {
             // 支持JS
