@@ -69,7 +69,7 @@
 在Module的gradle中加入：
 ```groovy
     dependencies {
-        implementation 'com.github.like5188:Common:5.3.2'
+        implementation 'com.github.like5188:Common:5.3.3'
 
         implementation 'com.github.like5188.WebView:component:版本号'
         implementation 'com.github.like5188.WebView:webview:版本号'

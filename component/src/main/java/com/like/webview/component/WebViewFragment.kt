@@ -48,7 +48,7 @@ class WebViewFragment : BaseFragment() {
     private var mX5ProgressBarWebView: X5ProgressBarWebView? = null
     private var mWebView: WebView? = null
 
-    override fun initViews(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = DataBindingUtil.inflate<FragmentWebviewBinding>(inflater, R.layout.fragment_webview, container, false)
                 ?: throw RuntimeException("初始化 WebViewFragment 失败")
         ARouter.getInstance().inject(this)
@@ -58,7 +58,7 @@ class WebViewFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun lazyLoadData() {
+    override fun onLazyLoadData() {
         mWebView?.loadUrl(url)
     }
 
