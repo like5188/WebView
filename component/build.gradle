@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.github.like5188:Common:5.3.3'
 
     kapt 'com.alibaba:arouter-compiler:1.2.2'
+
     implementation project(':webview')
     implementation project(':service')
 }
