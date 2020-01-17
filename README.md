@@ -6,11 +6,9 @@
 
 ## 功能介绍
 
-1、腾讯x5内核WebView的封装。基于版本：tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar
+1、腾讯x5内核WebView的封装，包含进度条。基于版本：tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar
 
-2、支持 ARouter 组件化架构。
-
-## 一、非组件化使用方法：
+## 使用方法：
 
 1、引用
 
@@ -26,7 +24,7 @@
 在Module的gradle中加入：
 ```groovy
     dependencies {
-        implementation 'com.github.like5188.WebView:webview:版本号'
+        implementation 'com.github.like5188:WebView:版本号'
     }
 ```
 
@@ -51,32 +49,48 @@
 
         app:progress_bar_progress_color="@color/colorAccent"
 
-4、js 和 android 的相互调用，使用 JavascriptInterface 帮助类。详情见 WebViewFragment
+4、js 和 android 的相互调用，使用 JavascriptInterface 帮助类
+```java
+    初始化webView
+    private val mX5ProgressBarWebView: X5ProgressBarWebView by lazy {
+        mBinding.webView
+    }
+    private val mWebView: WebView by lazy {
+        mX5ProgressBarWebView.getWebView()
+    }
+    private val mJavascriptInterface by lazy { JavascriptInterface() }
 
-## 二、组件化使用方法：
+    x5ProgressBarWebView.getWebView().addJavascriptInterface(mJavascriptInterface, "androidAPI")
 
-1、引用
-
-在Project的gradle中加入：
-```groovy
-    allprojects {
-        repositories {
-            ...
-            maven { url 'https://jitpack.io' }
+    // js调用android
+    mJavascriptInterface.registerAndroidMethodForJSCall("androidMethodName") {
+        try {
+           val jsonObject = JSONObject(it)
+           val name = jsonObject.optString("name")
+           val age = jsonObject.optInt("age")
+           Log.d("WebViewActivity", "androidMethodName name=$name age=$age")
+        } catch (e: Exception) {
+           e.printStackTrace()
         }
+        "js调用android方法成功"
+    }
+
+    // android调用js
+    try {
+        val params = JSONObject()
+        params.put("name", "like1")
+        params.put("age", 22)
+        mJavascriptInterface.callJsMethod(mWebView, "jsMethodName", params.toString()) {
+            Log.d("WebViewActivity", "callJsMethod 返回值：$it")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    // 释放资源
+    override fun onDestroy() {
+        super.onDestroy()
+        mWebView.destroy()
+        mJavascriptInterface.clearAndroidMethodForJSCall()
     }
 ```
-在Module的gradle中加入：
-```groovy
-    dependencies {
-        implementation 'com.github.like5188:Common:5.3.3'
-
-        implementation 'com.github.like5188.WebView:component:版本号'
-        implementation 'com.github.like5188.WebView:webview:版本号'
-        implementation 'com.github.like5188.WebView:service:版本号'
-
-        kapt 'com.alibaba:arouter-compiler:1.2.2'
-    }
-```
-
-2、通过 WebViewService 接口获取 WebViewFragment。然后可以通过 WebViewFragment 进行相关操作，详情见例子。

@@ -1,1 +1,1 @@
-include ':sample', ':webview', ':component', ':service'
+include ':sample', ':webview'

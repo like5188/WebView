@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="webview_color_gray">#E6E6E6</color>
-    <color name="webview_progress_bar_bg_color">#E6E6E6</color>
-    <color name="webview_progress_bar_progress_color">#FF4081</color>
-</resources>

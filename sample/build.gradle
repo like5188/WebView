@@ -16,13 +16,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
-
-        // 生成的文档路径 : build/generated/source/(apt or kapt)/(debug or release)/com/alibaba/android/arouter/docs/arouter-map-of-${moduleName}.json
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
-            }
-        }
     }
 
     signingConfigs {
@@ -84,11 +77,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'com.github.like5188:Common:5.3.3'
-
-    kapt 'com.alibaba:arouter-compiler:1.2.2'
-
-    implementation project(':component')
     implementation project(':webview')
-    implementation project(':service')
 }
