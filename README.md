@@ -6,7 +6,7 @@
 
 ## 功能介绍
 
-1、腾讯x5内核WebView的封装。基于版本：tbs_sdk_thirdapp_v3.6.0.1371_43624_sharewithdownload_withoutGame_obfs_20181106_121046.jar
+1、腾讯x5内核WebView的封装。基于版本：tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar
 
 2、支持 ARouter 组件化架构。
 
