@@ -62,36 +62,36 @@ class WebViewFragment : BaseFragment() {
         mWebView?.loadUrl(url)
     }
 
-    fun getWebView(): WebView? {
+    internal fun getWebView(): WebView? {
         return mWebView
     }
 
-    fun setListener(listener: X5Listener) {
+    internal fun setListener(listener: X5Listener) {
         mX5ProgressBarWebView?.setListener(listener)
     }
 
-    fun setInterfaceName(interfaceName: String) {
+    internal fun setInterfaceName(interfaceName: String) {
         mWebView?.addJavascriptInterface(mJavascriptInterface, interfaceName)
     }
 
-    fun registerAndroidMethodForJSCall(methodName: String, method: (String) -> String) {
+    internal fun registerAndroidMethodForJSCall(methodName: String, method: (String) -> String) {
         mJavascriptInterface.registerAndroidMethodForJSCall(methodName, method)
     }
 
-    fun callJSMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
+    internal fun callJSMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
         val webView = mWebView ?: return
         mJavascriptInterface.callJsMethod(webView, methodName, paramsJsonString, callback)
     }
 
-    fun pageUp() {
+    internal fun pageUp() {
         mWebView?.pageUp(true)
     }
 
-    fun pageDown() {
+    internal fun pageDown() {
         mWebView?.pageDown(true)
     }
 
-    fun reload() {
+    internal fun reload() {
         mWebView?.reload()
     }
 

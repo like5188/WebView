@@ -10,7 +10,6 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.launcher.ARouter
 import com.like.common.base.BaseActivity
 import com.like.webview.X5Listener
-import com.like.webview.component.WebViewFragment
 import com.like.webview.component.service.WebViewService
 import com.like.webview.sample.databinding.ActivityTestBinding
 import com.tencent.smtt.sdk.WebView
@@ -20,7 +19,6 @@ class TestActivity : BaseActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityTestBinding>(this, R.layout.activity_test)
     }
-    private var fragment: WebViewFragment? = null
     @Autowired
     @JvmField
     var mWebViewService: WebViewService? = null
@@ -33,8 +31,7 @@ class TestActivity : BaseActivity() {
         mBinding
         val url = "file:///android_asset/index.html"
 //        val url = "http://www.sohu.com/"
-        mWebViewService?.getWebViewFragment(url)?.let {
-            fragment = it as WebViewFragment
+        mWebViewService?.getFragment(url)?.let {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragment_holder, it)
                 // 触发BaseFragment的lazyLoadData()方法
@@ -50,8 +47,8 @@ class TestActivity : BaseActivity() {
     }
 
     private fun initWebViewFragment() {
-        fragment?.setInterfaceName("androidAPI")
-        fragment?.registerAndroidMethodForJSCall("androidMethodName") {
+        mWebViewService?.setInterfaceName("androidAPI")
+        mWebViewService?.registerAndroidMethodForJSCall("androidMethodName") {
             try {
                 val jsonObject = JSONObject(it)
                 val name = jsonObject.optString("name")
@@ -62,7 +59,7 @@ class TestActivity : BaseActivity() {
             }
             "js调用android方法成功"
         }
-        fragment?.setListener(object : X5Listener {
+        mWebViewService?.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
             }
@@ -89,15 +86,15 @@ class TestActivity : BaseActivity() {
     }
 
     fun pageUp(view: View) {
-        fragment?.pageUp()
+        mWebViewService?.pageUp()
     }
 
     fun pageDown(view: View) {
-        fragment?.pageDown()
+        mWebViewService?.pageDown()
     }
 
     fun reload(view: View) {
-        fragment?.reload()
+        mWebViewService?.reload()
     }
 
     fun callJSMethod(view: View) {
@@ -105,7 +102,7 @@ class TestActivity : BaseActivity() {
             val params = JSONObject()
             params.put("name", "like1")
             params.put("age", 22)
-            fragment?.callJSMethod("jsMethodName", params.toString()) {
+            mWebViewService?.callJSMethod("jsMethodName", params.toString()) {
                 Log.d("TestActivity", "callJsMethod 返回值：$it")
             }
         } catch (e: Exception) {
