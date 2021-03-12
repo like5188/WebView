@@ -7,12 +7,12 @@
     // JS代码
     <script>
 	   function jsMethodName(str){
-		    alert("Android调用了JS的jsMethodName方法，传递的参数：" + str);
+		    alert("Android 调用了 JS 的 jsMethodName 方法，传递的参数：" + str);
 		    return "3"
 	   }
 
 	   function jsMethodName1(){
-		    alert("Android调用了JS的jsMethodName1方法");
+		    alert("Android 调用了 JS 的 jsMethodName1 方法");
 		    return "4"
 	   }
 
@@ -20,10 +20,9 @@
 	        var user = {};
             user.name= "like";
             user.age = 36;
-            var str=window.androidAPI.callAndroidMethod("androidMethodName",JSON.stringify(user));
-            alert("调用了Android的callAndroidMethod方法，返回值：" + str);
+            var str=window.androidAPI.androidMethod(JSON.stringify(user));
+            alert("调用了 Android 的 androidMethod 方法，返回值：" + str);
        }
-
 
     </script>
 </head>

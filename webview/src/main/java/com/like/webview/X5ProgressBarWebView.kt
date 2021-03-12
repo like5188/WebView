@@ -28,6 +28,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
             max = 100
         }
     }
+    private var mListener: X5Listener? = null
     private val x5WebView: X5WebView by lazy {
         X5WebView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -64,7 +65,6 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
             })
         }
     }
-    private var mListener: X5Listener? = null
 
     init {
         orientation = LinearLayout.VERTICAL
@@ -99,5 +99,16 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
 
     fun setListener(listener: X5Listener) {
         mListener = listener
+    }
+
+    /**
+     * android 调用 js 方法
+     *
+     * @param methodName        js 方法的名字
+     * @param paramsJsonString  js 方法的参数
+     * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
+     */
+    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
+        x5WebView.callJsMethod(methodName, paramsJsonString, callback)
     }
 }
