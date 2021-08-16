@@ -6,7 +6,7 @@
 
 ## 功能介绍
 
-1、腾讯x5内核WebView的封装，包含进度条。基于版本：tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar
+1、腾讯x5内核WebView的封装，包含进度条。基于版本：com.tencent.tbs.tbssdk:sdk:43939
 
 ## 使用方法：
 
