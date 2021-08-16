@@ -10,14 +10,26 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
+import java.util.*
 
 /**
  * 包含了tencent的WebView、mErrorView
  */
-class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
     private val tencentWebView: WebView by lazy {
+        // 首次初始化冷启动优化，在调用TBS初始化、创建WebView之前进行如下配置
+        QbSdk.initTbsSettings(
+            mapOf(
+                TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER to true,
+                TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
+            )
+        )
+
         WebView(context).apply {
             layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
@@ -141,7 +153,8 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             // 2.NORMAL：正常显示不做任何渲染
             // 3.SINGLE_COLUMN：把所有内容放大webview等宽的一列中
             // 用SINGLE_COLUMN类型可以设置页面居中显示，页面可以放大缩小，但这种方法不怎么好，有时候会让你的页面布局走样而且我测了一下，只能显示中间那一块，超出屏幕的部分都不能显示。
-            layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN// 指定WebView的页面布局显示形式，调用该方法会引起页面重绘。默认值为LayoutAlgorithm#NARROW_COLUMNS。
+            layoutAlgorithm =
+                WebSettings.LayoutAlgorithm.SINGLE_COLUMN// 指定WebView的页面布局显示形式，调用该方法会引起页面重绘。默认值为LayoutAlgorithm#NARROW_COLUMNS。
             supportMultipleWindows()// 设置WebView是否支持多窗口。
             setSupportMultipleWindows(true)
             // 设置缓存模式。通常我们可以根据网络情况将这几种模式结合使用，比如有网的时候使用LOAD_DEFAULT，离线时使用LOAD_CACHE_ONLY、LOAD_CACHE_ELSE_NETWORK，让用户不至于在离线时啥都看不到。

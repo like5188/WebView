@@ -35,6 +35,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--首次初始化冷启动优化，内核首次加载时优化Service声明-->
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt" >
+        </service>
     </application>
 
 </manifest>
