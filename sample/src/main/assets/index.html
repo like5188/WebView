@@ -3,8 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>webView test</title>
-
-    // JS代码
     <script>
 	   function jsMethodName(str){
 		    alert("Android 调用了 JS 的 jsMethodName 方法，传递的参数：" + str);
@@ -24,13 +22,17 @@
             alert("调用了 Android 的 androidMethod 方法，返回值：" + str);
        }
 
+
+
     </script>
 </head>
 
 <body>
-<br/>
-<input type="button" value="callAndroid" onclick="callAndroid()"/>
-<br/>
+<br>
+<input type="button" value="callAndroid" onclick="callAndroid()" style="
+    height: 100px;
+    width: 100%;
+    font-size: 30px;
+">
+<br>
 </body>
-
-</html>
