@@ -1,16 +1,18 @@
 package com.like.webview
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import com.tencent.smtt.sdk.WebView
 
 /**
@@ -29,14 +31,6 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
 
     init {
         orientation = VERTICAL
-        // 获取自定义的属性
-        val a = context.obtainStyledAttributes(attrs, R.styleable.X5ProgressBarWebView, defStyleAttr, 0)
-        val errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1)
-        val progressBarBgColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_bg_color, Color.parseColor("#3F51B5"))
-        val progressBarProgressColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_progress_color, Color.parseColor("#FFFFFF"))
-        val progressBarHeight = a.getDimension(R.styleable.X5ProgressBarWebView_progress_bar_height, 3f)
-        a.recycle()
-
         x5WebView = X5WebView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.setListener(object : X5Listener {
@@ -73,7 +67,15 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 }
             })
         }
+    }
 
+    fun init(
+        errorViewResId: Int = R.layout.webview_error_view,
+        progressBarBgColor: Int = ContextCompat.getColor(context, R.color.colorPrimary),
+        progressBarProgressColor: Int = ContextCompat.getColor(context, R.color.colorPrimaryDark),
+        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+    ) {
+        removeAllViews()
         // 为X5WebView添加错误页面
         if (errorViewResId != -1) {
             val errorView = View.inflate(context, errorViewResId, null)
@@ -81,8 +83,8 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 x5WebView?.setErrorView(errorView)
             }
         }
-        if (progressBarHeight > 0) {
-            progressBar = ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal).apply {
+        if (progressBarHeight > 0 && progressBar == null) {
+            progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
                 max = 100
             }.apply {
                 // 设置进度条背景颜色
