@@ -7,57 +7,55 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.like.common.base.addFragments
+import com.like.common.util.Logger
 import com.like.webview.X5Listener
-import com.like.webview.X5ProgressBarWebView
 import com.like.webview.sample.databinding.ActivityTestBinding
-import com.tencent.smtt.sdk.WebSettings
+import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
 class TestActivity : AppCompatActivity() {
-    private val mBinding: ActivityTestBinding by lazy {
-        DataBindingUtil.setContentView(this, R.layout.activity_test)
+    private val mBinding by lazy {
+        DataBindingUtil.setContentView<ActivityTestBinding>(this, R.layout.activity_test)
     }
-    private val mX5ProgressBarWebView: X5ProgressBarWebView by lazy {
-        mBinding.webView
-    }
-    private val mWebView: WebView? by lazy {
-        mX5ProgressBarWebView.getWebView()
-    }
-
-    private class JavascriptInterface {
-        @android.webkit.JavascriptInterface// API17及以上的版本中，需要此注解才能调用下面的方法
-        fun androidMethod(params: String): String {
-            try {
-                val jsonObject = JSONObject(params)
-                val name = jsonObject.optString("name")
-                val age = jsonObject.optInt("age")
-                Log.d("WebViewActivity", "androidMethod name=$name age=$age")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return "js 调用 android 的 androidMethod 方法成功"
-        }
-    }
+    private var mWebViewFragment: WebViewFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-        mWebView?.addJavascriptInterface(JavascriptInterface(), "androidAPI")
+        mBinding
         val url = "file:///android_asset/index.html"
-//        val url = "http://www.sohu.com/"
-        mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-        mX5ProgressBarWebView.setListener(object : X5Listener {
+//        val url = "http://car1.i.cacf.cn/#/reservation/redestination"
+        WebViewFragment(url).let {
+            addFragments(R.id.fragment_holder, 0, it)
+            mWebViewFragment = it
+        }
+    }
+
+    fun startWebViewActivity(view: View) {
+        WebViewActivity.start("https://www.sina.com.cn/")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initWebViewFragment()
+    }
+
+    private fun initWebViewFragment() {
+        mWebViewFragment?.addJavascriptInterface(JavascriptInterface(), "appKcwc")
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
+        cookieManager.removeAllCookie()
+        cookieManager.setCookie("http://car1.i.cacf.cn", "mechine_type=android")
+        mWebViewFragment?.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
             }
 
             override fun onReceivedTitle(webView: WebView?, title: String?) {
-                if (title != null && title.length > 6)
-                    mBinding.tvTitle.text = "${title.subSequence(0, 6)}..."
-                else
-                    mBinding.tvTitle.text = title
+                mBinding.tvTitle.text = title
             }
 
             override fun onProgressChanged(webView: WebView?, progress: Int?) {
@@ -72,8 +70,18 @@ class TestActivity : AppCompatActivity() {
             override fun onReceivedError(webView: WebView?) {
             }
         })
+    }
 
-        mWebView?.loadUrl(url)
+    fun pageUp(view: View) {
+        mWebViewFragment?.pageUp()
+    }
+
+    fun pageDown(view: View) {
+        mWebViewFragment?.pageDown()
+    }
+
+    fun reload(view: View) {
+        mWebViewFragment?.reload()
     }
 
     fun callJSMethod(view: View) {
@@ -81,29 +89,46 @@ class TestActivity : AppCompatActivity() {
             val params = JSONObject()
             params.put("name", "like1")
             params.put("age", 22)
-            mX5ProgressBarWebView.callJsMethod("jsMethodName", params.toString()) {
-                Log.d("WebViewActivity", "callJsMethod 返回值：$it")
+            mWebViewFragment?.callJsMethod(
+                "jsMethodName",
+                params.toString()
+            ) {
+                Logger.d("callJsMethod 返回值：$it")
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun pageUp(view: View) {
-        mWebView?.pageUp(true)
-    }
+    companion object {
+        private class JavascriptInterface {
+            @android.webkit.JavascriptInterface// API17及以上的版本中，需要此注解才能调用下面的方法
+            fun androidMethod(params: String): String {
+                try {
+                    val jsonObject = JSONObject(params)
+                    val name = jsonObject.optString("name")
+                    val age = jsonObject.optInt("age")
+                    Log.d("WebViewActivity", "androidMethod name=$name age=$age")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return "js 调用 android 的 androidMethod 方法成功"
+            }
 
-    fun pageDown(view: View) {
-        mWebView?.pageDown(true)
-    }
+            @android.webkit.JavascriptInterface
+            fun goBack() {
+                Logger.d("js调用了goBack方法")
+            }
 
-    fun refresh(view: View) {
-        mWebView?.reload()
-    }
+            @android.webkit.JavascriptInterface
+            fun login() {
+                Logger.d("js调用了login方法")
+            }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mX5ProgressBarWebView.destroy()
+            @android.webkit.JavascriptInterface
+            fun login(a: String) {
+                Logger.d("js调用了login方法，参数：$a")
+            }
+        }
     }
-
 }

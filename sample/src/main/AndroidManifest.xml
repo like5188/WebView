@@ -3,6 +3,7 @@
     package="com.like.webview.sample">
 
     <application
+        android:name=".WebViewApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,7 +13,7 @@
         <!--享受页面视频的完整播放体验需要做如下声明 android:configChanges="orientation|screenSize|keyboardHidden"，这样不会重新创建Activity实例，会调用Activity的onConfigurationChanged()方法-->
         <!--避免输入法界面弹出后遮挡输入光标的问题 android:windowSoftInputMode="stateHidden|adjustResize"-->
         <activity
-            android:name=".TestActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -22,6 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WebViewActivity"
+            android:exported="true" />
 
     </application>
 

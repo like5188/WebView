@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,25 +50,37 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="refresh"
+                android:onClick="reload"
                 android:text="刷新" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="callJSMethod"
-                android:text="callJS" />
+                android:text="callJSMethod"
+                android:textAllCaps="false" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="startWebViewActivity"
+                android:text="启动WebViewActivity"
+                android:textAllCaps="false" />
         </LinearLayout>
 
-        <com.like.webview.X5ProgressBarWebView
-            android:id="@+id/web_view"
+        <FrameLayout
+            android:id="@+id/fragment_holder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:error_view_res_id="@layout/webview_error_view"
-            app:progress_bar_height="3dp"
-            app:progress_bar_bg_color="@color/colorPrimary"
-            app:progress_bar_progress_color="@color/colorAccent" />
-
+            android:layout_height="match_parent" />
     </LinearLayout>
+
 </layout>
