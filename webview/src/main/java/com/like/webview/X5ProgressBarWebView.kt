@@ -17,11 +17,6 @@ import com.tencent.smtt.sdk.WebView
 
 /**
  * 包含了X5WebView，并在其基础上增加了进度条
- *
- * <attr name="error_view_res_id" format="reference|integer" />
- * <attr name="progress_bar_bg_color" format="reference|color" />
- * <attr name="progress_bar_progress_color" format="reference|color" />
- * <attr name="progress_bar_height" format="dimension|integer" />
  */
 class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
