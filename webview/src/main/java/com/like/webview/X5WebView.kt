@@ -232,7 +232,6 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     fun destroy() {
         tencentWebView?.apply {
             try {
-                loadUrl("about:blank")
                 parent?.let {
                     (it as ViewGroup).removeView(this)
                 }
