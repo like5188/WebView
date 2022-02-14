@@ -244,5 +244,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             }
             destroy()
         }
+        mErrorView = null
+        mListener = null
     }
 }
