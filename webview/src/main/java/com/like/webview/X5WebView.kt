@@ -11,10 +11,10 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.sdk.CookieSyncManager
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
-import java.util.*
 
 /**
  * 包含了tencent的WebView、mErrorView
@@ -225,5 +225,24 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val info = connectivity.activeNetworkInfo
         return info != null && info.isConnected
+    }
+
+    /**
+     * 需要放在super.onDestroy();之前调用，防止内存泄漏。
+     */
+    fun destroy() {
+        with(tencentWebView) {
+            stopLoading()
+            removeAllViewsInLayout()
+            removeAllViews()
+            webViewClient = null
+            webChromeClient = null
+            try {
+                CookieSyncManager.getInstance().stopSync()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            destroy()
+        }
     }
 }
