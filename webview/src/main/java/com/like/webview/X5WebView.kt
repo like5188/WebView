@@ -230,18 +230,18 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
      */
     fun destroy() {
         tencentWebView?.apply {
-            stopLoading()
-            removeAllViewsInLayout()
-            removeAllViews()
-            webViewClient = null
-            webChromeClient = null
             try {
+                stopLoading()
+                removeAllViewsInLayout()
+                removeAllViews()
+                webViewClient = null
+                webChromeClient = null
                 CookieSyncManager.getInstance().stopSync()
+                destroy()
+                tencentWebView = null
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            destroy()
-            tencentWebView = null
         }
         mErrorView = null
         mListener = null
