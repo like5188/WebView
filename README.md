@@ -6,7 +6,7 @@
 
 ## 功能介绍
 
-1、腾讯x5内核WebView的封装，包含进度条。基于版本：com.tencent.tbs.tbssdk:sdk:43939
+1、腾讯x5内核WebView的封装，包含进度条。基于版本：'com.tencent.tbs:tbssdk:44153'
 
 ## 使用方法：
 
