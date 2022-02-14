@@ -41,4 +41,8 @@ class ViewPagerActivity : FragmentActivity() {
         mBinding.vp.setCurrentItem(3, false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 }
