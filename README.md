@@ -27,8 +27,8 @@
 
 ```groovy
     dependencies {
-    implementation 'com.github.like5188:WebView:版本号'
-}
+        implementation 'com.github.like5188:WebView:版本号'
+    }
 ```
 
 2、在Application中初始化
