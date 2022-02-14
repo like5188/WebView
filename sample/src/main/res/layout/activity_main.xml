@@ -7,7 +7,22 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="test"
-        android:text="跳转test界面" />
+        android:onClick="fragment"
+        android:text="fragment测试"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="activity"
+        android:text="activity测试"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="viewPager"
+        android:text="viewPager测试"
+        android:textAllCaps="false" />
 
 </LinearLayout>

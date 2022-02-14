@@ -24,10 +24,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TestActivity"
+            android:name=".WebViewFragmentActivity"
             android:exported="true" />
         <activity
             android:name=".WebViewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".viewpager.ViewPagerActivity"
             android:exported="true" />
 
     </application>

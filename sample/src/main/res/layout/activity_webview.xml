@@ -68,13 +68,6 @@
                 android:text="callJSMethod"
                 android:textAllCaps="false" />
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="startWebViewActivity"
-                android:text="启动WebViewActivity"
-                android:textAllCaps="false" />
         </LinearLayout>
 
         <FrameLayout

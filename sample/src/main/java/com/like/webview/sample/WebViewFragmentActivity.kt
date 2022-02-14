@@ -10,14 +10,14 @@ import androidx.databinding.DataBindingUtil
 import com.like.common.base.addFragments
 import com.like.common.util.Logger
 import com.like.webview.X5Listener
-import com.like.webview.sample.databinding.ActivityTestBinding
+import com.like.webview.sample.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
-class TestActivity : AppCompatActivity() {
+class WebViewFragmentActivity : AppCompatActivity() {
     private val mBinding by lazy {
-        DataBindingUtil.setContentView<ActivityTestBinding>(this, R.layout.activity_test)
+        DataBindingUtil.setContentView<ActivityWebviewBinding>(this, R.layout.activity_webview)
     }
     private var mWebViewFragment: WebViewFragment? = null
 
@@ -32,10 +32,6 @@ class TestActivity : AppCompatActivity() {
             addFragments(R.id.fragment_holder, 0, it)
             mWebViewFragment = it
         }
-    }
-
-    fun startWebViewActivity(view: View) {
-        WebViewActivity.start("https://www.sina.com.cn/")
     }
 
     override fun onStart() {
