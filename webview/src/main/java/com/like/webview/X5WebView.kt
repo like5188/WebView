@@ -21,19 +21,7 @@ import com.tencent.smtt.sdk.WebView
  */
 class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
-    private val tencentWebView: WebView by lazy {
-        // 首次初始化冷启动优化，在调用TBS初始化、创建WebView之前进行如下配置
-        QbSdk.initTbsSettings(
-            mapOf(
-                TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER to true,
-                TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
-            )
-        )
-
-        WebView(context).apply {
-            layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        }
-    }
+    private var tencentWebView: WebView? = null
     private var mErrorView: View? = null
         set(value) {
             value?.let {
@@ -73,7 +61,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
         // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
         // b)Android 4.4 后才可使用
-        tencentWebView.evaluateJavascript(jsString) {
+        tencentWebView?.evaluateJavascript(jsString) {
             callback?.invoke(it)
         }
     }
@@ -81,10 +69,20 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     init {
         // 支持获取手势焦点
         requestFocusFromTouch()
+        // 首次初始化冷启动优化，在调用TBS初始化、创建WebView之前进行如下配置
+        QbSdk.initTbsSettings(
+            mapOf(
+                TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER to true,
+                TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
+            )
+        )
+        tencentWebView = WebView(context).apply {
+            layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        }
         // 此处必须用getView()，因为TBS对WebView进行了封装
-        tencentWebView.view.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && tencentWebView.canGoBack()) {
-                tencentWebView.goBack()
+        tencentWebView?.view?.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && tencentWebView?.canGoBack() == true) {
+                tencentWebView?.goBack()
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
@@ -123,13 +121,13 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 mListener?.onReceivedError(webView)
             }
         }
-        tencentWebView.webViewClient = X5WebViewClient(listener)
-        tencentWebView.webChromeClient = X5WebChromeClient(context as Activity, listener)
+        tencentWebView?.webViewClient = X5WebViewClient(listener)
+        tencentWebView?.webChromeClient = X5WebChromeClient(context as Activity, listener)
         addView(tencentWebView)
     }
 
     private fun initWebSettings() {
-        tencentWebView.settings.apply {
+        tencentWebView?.settings?.apply {
             // 支持JS
             javaScriptEnabled = true
             // 设置WebView是否可以由JavaScript自动打开窗口，默认为false，通常与JavaScript的window.open()配合使用。
@@ -191,28 +189,28 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 it.visibility = View.GONE
             }
         }
-        if (tencentWebView.visibility != View.VISIBLE) {
-            tencentWebView.visibility = View.VISIBLE
+        if (tencentWebView?.visibility != View.VISIBLE) {
+            tencentWebView?.visibility = View.VISIBLE
         }
     }
 
     private fun showErrorView() {
         if (!isErrorViewShow()) {
-            tencentWebView.clearHistory()
+            tencentWebView?.clearHistory()
             mErrorView?.let {
                 if (it.visibility != View.VISIBLE) {
                     it.visibility = View.VISIBLE
                     it.setOnClickListener { v ->
                         isErrorPage = false
-                        tencentWebView.reload()
+                        tencentWebView?.reload()
                     }
                 }
             }
-            if (tencentWebView.visibility != View.GONE) {
-                tencentWebView.visibility = View.GONE
+            if (tencentWebView?.visibility != View.GONE) {
+                tencentWebView?.visibility = View.GONE
             }
         }
-        tencentWebView.stopLoading()
+        tencentWebView?.stopLoading()
         isErrorPage = true
     }
 
@@ -231,7 +229,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
      * 需要放在super.onDestroy();之前调用，防止内存泄漏。
      */
     fun destroy() {
-        with(tencentWebView) {
+        tencentWebView?.apply {
             stopLoading()
             removeAllViewsInLayout()
             removeAllViews()
@@ -243,6 +241,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 e.printStackTrace()
             }
             destroy()
+            tencentWebView = null
         }
         mErrorView = null
         mListener = null

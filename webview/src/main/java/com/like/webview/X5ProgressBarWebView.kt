@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-
 import com.tencent.smtt.sdk.WebView
 
 /**
@@ -20,17 +19,25 @@ import com.tencent.smtt.sdk.WebView
  * <attr name="error_view_res_id" format="reference|integer" />
  * <attr name="progress_bar_bg_color" format="reference|color" />
  * <attr name="progress_bar_progress_color" format="reference|color" />
- * <attr name="progress_bar_height" format="dimension|integer" />
+ * <attr name="progress_bar_height" format="dimension|integer" /> 高度小于等于0，表示不显示进度条
  */
-class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
-    private val progressBar: ProgressBar by lazy {
-        ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 100
-        }
-    }
+class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    LinearLayout(context, attrs, defStyleAttr) {
+    private var progressBar: ProgressBar? = null
     private var mListener: X5Listener? = null
-    private val x5WebView: X5WebView by lazy {
-        X5WebView(context).also {
+    private var x5WebView: X5WebView? = null
+
+    init {
+        orientation = VERTICAL
+        // 获取自定义的属性
+        val a = context.obtainStyledAttributes(attrs, R.styleable.X5ProgressBarWebView, defStyleAttr, 0)
+        val errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1)
+        val progressBarBgColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_bg_color, Color.parseColor("#3F51B5"))
+        val progressBarProgressColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_progress_color, Color.parseColor("#FFFFFF"))
+        val progressBarHeight = a.getDimension(R.styleable.X5ProgressBarWebView_progress_bar_height, 10f)
+        a.recycle()
+
+        x5WebView = X5WebView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.setListener(object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
@@ -54,48 +61,43 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {
-                    progressBar.progress = progress ?: 0
+                    progressBar?.progress = progress ?: 0
                     if (progress != 100) {
-                        progressBar.visibility = View.VISIBLE
+                        progressBar?.visibility = View.VISIBLE
                     } else {
-                        progressBar.visibility = View.GONE
+                        progressBar?.visibility = View.GONE
                     }
                     mListener?.onProgressChanged(webView, progress)
                 }
             })
         }
-    }
 
-    init {
-        orientation = VERTICAL
-        // 获取自定义的属性
-        val a = context.obtainStyledAttributes(attrs, R.styleable.X5ProgressBarWebView, defStyleAttr, 0)
-        val errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1)
-        val progressBarBgColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_bg_color, Color.parseColor("#3F51B5"))
-        val progressBarProgressColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_progress_color, Color.parseColor("#FFFFFF"))
-        val progressBarHeight = a.getDimension(R.styleable.X5ProgressBarWebView_progress_bar_height, 10f)
-        a.recycle()
         // 为X5WebView添加错误页面
         if (errorViewResId != -1) {
             val errorView = View.inflate(context, errorViewResId, null)
             if (errorView != null) {
-                x5WebView.setErrorView(errorView)
+                x5WebView?.setErrorView(errorView)
             }
         }
-        // 设置进度条背景颜色
-        progressBar.setBackgroundColor(progressBarBgColor)
-        // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
-        progressBar.progressDrawable = ClipDrawable(ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL)
-        // 设置进度条高度
-        progressBar.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
+        if (progressBarHeight > 0) {
+            progressBar = ProgressBar(context, attrs, android.R.attr.progressBarStyleHorizontal).apply {
+                max = 100
+            }
+            // 设置进度条背景颜色
+            progressBar?.setBackgroundColor(progressBarBgColor)
+            // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
+            progressBar?.progressDrawable = ClipDrawable(ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL)
+            // 设置进度条高度
+            progressBar?.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
 
-        // 添加进度条
-        addView(progressBar)
+            // 添加进度条
+            addView(progressBar)
+        }
         // 添加X5WebView
         addView(x5WebView)
     }
 
-    fun getWebView() = x5WebView.getWebView()
+    fun getWebView(): WebView? = x5WebView?.getWebView()
 
     fun setListener(listener: X5Listener) {
         mListener = listener
@@ -109,6 +111,16 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
-        x5WebView.callJsMethod(methodName, paramsJsonString, callback)
+        x5WebView?.callJsMethod(methodName, paramsJsonString, callback)
+    }
+
+    /**
+     * 需要放在super.onDestroy();之前调用，防止内存泄漏。
+     */
+    fun destroy() {
+        progressBar = null
+        mListener = null
+        x5WebView?.destroy()
+        x5WebView = null
     }
 }

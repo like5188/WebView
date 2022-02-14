@@ -21,7 +21,7 @@ class TestActivity : AppCompatActivity() {
     private val mX5ProgressBarWebView: X5ProgressBarWebView by lazy {
         mBinding.webView
     }
-    private val mWebView: WebView by lazy {
+    private val mWebView: WebView? by lazy {
         mX5ProgressBarWebView.getWebView()
     }
 
@@ -44,10 +44,10 @@ class TestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-        mWebView.addJavascriptInterface(JavascriptInterface(), "androidAPI")
+        mWebView?.addJavascriptInterface(JavascriptInterface(), "androidAPI")
         val url = "file:///android_asset/index.html"
 //        val url = "http://www.sohu.com/"
-        mWebView.settings.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+        mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         mX5ProgressBarWebView.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
@@ -73,7 +73,7 @@ class TestActivity : AppCompatActivity() {
             }
         })
 
-        mWebView.loadUrl(url)
+        mWebView?.loadUrl(url)
     }
 
     fun callJSMethod(view: View) {
@@ -90,20 +90,20 @@ class TestActivity : AppCompatActivity() {
     }
 
     fun pageUp(view: View) {
-        mWebView.pageUp(true)
+        mWebView?.pageUp(true)
     }
 
     fun pageDown(view: View) {
-        mWebView.pageDown(true)
+        mWebView?.pageDown(true)
     }
 
     fun refresh(view: View) {
-        mWebView.reload()
+        mWebView?.reload()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mWebView.destroy()
+        mX5ProgressBarWebView.destroy()
     }
 
 }
