@@ -8,6 +8,7 @@ import com.like.webview.sample.R
 import com.like.webview.sample.WebViewFragment
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
+// todo 未解决 viewpager+fragment+webview 内存泄漏问题
 class ViewPagerActivity : FragmentActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
