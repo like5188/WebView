@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.tencent.smtt.export.external.TbsCoreSettings
@@ -76,7 +77,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
             )
         )
-        tencentWebView = WebView(context).apply {
+        tencentWebView = WebView(context.applicationContext).apply {
             layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
         // 此处必须用getView()，因为TBS对WebView进行了封装
@@ -231,7 +232,14 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     fun destroy() {
         tencentWebView?.apply {
             try {
+                loadUrl("about:blank")
+                parent?.let {
+                    (it as ViewGroup).removeView(this)
+                }
                 stopLoading()
+                settings?.javaScriptEnabled = false
+                clearHistory()
+                clearCache(true)
                 removeAllViewsInLayout()
                 removeAllViews()
                 webViewClient = null
