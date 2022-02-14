@@ -110,7 +110,7 @@ class WebViewFragment(private val url: String?) : BaseLazyFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mWebView?.destroy()
+        mX5ProgressBarWebView?.destroy()
     }
 
 }
