@@ -33,7 +33,7 @@
     QbSdk.initX5Environment(this, null)
 ```
 
-3、直接在xml布局文件中使用
+3、在xml布局文件中使用
 
     com.like.webview.X5WebView。不带进度条。
 
@@ -48,3 +48,5 @@
         app:progress_bar_bg_color="@color/colorPrimary"
 
         app:progress_bar_progress_color="@color/colorAccent"
+
+4、也可以直接使用 WebViewActivity 或者 WebViewFragment。
