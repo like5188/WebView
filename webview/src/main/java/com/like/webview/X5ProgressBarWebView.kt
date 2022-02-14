@@ -34,7 +34,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         val errorViewResId = a.getResourceId(R.styleable.X5ProgressBarWebView_error_view_res_id, -1)
         val progressBarBgColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_bg_color, Color.parseColor("#3F51B5"))
         val progressBarProgressColor = a.getColor(R.styleable.X5ProgressBarWebView_progress_bar_progress_color, Color.parseColor("#FFFFFF"))
-        val progressBarHeight = a.getDimension(R.styleable.X5ProgressBarWebView_progress_bar_height, 10f)
+        val progressBarHeight = a.getDimension(R.styleable.X5ProgressBarWebView_progress_bar_height, 3f)
         a.recycle()
 
         x5WebView = X5WebView(context).also {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.like.webview.databinding.FragmentProgressWebviewBinding
 import com.like.webview.databinding.FragmentWebviewBinding
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
@@ -29,16 +30,29 @@ class WebViewFragment(private val url: String?, private val showProgress: Boolea
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = DataBindingUtil.inflate<FragmentWebviewBinding>(
-            inflater,
-            R.layout.fragment_webview,
-            container,
-            false
-        ) ?: throw RuntimeException("初始化 WebViewFragment 失败")
-        mX5ProgressBarWebView = binding.x5ProgressBarWebView
-        mWebView = mX5ProgressBarWebView?.getWebView()
-        mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-        return binding.root
+        return if (showProgress) {
+            val binding = DataBindingUtil.inflate<FragmentProgressWebviewBinding>(
+                inflater,
+                R.layout.fragment_progress_webview,
+                container,
+                false
+            ) ?: throw RuntimeException("初始化 WebViewFragment 失败")
+            mX5ProgressBarWebView = binding.x5ProgressBarWebView
+            mWebView = mX5ProgressBarWebView?.getWebView()
+            mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+            binding.root
+        } else {
+            val binding = DataBindingUtil.inflate<FragmentWebviewBinding>(
+                inflater,
+                R.layout.fragment_webview,
+                container,
+                false
+            ) ?: throw RuntimeException("初始化 WebViewFragment 失败")
+            mX5ProgressBarWebView = binding.x5ProgressBarWebView
+            mWebView = mX5ProgressBarWebView?.getWebView()
+            mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+            binding.root
+        }
     }
 
     fun load(url: String?) {

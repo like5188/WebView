@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun activity(view: View) {
-        WebViewActivity.start(this, "https://www.sina.com.cn/")
+        WebViewActivity.start(this, "https://www.sina.com.cn/", false)
     }
 
     fun viewPager(view: View) {
