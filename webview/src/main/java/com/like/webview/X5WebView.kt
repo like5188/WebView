@@ -77,7 +77,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
             )
         )
-        tencentWebView = WebView(context.applicationContext).apply {
+        tencentWebView = WebView(context).apply {
             layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
         // 此处必须用getView()，因为TBS对WebView进行了封装
