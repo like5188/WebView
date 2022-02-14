@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.like.webview.sample.R
+import com.like.webview.sample.WebViewFragment
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
 class ViewPagerActivity : FragmentActivity() {
@@ -12,7 +13,7 @@ class ViewPagerActivity : FragmentActivity() {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
-        Fragment1(),
+        WebViewFragment("https://www.baidu.com/"),
         Fragment2(),
         Fragment3(),
         Fragment4()
