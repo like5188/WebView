@@ -9,15 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.like.common.base.addFragments
 import com.like.common.util.Logger
+import com.like.webview.WebViewFragment
 import com.like.webview.X5Listener
-import com.like.webview.sample.databinding.ActivityWebviewBinding
+import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
 class WebViewFragmentActivity : AppCompatActivity() {
     private val mBinding by lazy {
-        DataBindingUtil.setContentView<ActivityWebviewBinding>(this, R.layout.activity_webview)
+        DataBindingUtil.setContentView<ActivityWebviewFragmentBinding>(this, R.layout.activity_webview_fragment)
     }
     private var mWebViewFragment: WebViewFragment? = null
 

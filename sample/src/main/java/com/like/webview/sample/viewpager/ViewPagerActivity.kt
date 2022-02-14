@@ -5,7 +5,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.like.webview.sample.R
-import com.like.webview.sample.WebViewFragment
+import com.like.webview.WebViewFragment
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
 // todo 未解决 viewpager+fragment+webview 内存泄漏问题

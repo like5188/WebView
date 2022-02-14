@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.like.webview.WebViewActivity
 import com.like.webview.sample.viewpager.ViewPagerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun activity(view: View) {
-        WebViewActivity.start("https://www.sina.com.cn/")
+        WebViewActivity.start(this, "https://www.sina.com.cn/")
     }
 
     fun viewPager(view: View) {
