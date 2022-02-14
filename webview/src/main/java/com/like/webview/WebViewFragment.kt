@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 因为 FragmentTransaction 的 commit() 方法是异步的，所以我们不知道什么时候 WebViewFragment 会被创建并添加到 Activity 中。
  * 所以，如果 Activity 在 onCreate() 方法中添加了 WebViewFragment，那么就需要在 onStart()或者onResume()方法中调用相关方法才有效，具体情况有所不同。
  */
-class WebViewFragment(private val url: String?, private val showProgressBar: Boolean = true) : Fragment() {
+class WebViewFragment(private val url: String?, private val showProgress: Boolean = true) : Fragment() {
     private val isLoaded = AtomicBoolean(false)
     private var mX5ProgressBarWebView: X5ProgressBarWebView? = null
     private var mWebView: WebView? = null

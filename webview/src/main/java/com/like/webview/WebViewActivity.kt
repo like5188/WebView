@@ -8,8 +8,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.like.webview.databinding.ActivityWebviewBinding
-import com.tencent.smtt.sdk.WebSettings
-import com.tencent.smtt.sdk.WebView
 
 /**
  * 对 [WebViewFragment] 的封装
@@ -19,14 +17,17 @@ import com.tencent.smtt.sdk.WebView
 class WebViewActivity : AppCompatActivity() {
     companion object {
         private const val KEY_URL = "key_url"
-        fun start(context: Context, url: String?) {
+        private const val KEY_SHOW_PROGRESS = "key_show_progress"
+        fun start(context: Context, url: String?, showProgress: Boolean = true) {
             Intent(context, WebViewActivity::class.java).apply {
                 if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 putExtra(KEY_URL, url)
+                putExtra(KEY_SHOW_PROGRESS, showProgress)
                 context.startActivity(this)
             }
         }
     }
+
 
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityWebviewBinding>(
@@ -34,38 +35,23 @@ class WebViewActivity : AppCompatActivity() {
             R.layout.activity_webview
         )
     }
-    private var mX5ProgressBarWebView: X5ProgressBarWebView? = null
-    private var mWebView: WebView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-        mX5ProgressBarWebView = mBinding.x5ProgressBarWebView
-        mWebView = mX5ProgressBarWebView?.getWebView()
-        mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+        mBinding
+        val showProgress = intent.getBooleanExtra(KEY_SHOW_PROGRESS, true)
         val url = intent.getStringExtra(KEY_URL)
         if (!url.isNullOrEmpty()) {
-            mWebView?.loadUrl(url)
+            supportFragmentManager.beginTransaction().apply {
+                val tag = WebViewFragment::class.java.name
+                // 防止重复添加
+                if (supportFragmentManager.findFragmentByTag(tag) == null) {
+                    add(R.id.fragment_holder, WebViewFragment(url, showProgress), tag)
+                }
+            }.commit()
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mWebView?.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mWebView?.onResume()
-    }
-
-    override fun onDestroy() {
-        // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        mX5ProgressBarWebView?.destroy()
-        mX5ProgressBarWebView = null
-        mWebView = null
-        super.onDestroy()
     }
 
 }

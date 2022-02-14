@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.like.webview.X5ProgressBarWebView
-        android:id="@+id/x5ProgressBarWebView"
+    <FrameLayout
+        android:id="@+id/fragment_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:error_view_res_id="@layout/webview_error_view"
-        app:progress_bar_bg_color="@color/colorPrimary"
-        app:progress_bar_height="3dp"
-        app:progress_bar_progress_color="@color/colorAccent" />
+        android:layout_height="match_parent" />
 
 </layout>
