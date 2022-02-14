@@ -13,24 +13,28 @@
 1、引用
 
 在Project的gradle中加入：
+
 ```groovy
     allprojects {
-        repositories {
-            ...
-            maven { url 'https://jitpack.io' }
-        }
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
     }
+}
 ```
+
 在Module的gradle中加入：
+
 ```groovy
     dependencies {
-        implementation 'com.github.like5188:WebView:版本号'
-    }
+    implementation 'com.github.like5188:WebView:版本号'
+}
 ```
 
 2、在Application中初始化
+
 ```java
-    QbSdk.initX5Environment(this, null)
+    QbSdk.initX5Environment(this,null)
 ```
 
 3、在xml布局文件中使用
@@ -38,15 +42,5 @@
     com.like.webview.X5WebView。不带进度条。
 
     com.like.webview.X5ProgressBarWebView。带进度条。
-
-        进度条的属性可以通过下面四个自定义属性设置：
-
-        app:error_view_res_id="@layout/webview_error_view"
-
-        app:progress_bar_height="3dp"
-
-        app:progress_bar_bg_color="@color/colorPrimary"
-
-        app:progress_bar_progress_color="@color/colorAccent"
 
 4、也可以直接使用 WebViewActivity 或者 WebViewFragment。
