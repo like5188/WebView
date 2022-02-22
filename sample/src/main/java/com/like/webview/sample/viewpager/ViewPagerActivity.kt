@@ -14,9 +14,9 @@ class ViewPagerActivity : FragmentActivity() {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
+        WebViewFragment("https://www.jd.com/"),
         WebViewFragment("https://www.baidu.com/"),
-        WebViewFragment("https://www.baidu.com/"),
-        WebViewFragment("https://www.baidu.com/"),
+        WebViewFragment("https://cn.bing.com/"),
         WebViewFragment("https://www.baidu.com/")
     )
 
