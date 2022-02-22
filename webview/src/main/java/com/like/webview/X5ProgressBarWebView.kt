@@ -64,6 +64,13 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
+    /**
+     * 初始化
+     * @param errorViewResId            错误视图
+     * @param progressBarBgColor        进度条背景色
+     * @param progressBarProgressColor  进度条颜色
+     * @param progressBarHeight         进度条高度，dp。如果小于等于0，表示无进度条。
+     */
     fun init(
         errorViewResId: Int = R.layout.webview_error_view,
         progressBarBgColor: Int = ContextCompat.getColor(context, R.color.colorPrimary),
