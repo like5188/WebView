@@ -66,15 +66,15 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
 
     /**
      * 初始化
-     * @param errorViewResId            错误视图
-     * @param progressBarBgColor        进度条背景色
-     * @param progressBarProgressColor  进度条颜色
-     * @param progressBarHeight         进度条高度，dp。如果小于等于0，表示无进度条。
+     * @param errorViewResId                错误视图
+     * @param progressBarBgColorResId       进度条背景色
+     * @param progressBarProgressColorResId 进度条颜色
+     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
      */
     fun init(
         errorViewResId: Int = R.layout.webview_error_view,
-        progressBarBgColor: Int = ContextCompat.getColor(context, R.color.colorPrimary),
-        progressBarProgressColor: Int = ContextCompat.getColor(context, R.color.colorPrimaryDark),
+        progressBarBgColorResId: Int = R.color.colorPrimary,
+        progressBarProgressColorResId: Int = R.color.colorPrimaryDark,
         progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
     ) {
         removeAllViews()
@@ -90,9 +90,13 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 max = 100
             }.apply {
                 // 设置进度条背景颜色
-                setBackgroundColor(progressBarBgColor)
+                setBackgroundColor(ContextCompat.getColor(context, progressBarBgColorResId))
                 // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
-                progressDrawable = ClipDrawable(ColorDrawable(progressBarProgressColor), Gravity.START, ClipDrawable.HORIZONTAL)
+                progressDrawable = ClipDrawable(
+                    ColorDrawable(ContextCompat.getColor(context, progressBarProgressColorResId)),
+                    Gravity.START,
+                    ClipDrawable.HORIZONTAL
+                )
                 // 设置进度条高度
                 layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
                 // 添加进度条

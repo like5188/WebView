@@ -1,6 +1,8 @@
 package com.like.webview
 
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +19,13 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 因为 FragmentTransaction 的 commit() 方法是异步的，所以我们不知道什么时候 WebViewFragment 会被创建并添加到 Activity 中。
  * 所以，如果 Activity 在 onCreate() 方法中添加了 WebViewFragment，那么就需要在 onStart()或者onResume()方法中调用相关方法才有效，具体情况有所不同。
  */
-class WebViewFragment(private val url: String?, private val showProgress: Boolean = true) : Fragment() {
+class WebViewFragment(
+    private val url: String?,
+    private val errorViewResId: Int = R.layout.webview_error_view,
+    private val progressBarBgColorResId: Int = R.color.colorPrimary,
+    private val progressBarProgressColorResId: Int = R.color.colorPrimaryDark,
+    private val progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+) : Fragment() {
     private val isLoaded = AtomicBoolean(false)
     private var mX5ProgressBarWebView: X5ProgressBarWebView? = null
     private var mWebView: WebView? = null
@@ -32,7 +40,7 @@ class WebViewFragment(private val url: String?, private val showProgress: Boolea
             mWebView = getWebView()
             mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         }.apply {
-            init()
+            init(errorViewResId, progressBarBgColorResId, progressBarProgressColorResId, progressBarHeight)
         }
     }
 

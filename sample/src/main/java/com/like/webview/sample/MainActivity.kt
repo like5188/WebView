@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun activity(view: View) {
-        WebViewActivity.start(this, "https://www.sina.com.cn/", false)
+        WebViewActivity.start(this, "https://www.sina.com.cn/", progressBarHeight = 0f)
     }
 
     fun viewPager(view: View) {
