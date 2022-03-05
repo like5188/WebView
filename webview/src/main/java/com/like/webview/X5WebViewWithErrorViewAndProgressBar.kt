@@ -80,10 +80,10 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
         // 为X5WebView添加错误页面
-        if (errorViewResId != -1) {
+        if (errorViewResId != -1 && x5WebViewWithErrorView?.errorView == null) {
             val errorView = View.inflate(context, errorViewResId, null)
             if (errorView != null) {
-                x5WebViewWithErrorView?.setErrorView(errorView)
+                x5WebViewWithErrorView?.errorView = errorView
             }
         }
         if (progressBarHeight > 0 && progressBar == null) {
