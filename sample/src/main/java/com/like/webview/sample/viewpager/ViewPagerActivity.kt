@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import com.like.webview.sample.R
 import com.like.webview.WebViewFragment
+import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
 // todo 未解决 viewpager+fragment+webview 内存泄漏问题
@@ -14,10 +14,18 @@ class ViewPagerActivity : FragmentActivity() {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
-        WebViewFragment("https://www.jd.com/"),
-        WebViewFragment("https://www.baidu.com/"),
-        WebViewFragment("https://cn.bing.com/"),
-        WebViewFragment("https://www.baidu.com/")
+        WebViewFragment().apply {
+            init("https://www.jd.com/")
+        },
+        WebViewFragment().apply {
+            init("https://www.baidu.com/")
+        },
+        WebViewFragment().apply {
+            init("https://cn.bing.com/")
+        },
+        WebViewFragment().apply {
+            init("https://www.baidu.com/")
+        }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

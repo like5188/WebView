@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -50,6 +51,10 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                    Log.i(
+                        "Logger",
+                        "progressBar=$progressBar progress=$progress"
+                    )
                     progressBar?.let { pb ->
                         pb.progress = progress ?: 0
                         if (progress != 100) {
@@ -61,23 +66,24 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                     mListener?.onProgressChanged(webView, progress)
                 }
             })
+            addView(it)
         }
     }
 
     /**
-     * 初始化
-     * @param errorViewResId                错误视图
+     * 初始化，设置错误视图和进度条。
+     *
+     * @param errorViewResId                错误视图。如果为 -1，表示无错误视图。
+     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
      * @param progressBarBgColorResId       进度条背景色
      * @param progressBarProgressColorResId 进度条颜色
-     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
      */
     fun init(
         errorViewResId: Int = R.layout.webview_error_view,
+        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
         progressBarBgColorResId: Int = R.color.colorPrimary,
-        progressBarProgressColorResId: Int = R.color.colorPrimaryDark,
-        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+        progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        removeAllViews()
         // 为X5WebView添加错误页面
         if (errorViewResId != -1) {
             val errorView = View.inflate(context, errorViewResId, null)
@@ -100,11 +106,9 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
                 // 设置进度条高度
                 layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
                 // 添加进度条
-                addView(this)
+                addView(this, 0)
             }
         }
-        // 添加X5WebView
-        addView(x5WebView)
     }
 
     fun getWebView(): WebView? = x5WebView?.getWebView()

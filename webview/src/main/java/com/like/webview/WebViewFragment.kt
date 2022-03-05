@@ -1,7 +1,9 @@
 package com.like.webview
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -19,29 +21,59 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 因为 FragmentTransaction 的 commit() 方法是异步的，所以我们不知道什么时候 WebViewFragment 会被创建并添加到 Activity 中。
  * 所以，如果 Activity 在 onCreate() 方法中添加了 WebViewFragment，那么就需要在 onStart()或者onResume()方法中调用相关方法才有效，具体情况有所不同。
  */
-class WebViewFragment(
-    private val url: String?,
-    private val errorViewResId: Int = R.layout.webview_error_view,
-    private val progressBarBgColorResId: Int = R.color.colorPrimary,
-    private val progressBarProgressColorResId: Int = R.color.colorPrimaryDark,
-    private val progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
-) : Fragment() {
+class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
-    private var mX5ProgressBarWebView: X5ProgressBarWebView? = null
-    private var mWebView: WebView? = null
+    private lateinit var mX5ProgressBarWebView: X5ProgressBarWebView
+    private val mWebView: WebView? by lazy {
+        mX5ProgressBarWebView.getWebView()?.apply {
+            settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+        }
+    }
+    private var url: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(
+            "Logger",
+            "WebViewFragment onAttach"
+        )
+        mX5ProgressBarWebView = X5ProgressBarWebView(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return X5ProgressBarWebView(requireActivity()).apply {
-            mX5ProgressBarWebView = this
-            mWebView = getWebView()
-            mWebView?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-        }.apply {
-            init(errorViewResId, progressBarBgColorResId, progressBarProgressColorResId, progressBarHeight)
-        }
+        Log.d(
+            "Logger",
+            "WebViewFragment onCreateView"
+        )
+        return mX5ProgressBarWebView
+    }
+
+    /**
+     * 初始化，设置错误视图和进度条。
+     *
+     * @param url   注意：[url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
+     * @param errorViewResId                错误视图。如果为 -1，表示无错误视图。
+     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
+     * @param progressBarBgColorResId       进度条背景色
+     * @param progressBarProgressColorResId 进度条颜色
+     */
+    fun init(
+        url: String? = null,
+        errorViewResId: Int = R.layout.webview_error_view,
+        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
+        progressBarBgColorResId: Int = R.color.colorPrimary,
+        progressBarProgressColorResId: Int = R.color.colorPrimaryDark
+    ) {
+        Log.d(
+            "Logger",
+            "WebViewFragment init mX5ProgressBarWebView=$mX5ProgressBarWebView url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
+        )
+        this.url = url
+        mX5ProgressBarWebView?.init(errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
     fun load(url: String?) {
@@ -56,7 +88,7 @@ class WebViewFragment(
     }
 
     fun setListener(listener: X5Listener) {
-        mX5ProgressBarWebView?.setListener(listener)
+        mX5ProgressBarWebView.setListener(listener)
     }
 
     fun pageUp() {
@@ -86,7 +118,7 @@ class WebViewFragment(
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String?, callback: ((String) -> Unit)?) {
-        mX5ProgressBarWebView?.callJsMethod(methodName, paramsJsonString, callback)
+        mX5ProgressBarWebView.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
@@ -98,6 +130,7 @@ class WebViewFragment(
         super.onResume()
         mWebView?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
+            Log.d("WebViewFragment", "load url=$url")
             load(url)
         }
     }
@@ -105,9 +138,7 @@ class WebViewFragment(
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        mX5ProgressBarWebView?.destroy()
-        mX5ProgressBarWebView = null
-        mWebView = null
+        mX5ProgressBarWebView.destroy()
         super.onDestroyView()
     }
 
