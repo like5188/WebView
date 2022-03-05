@@ -58,20 +58,19 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
-        initWebViewFragment()
     }
 
-    private fun initWebViewFragment() {
+    override fun getFragmentHolderResId(): Int {
+        return R.id.fragment_holder
+    }
+
+    override fun intWebViewFragment(webViewFragment: WebViewFragment) {
         val url = intent.getStringExtra(KEY_URL)
         val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
         val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
         val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
         val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        mWebViewFragment?.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
-    }
-
-    override fun getFragmentHolderResId(): Int {
-        return R.id.fragment_holder
+        webViewFragment.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
 }

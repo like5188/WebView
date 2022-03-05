@@ -12,6 +12,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.like.common.util.Logger
 import com.like.webview.BaseWebViewActivity
+import com.like.webview.WebViewFragment
 import com.like.webview.X5Listener
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.CookieManager
@@ -92,28 +93,23 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         mBinding
     }
 
-    override fun onStart() {
-        super.onStart()
-        initWebViewFragment()
-    }
-
     override fun getFragmentHolderResId(): Int {
         return R.id.fragment_holder
     }
 
-    private fun initWebViewFragment() {
+    override fun intWebViewFragment(webViewFragment: WebViewFragment) {
         val url = intent.getStringExtra(KEY_URL)
         val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
         val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
         val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
         val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        mWebViewFragment?.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
-        mWebViewFragment?.addJavascriptInterface(JavascriptInterface(), "appKcwc")
+        webViewFragment.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        webViewFragment.addJavascriptInterface(JavascriptInterface(), "appKcwc")
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
         cookieManager.removeAllCookie()
         cookieManager.setCookie("http://car1.i.cacf.cn", "mechine_type=android")
-        mWebViewFragment?.setListener(object : X5Listener {
+        webViewFragment.setListener(object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
             }
@@ -137,19 +133,19 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun pageUp(view: View) {
-        mWebViewFragment?.pageUp()
+        webViewFragment?.pageUp()
     }
 
     fun pageDown(view: View) {
-        mWebViewFragment?.pageDown()
+        webViewFragment?.pageDown()
     }
 
     fun reload(view: View) {
-        mWebViewFragment?.reload()
+        webViewFragment?.reload()
     }
 
     fun callJSMethod(view: View) {
-        mWebViewFragment?.callJsMethod("jsMethodName") {
+        webViewFragment?.callJsMethod("jsMethodName") {
             Logger.d("callJsMethod 返回值：$it")
         }
     }
@@ -158,7 +154,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         val params = JSONObject()
         params.put("name", "like")
         params.put("age", 1)
-        mWebViewFragment?.callJsMethod(
+        webViewFragment?.callJsMethod(
             "jsMethodNameWithParams",
             params.toString()
         ) {
