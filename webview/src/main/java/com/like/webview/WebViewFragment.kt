@@ -69,6 +69,13 @@ class WebViewFragment : Fragment() {
         this.progressBarHeight = progressBarHeight
         this.progressBarBgColorResId = progressBarBgColorResId
         this.progressBarProgressColorResId = progressBarProgressColorResId
+        // 这里也初始化一遍，避免使用者调用 init 方法的时机不对造成没有初始化。
+        mX5WebViewWithErrorViewAndProgressBar?.init(
+            errorViewResId,
+            progressBarHeight,
+            progressBarBgColorResId,
+            progressBarProgressColorResId
+        )
     }
 
     fun load(url: String?) {
