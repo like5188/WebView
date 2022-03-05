@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
-    private lateinit var mX5ProgressBarWebView: X5ProgressBarWebView
+    private lateinit var mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar
     private val mWebView: WebView? by lazy {
-        mX5ProgressBarWebView.getWebView()?.apply {
+        mX5WebViewWithErrorViewAndProgressBar.getWebView()?.apply {
             settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         }
     }
@@ -37,7 +37,7 @@ class WebViewFragment : Fragment() {
             "Logger",
             "WebViewFragment onAttach"
         )
-        mX5ProgressBarWebView = X5ProgressBarWebView(context)
+        mX5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context)
     }
 
     override fun onCreateView(
@@ -49,7 +49,7 @@ class WebViewFragment : Fragment() {
             "Logger",
             "WebViewFragment onCreateView"
         )
-        return mX5ProgressBarWebView
+        return mX5WebViewWithErrorViewAndProgressBar
     }
 
     /**
@@ -70,10 +70,10 @@ class WebViewFragment : Fragment() {
     ) {
         Log.d(
             "Logger",
-            "WebViewFragment init mX5ProgressBarWebView=$mX5ProgressBarWebView url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
+            "WebViewFragment init mX5ProgressBarWebView=$mX5WebViewWithErrorViewAndProgressBar url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
         )
         this.url = url
-        mX5ProgressBarWebView?.init(errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        mX5WebViewWithErrorViewAndProgressBar?.init(errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
     fun load(url: String?) {
@@ -88,7 +88,7 @@ class WebViewFragment : Fragment() {
     }
 
     fun setListener(listener: X5Listener) {
-        mX5ProgressBarWebView.setListener(listener)
+        mX5WebViewWithErrorViewAndProgressBar.setListener(listener)
     }
 
     fun pageUp() {
@@ -118,7 +118,7 @@ class WebViewFragment : Fragment() {
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String?, callback: ((String) -> Unit)?) {
-        mX5ProgressBarWebView.callJsMethod(methodName, paramsJsonString, callback)
+        mX5WebViewWithErrorViewAndProgressBar.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
@@ -138,7 +138,7 @@ class WebViewFragment : Fragment() {
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        mX5ProgressBarWebView.destroy()
+        mX5WebViewWithErrorViewAndProgressBar.destroy()
         super.onDestroyView()
     }
 

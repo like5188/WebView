@@ -18,9 +18,9 @@ import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 
 /**
- * 包含了tencent的WebView、mErrorView
+ * 包含了tencent的[WebView]、错误视图[mErrorView]
  */
-class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var tencentWebView: WebView? = null
     private var mErrorView: View? = null

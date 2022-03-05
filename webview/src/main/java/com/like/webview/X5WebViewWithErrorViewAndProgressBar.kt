@@ -17,17 +17,17 @@ import androidx.core.content.ContextCompat
 import com.tencent.smtt.sdk.WebView
 
 /**
- * 包含了X5WebView，并在其基础上增加了进度条
+ * 包含了[X5WebViewWithErrorView]，进度条[progressBar]
  */
-class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
     private var mListener: X5Listener? = null
-    private var x5WebView: X5WebView? = null
+    private var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
 
     init {
         orientation = VERTICAL
-        x5WebView = X5WebView(context).also {
+        x5WebViewWithErrorView = X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.setListener(object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
@@ -88,7 +88,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         if (errorViewResId != -1) {
             val errorView = View.inflate(context, errorViewResId, null)
             if (errorView != null) {
-                x5WebView?.setErrorView(errorView)
+                x5WebViewWithErrorView?.setErrorView(errorView)
             }
         }
         if (progressBarHeight > 0 && progressBar == null) {
@@ -111,7 +111,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
-    fun getWebView(): WebView? = x5WebView?.getWebView()
+    fun getWebView(): WebView? = x5WebViewWithErrorView?.getWebView()
 
     fun setListener(listener: X5Listener) {
         mListener = listener
@@ -125,7 +125,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String) -> Unit)? = null) {
-        x5WebView?.callJsMethod(methodName, paramsJsonString, callback)
+        x5WebViewWithErrorView?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     /**
@@ -134,7 +134,7 @@ class X5ProgressBarWebView @JvmOverloads constructor(context: Context, attrs: At
     fun destroy() {
         progressBar = null
         mListener = null
-        x5WebView?.destroy()
-        x5WebView = null
+        x5WebViewWithErrorView?.destroy()
+        x5WebViewWithErrorView = null
     }
 }
