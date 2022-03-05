@@ -66,7 +66,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     }
 
     /**
-     * 初始化，设置错误视图和进度条。
+     * 初始化，设置错误视图和进度条。如果已经设置过了，不会重复设置。
      *
      * @param errorViewResId                错误视图。如果为 -1，表示无错误视图。
      * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
