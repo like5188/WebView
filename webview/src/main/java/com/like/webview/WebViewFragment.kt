@@ -1,5 +1,6 @@
 package com.like.webview
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
@@ -21,21 +22,24 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
-    private val mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar by lazy {
-        X5WebViewWithErrorViewAndProgressBar(requireContext())
-    }
-    private val mWebView: WebView? by lazy {
-        mX5WebViewWithErrorViewAndProgressBar.getWebView()?.apply {
-            settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+    private var mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
+    private var mWebView: WebView? = null
+    private var url: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mX5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
+            mWebView = getWebView()?.apply {
+                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+            }
         }
     }
-    private var url: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         return mX5WebViewWithErrorViewAndProgressBar
     }
 
@@ -56,7 +60,7 @@ class WebViewFragment : Fragment() {
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
         this.url = url
-        mX5WebViewWithErrorViewAndProgressBar.init(
+        mX5WebViewWithErrorViewAndProgressBar?.init(
             errorViewResId,
             progressBarHeight,
             progressBarBgColorResId,
@@ -76,7 +80,7 @@ class WebViewFragment : Fragment() {
     }
 
     fun setListener(listener: X5Listener) {
-        mX5WebViewWithErrorViewAndProgressBar.setListener(listener)
+        mX5WebViewWithErrorViewAndProgressBar?.setListener(listener)
     }
 
     fun pageUp() {
@@ -106,7 +110,7 @@ class WebViewFragment : Fragment() {
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String?, callback: ((String) -> Unit)?) {
-        mX5WebViewWithErrorViewAndProgressBar.callJsMethod(methodName, paramsJsonString, callback)
+        mX5WebViewWithErrorViewAndProgressBar?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
@@ -125,7 +129,9 @@ class WebViewFragment : Fragment() {
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        mX5WebViewWithErrorViewAndProgressBar.destroy()
+        mX5WebViewWithErrorViewAndProgressBar?.destroy()
+        mX5WebViewWithErrorViewAndProgressBar = null
+        mWebView = null
         super.onDestroyView()
     }
 
