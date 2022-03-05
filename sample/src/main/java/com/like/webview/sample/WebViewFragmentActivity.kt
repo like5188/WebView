@@ -38,7 +38,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             url: String?,
             errorViewResId: Int = R.layout.webview_error_view,
             progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
-            progressBarBgColorResId: Int = R.color.colorAccent,
+            progressBarBgColorResId: Int = R.color.colorPrimary,
             progressBarProgressColorResId: Int = R.color.colorPrimaryDark
         ) {
             Intent(context, WebViewFragmentActivity::class.java).apply {
