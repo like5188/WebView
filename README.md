@@ -43,4 +43,4 @@
 
     com.like.webview.X5WebViewWithErrorViewAndProgressBar。带错误视图带进度条。
 
-4、也可以直接使用：WebViewFragment、SimpleWebViewActivity（或者继承BaseWebViewActivity）
+4、也可以直接使用：WebViewFragment、SimpleWebViewActivity（或者继承 BaseWebViewActivity，可参照 sample 中的 WebViewFragmentActivity）
