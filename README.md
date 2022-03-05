@@ -27,8 +27,8 @@
 
 ```groovy
     dependencies {
-        implementation 'com.github.like5188:WebView:版本号'
-    }
+    implementation 'com.github.like5188:WebView:版本号'
+}
 ```
 
 2、在Application中初始化
@@ -39,8 +39,8 @@
 
 3、在xml布局文件中使用
 
-    com.like.webview.X5WebView。不带进度条。
+    com.like.webview.X5WebViewWithErrorView。带错误视图不带进度条。
 
-    com.like.webview.X5ProgressBarWebView。带进度条。
+    com.like.webview.X5WebViewWithErrorViewAndProgressBar。带错误视图带进度条。
 
-4、也可以直接使用 WebViewActivity 或者 WebViewFragment。
+4、也可以直接使用：WebViewFragment、SimpleWebViewActivity（或者继承BaseWebViewActivity）
