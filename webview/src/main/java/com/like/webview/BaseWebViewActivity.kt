@@ -26,6 +26,9 @@ abstract class BaseWebViewActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * [mWebViewFragment]的容器资源 id
+     */
     abstract fun getFragmentHolderResId(): Int
 
 }

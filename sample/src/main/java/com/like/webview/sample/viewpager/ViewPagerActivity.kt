@@ -8,23 +8,22 @@ import com.like.webview.WebViewFragment
 import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
-// todo 未解决 viewpager+fragment+webview 内存泄漏问题
 class ViewPagerActivity : FragmentActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
         WebViewFragment().apply {
-            init("https://www.jd.com/")
-        },
-        WebViewFragment().apply {
-            init("https://www.baidu.com/")
+            init("https://cn.bing.com/")
         },
         WebViewFragment().apply {
             init("https://cn.bing.com/")
         },
         WebViewFragment().apply {
-            init("https://www.baidu.com/")
+            init("https://cn.bing.com/")
+        },
+        WebViewFragment().apply {
+            init("https://cn.bing.com/")
         }
     )
 
@@ -48,10 +47,6 @@ class ViewPagerActivity : FragmentActivity() {
 
     fun showFragment4(view: View) {
         mBinding.vp.setCurrentItem(3, false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
 }

@@ -1,6 +1,5 @@
 package com.like.webview
 
-import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
@@ -25,22 +24,28 @@ class WebViewFragment : Fragment() {
     private var mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
     private var mWebView: WebView? = null
     private var url: String? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mX5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
-            mWebView = getWebView()?.apply {
-                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-            }
-        }
-    }
+    private var errorViewResId: Int = -1
+    private var progressBarHeight: Float = 0f
+    private var progressBarBgColorResId: Int = -1
+    private var progressBarProgressColorResId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return mX5WebViewWithErrorViewAndProgressBar
+    ): View {
+        return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
+            mX5WebViewWithErrorViewAndProgressBar = this
+            mWebView = getWebView()?.apply {
+                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+            }
+            init(
+                errorViewResId,
+                progressBarHeight,
+                progressBarBgColorResId,
+                progressBarProgressColorResId
+            )
+        }
     }
 
     /**
@@ -60,12 +65,10 @@ class WebViewFragment : Fragment() {
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
         this.url = url
-        mX5WebViewWithErrorViewAndProgressBar?.init(
-            errorViewResId,
-            progressBarHeight,
-            progressBarBgColorResId,
-            progressBarProgressColorResId
-        )
+        this.errorViewResId = errorViewResId
+        this.progressBarHeight = progressBarHeight
+        this.progressBarBgColorResId = progressBarBgColorResId
+        this.progressBarProgressColorResId = progressBarProgressColorResId
     }
 
     fun load(url: String?) {
