@@ -1,6 +1,5 @@
 package com.like.webview
 
-import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
@@ -22,18 +21,15 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
-    private lateinit var mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar
+    private val mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar by lazy {
+        X5WebViewWithErrorViewAndProgressBar(requireContext())
+    }
     private val mWebView: WebView? by lazy {
         mX5WebViewWithErrorViewAndProgressBar.getWebView()?.apply {
             settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
         }
     }
     private var url: String? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mX5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +56,7 @@ class WebViewFragment : Fragment() {
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
         this.url = url
-        mX5WebViewWithErrorViewAndProgressBar?.init(
+        mX5WebViewWithErrorViewAndProgressBar.init(
             errorViewResId,
             progressBarHeight,
             progressBarBgColorResId,
