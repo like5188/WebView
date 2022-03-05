@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -51,10 +50,6 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {
-                    Log.i(
-                        "Logger",
-                        "progressBar=$progressBar progress=$progress"
-                    )
                     progressBar?.let { pb ->
                         pb.progress = progress ?: 0
                         if (progress != 100) {

@@ -3,7 +3,6 @@ package com.like.webview
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -33,10 +32,6 @@ class WebViewFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(
-            "Logger",
-            "WebViewFragment onAttach"
-        )
         mX5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context)
     }
 
@@ -45,10 +40,6 @@ class WebViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(
-            "Logger",
-            "WebViewFragment onCreateView"
-        )
         return mX5WebViewWithErrorViewAndProgressBar
     }
 
@@ -68,12 +59,13 @@ class WebViewFragment : Fragment() {
         progressBarBgColorResId: Int = R.color.colorPrimary,
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        Log.d(
-            "Logger",
-            "WebViewFragment init mX5ProgressBarWebView=$mX5WebViewWithErrorViewAndProgressBar url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
-        )
         this.url = url
-        mX5WebViewWithErrorViewAndProgressBar?.init(errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        mX5WebViewWithErrorViewAndProgressBar?.init(
+            errorViewResId,
+            progressBarHeight,
+            progressBarBgColorResId,
+            progressBarProgressColorResId
+        )
     }
 
     fun load(url: String?) {
@@ -130,7 +122,6 @@ class WebViewFragment : Fragment() {
         super.onResume()
         mWebView?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
-            Log.d("WebViewFragment", "load url=$url")
             load(url)
         }
     }

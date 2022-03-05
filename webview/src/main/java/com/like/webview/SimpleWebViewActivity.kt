@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import androidx.databinding.DataBindingUtil
 import com.like.webview.databinding.ActivityWebviewBinding
@@ -37,10 +36,6 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
             progressBarBgColorResId: Int = R.color.colorPrimary,
             progressBarProgressColorResId: Int = R.color.colorPrimaryDark
         ) {
-            Log.w(
-                "Logger",
-                "url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
-            )
             Intent(context, SimpleWebViewActivity::class.java).apply {
                 if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 putExtra(KEY_URL, url)
@@ -63,15 +58,15 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+    }
+
+    override fun onStart() {
+        super.onStart()
         val url = intent.getStringExtra(KEY_URL)
         val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
         val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
         val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
         val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        Log.e(
-            "Logger",
-            "url=$url errorViewResId=$errorViewResId progressBarHeight=$progressBarHeight progressBarBgColorResId=$progressBarBgColorResId progressBarProgressColorResId=$progressBarProgressColorResId"
-        )
         mWebViewFragment?.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
