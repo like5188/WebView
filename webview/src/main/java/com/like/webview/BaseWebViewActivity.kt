@@ -22,7 +22,7 @@ abstract class BaseWebViewActivity : AppCompatActivity() {
                     add(getFragmentHolderResId(), this)
                     mWebViewFragment = this
                 }
-            }.commit()
+            }.commitNow()
         }
     }
 

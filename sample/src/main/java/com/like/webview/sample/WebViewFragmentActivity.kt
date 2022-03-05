@@ -90,15 +90,11 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+        initWebViewFragment()
     }
 
     override fun getFragmentHolderResId(): Int {
         return R.id.fragment_holder
-    }
-
-    override fun onStart() {
-        super.onStart()
-        initWebViewFragment()
     }
 
     private fun initWebViewFragment() {

@@ -58,10 +58,10 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+        initWebViewFragment()
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun initWebViewFragment() {
         val url = intent.getStringExtra(KEY_URL)
         val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
         val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
