@@ -2,6 +2,7 @@ package com.like.webview
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
+ * todo 1、生命周期还没弄好。2、在ViewPagerActivity的WebViewFragment中也添加交互功能。
  * 包含了进度条的 WebView 的封装
  *
  * 注意：
@@ -36,6 +38,7 @@ class WebViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.e("Logger", "onCreateView")
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             mX5WebViewWithErrorViewAndProgressBar = this
             mWebView = getWebView()?.apply {

@@ -2,6 +2,7 @@ package com.like.webview
 
 import android.graphics.PixelFormat
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 /**
@@ -29,6 +30,7 @@ abstract class BaseWebViewActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         webViewFragment?.let {
+            Log.e("Logger", "intWebViewFragment")
             intWebViewFragment(it)
         }
     }
