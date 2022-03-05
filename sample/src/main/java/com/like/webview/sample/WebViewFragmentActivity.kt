@@ -145,18 +145,20 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun callJSMethod(view: View) {
-        try {
-            val params = JSONObject()
-            params.put("name", "like1")
-            params.put("age", 22)
-            mWebViewFragment?.callJsMethod(
-                "jsMethodName",
-                params.toString()
-            ) {
-                Logger.d("callJsMethod 返回值：$it")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        mWebViewFragment?.callJsMethod("jsMethodName") {
+            Logger.d("callJsMethod 返回值：$it")
+        }
+    }
+
+    fun callJSMethodWithParams(view: View) {
+        val params = JSONObject()
+        params.put("name", "like")
+        params.put("age", 1)
+        mWebViewFragment?.callJsMethod(
+            "jsMethodNameWithParams",
+            params.toString()
+        ) {
+            Logger.d("callJSMethodWithParams 返回值：$it")
         }
     }
 

@@ -112,7 +112,7 @@ class WebViewFragment : Fragment() {
      * @param paramsJsonString  js 方法的参数
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
-    fun callJsMethod(methodName: String, paramsJsonString: String?, callback: ((String) -> Unit)?) {
+    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
         mX5WebViewWithErrorViewAndProgressBar?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
