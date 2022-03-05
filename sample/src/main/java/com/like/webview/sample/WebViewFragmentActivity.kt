@@ -1,38 +1,30 @@
 package com.like.webview.sample
 
 import android.graphics.Bitmap
-import android.graphics.PixelFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.like.common.base.addFragments
 import com.like.common.util.Logger
-import com.like.webview.WebViewFragment
+import com.like.webview.BaseWebViewActivity
 import com.like.webview.X5Listener
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
-class WebViewFragmentActivity : AppCompatActivity() {
+class WebViewFragmentActivity : BaseWebViewActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityWebviewFragmentBinding>(this, R.layout.activity_webview_fragment)
     }
-    private var mWebViewFragment: WebViewFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
-        window.setFormat(PixelFormat.TRANSLUCENT)
         mBinding
-        val url = "file:///android_asset/index.html"
-//        val url = "http://car1.i.cacf.cn/#/reservation/redestination"
-        WebViewFragment(url).let {
-            addFragments(R.id.fragment_holder, 0, it)
-            mWebViewFragment = it
-        }
+    }
+
+    override fun getFragmentHolderResId(): Int {
+        return R.id.fragment_holder
     }
 
     override fun onStart() {

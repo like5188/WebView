@@ -78,6 +78,6 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.github.like5188:Common:6.7.4'
+    implementation 'com.github.like5188:Common:6.8.1'
     implementation project(':webview')
 }

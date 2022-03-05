@@ -7,15 +7,15 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="fragment"
-        android:text="fragment测试"
+        android:onClick="simpleWebViewActivity"
+        android:text="简单WebViewActivity测试"
         android:textAllCaps="false" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="activity"
-        android:text="activity测试"
+        android:onClick="webViewActivity"
+        android:text="需要交互的WebViewActivity测试"
         android:textAllCaps="false" />
 
     <Button
