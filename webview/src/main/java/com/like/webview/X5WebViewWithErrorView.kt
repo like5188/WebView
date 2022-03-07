@@ -22,16 +22,16 @@ import com.tencent.smtt.sdk.WebView
  */
 class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
-    private var tencentWebView: WebView? = null
-    private var x5Listener: X5Listener? = null
     private var isErrorPage = false
+    var tencentWebView: WebView? = null
+        private set
+    var x5Listener: X5Listener? = null
     var errorView: View? = null
         set(value) {
-            value?.let {
-                it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-                addView(it, 0)
-                it.visibility = View.GONE
-            }
+            removeView(field)
+            value?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            value?.visibility = View.GONE
+            addView(value, 0)
             field = value
         }
 
@@ -93,12 +93,6 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         tencentWebView?.webViewClient = X5WebViewClient(listener)
         tencentWebView?.webChromeClient = X5WebChromeClient(context as Activity, listener)
         addView(tencentWebView)
-    }
-
-    fun getX5WebView() = tencentWebView
-
-    fun setX5Listener(listener: X5Listener) {
-        x5Listener = listener
     }
 
     /**

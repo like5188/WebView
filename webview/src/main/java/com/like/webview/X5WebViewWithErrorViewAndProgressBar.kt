@@ -22,14 +22,14 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
-    private var x5Listener: X5Listener? = null
     private var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
+    var x5Listener: X5Listener? = null
 
     init {
         orientation = VERTICAL
         x5WebViewWithErrorView = X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            it.setX5Listener(object : X5Listener {
+            it.x5Listener = object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     x5Listener?.onReceivedIcon(webView, icon)
                 }
@@ -61,7 +61,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
                     }
                     x5Listener?.onProgressChanged(webView, progress)
                 }
-            })
+            }
             addView(it)
         }
     }
@@ -107,11 +107,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         }
     }
 
-    fun getX5WebView(): WebView? = x5WebViewWithErrorView?.getX5WebView()
-
-    fun setX5Listener(listener: X5Listener) {
-        x5Listener = listener
-    }
+    fun getX5WebView(): WebView? = x5WebViewWithErrorView?.tencentWebView
 
     /**
      * android 调用 js 方法
