@@ -15,13 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * 包含了进度条的 WebView 的封装
- *
- * 注意：
- * 1、如果使用 FragmentTransaction 的 commit() 方法来添加，因为此方法是异步的，所以我们不知道什么时候 WebViewFragment 会被创建并添加到 Activity 中。
- * 所以，如果 Activity 在 onCreate() 方法中添加了 WebViewFragment，那么就需要在 onStart()或者onResume()方法中调用[WebViewFragment]里面的相关方法才有效，具体情况有所不同。
- * 2、如果在 Activity 的 onCreate 方法中进行 WebView 相关的操作，不会成功，
- * 因为 [x5WebView]、[x5WebViewWithErrorViewAndProgressBar]都为 null。
- * 所以相关操作都要放到 onStart()或者onResume()（如果不需要懒加载 url）方法中。
  */
 class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
     private val isLoaded = AtomicBoolean(false)
