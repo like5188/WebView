@@ -1,6 +1,5 @@
 package com.like.webview
 
-import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -29,32 +28,25 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
     private var x5WebView: WebView? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.e("Logger", "WebViewFragment onAttach")
-        x5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
-            x5WebView = getX5WebView()?.apply {
-                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-                webViewFragmentConfig.javascriptInterfaceMap.forEach {
-                    addJavascriptInterface(it.value, it.key)
-                }
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Log.e("Logger", "WebViewFragment onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
-        return x5WebViewWithErrorViewAndProgressBar?.apply {
+    ): View {
+        return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
+            x5WebViewWithErrorViewAndProgressBar = this
             setErrorViewResId(webViewFragmentConfig.errorViewResId)
             setProgressBar(
                 webViewFragmentConfig.progressBarHeight,
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
+            x5WebView = getX5WebView()?.apply {
+                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+                webViewFragmentConfig.javascriptInterfaceMap.forEach {
+                    addJavascriptInterface(it.value, it.key)
+                }
+            }
         }
     }
 
