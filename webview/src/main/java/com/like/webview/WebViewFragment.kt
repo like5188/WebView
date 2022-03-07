@@ -52,7 +52,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         return getX5WebViewWithErrorView()?.tencentWebView
     }
 
-    fun load(url: String?) {
+    fun loadUrl(url: String?) {
         if (url.isNullOrEmpty()) {
             return
         }
@@ -95,7 +95,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         super.onResume()
         getX5WebView()?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
-            load(webViewFragmentConfig.url)
+            loadUrl(webViewFragmentConfig.url)
         }
     }
 
