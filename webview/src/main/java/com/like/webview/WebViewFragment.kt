@@ -106,6 +106,12 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     override fun onDestroyView() {
         Log.e("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
+        getX5WebView()?.apply {
+            webViewFragmentConfig.javascriptInterfaceMap.forEach {
+                removeJavascriptInterface(it.key)
+            }
+        }
+        webViewFragmentConfig.destroy()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
@@ -147,4 +153,14 @@ class WebViewFragmentConfig {
     val javascriptInterfaceMap = mutableMapOf<String, Any>()
 
     var x5Listener: X5Listener? = null
+
+    fun destroy() {
+        url = null
+        errorViewResId = -1
+        progressBarHeight = 0f
+        progressBarBgColorResId = -1
+        progressBarProgressColorResId = -1
+        x5Listener = null
+        javascriptInterfaceMap.clear()
+    }
 }
