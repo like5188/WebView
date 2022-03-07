@@ -39,6 +39,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             }
 
             override fun onPageFinished(webView: WebView?, url: String?) {
+                // 测试 localStorage
                 val j = JSONObject()
                 j.put(
                     "source",
