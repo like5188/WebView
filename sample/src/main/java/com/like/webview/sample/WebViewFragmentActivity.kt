@@ -57,15 +57,6 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
-        webViewFragment?.setListener(object : X5ListenerAdapter() {
-            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                mBinding.ivIcon.setImageBitmap(icon)
-            }
-
-            override fun onReceivedTitle(webView: WebView?, title: String?) {
-                mBinding.tvTitle.text = title
-            }
-        })
     }
 
     override fun getFragmentHolderResId(): Int {
@@ -79,6 +70,15 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
         progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
         javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
+        x5Listener = object : X5ListenerAdapter() {
+            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                mBinding.ivIcon.setImageBitmap(icon)
+            }
+
+            override fun onReceivedTitle(webView: WebView?, title: String?) {
+                mBinding.tvTitle.text = title
+            }
+        }
     }
 
     fun pageUp(view: View) {

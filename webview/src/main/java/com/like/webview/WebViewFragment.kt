@@ -34,6 +34,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
+            x5Listener = webViewFragmentConfig.x5Listener
             x5WebView = getX5WebView()?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
                 webViewFragmentConfig.javascriptInterfaceMap.forEach {
@@ -43,19 +44,15 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
+    fun getWebView(): WebView? {
+        return x5WebView
+    }
+
     fun load(url: String?) {
         if (url.isNullOrEmpty()) {
             return
         }
         x5WebView?.loadUrl(url)
-    }
-
-    fun getWebView(): WebView? {
-        return x5WebView
-    }
-
-    fun setListener(listener: X5Listener) {
-        x5WebViewWithErrorViewAndProgressBar?.x5Listener = listener
     }
 
     fun pageUp() {
@@ -138,4 +135,6 @@ class WebViewFragmentConfig {
      * 注册 js 调用 android 方法
      */
     val javascriptInterfaceMap = mutableMapOf<String, Any>()
+
+    var x5Listener: X5Listener? = null
 }
