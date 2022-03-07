@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
-import android.os.Build
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
@@ -102,8 +101,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
      * 往浏览器的 localStorage 中写入数据。
      */
     fun localStorage(key: String, value: String) {
-        val jsString = "window.localStorage.setItem($key,'$value');"
-        tencentWebView?.evaluateJavascript(jsString, null)
+        tencentWebView?.evaluateJavascript("window.localStorage.setItem('$key','$value');", null)
     }
 
     /**
