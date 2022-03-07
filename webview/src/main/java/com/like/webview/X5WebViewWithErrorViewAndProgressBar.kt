@@ -1,12 +1,10 @@
 package com.like.webview
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -76,14 +74,14 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     /**
      * 设置进度条。
      *
-     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
+     * @param progressBarHeight             进度条高度
      * @param progressBarBgColorResId       进度条背景色
      * @param progressBarProgressColorResId 进度条颜色
      */
     fun setProgressBar(
-        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
-        progressBarBgColorResId: Int = R.color.colorPrimary,
-        progressBarProgressColorResId: Int = R.color.colorPrimaryDark
+        progressBarHeight: Float,
+        progressBarBgColorResId: Int,
+        progressBarProgressColorResId: Int
     ) {
         removeView(progressBar)
         progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {

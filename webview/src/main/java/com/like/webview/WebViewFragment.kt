@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
@@ -28,14 +29,15 @@ class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
     private var x5WebView: WebView? = null
-    private var url: String? = null
-    private var errorViewResId: Int = -1
-    private var progressBarHeight: Float = 0f
-    private var progressBarBgColorResId: Int = -1
-    private var progressBarProgressColorResId: Int = -1
+
+    /**
+     * [url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
+     */
+    var url: String? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.e("Logger", "onAttach")
         x5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
             x5WebView = getX5WebView()?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
@@ -47,39 +49,33 @@ class WebViewFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        Log.e("Logger", "onCreateView")
-        return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
-            x5WebViewWithErrorViewAndProgressBar = this
-            x5WebView = getX5WebView()?.apply {
-                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
-            }
-            setErrorViewResId(errorViewResId)
-            setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
-        }
+    ): View? {
+        Log.e("Logger", "onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        return x5WebViewWithErrorViewAndProgressBar
     }
 
     /**
-     * 初始化，设置错误视图和进度条。
+     * 添加错误页面。
+     */
+    fun setErrorViewResId(@LayoutRes resId: Int = R.layout.webview_error_view) {
+        Log.e("Logger", "setErrorViewResId x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        x5WebViewWithErrorViewAndProgressBar?.setErrorViewResId(resId)
+    }
+
+    /**
+     * 设置进度条。
      *
-     * @param url   注意：[url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
-     * @param errorViewResId                错误视图。如果为 -1，表示无错误视图。
-     * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
+     * @param progressBarHeight             进度条高度
      * @param progressBarBgColorResId       进度条背景色
      * @param progressBarProgressColorResId 进度条颜色
      */
-    fun init(
-        url: String? = null,
-        errorViewResId: Int = R.layout.webview_error_view,
+    fun setProgressBar(
         progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
         progressBarBgColorResId: Int = R.color.colorPrimary,
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        this.url = url
-        this.errorViewResId = errorViewResId
-        this.progressBarHeight = progressBarHeight
-        this.progressBarBgColorResId = progressBarBgColorResId
-        this.progressBarProgressColorResId = progressBarProgressColorResId
+        Log.e("Logger", "setProgressBar x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        x5WebViewWithErrorViewAndProgressBar?.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
     fun load(url: String?) {
