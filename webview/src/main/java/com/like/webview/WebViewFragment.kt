@@ -20,13 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 1、如果使用 FragmentTransaction 的 commit() 方法来添加，因为此方法是异步的，所以我们不知道什么时候 WebViewFragment 会被创建并添加到 Activity 中。
  * 所以，如果 Activity 在 onCreate() 方法中添加了 WebViewFragment，那么就需要在 onStart()或者onResume()方法中调用[WebViewFragment]里面的相关方法才有效，具体情况有所不同。
  * 2、如果在 Activity 的 onCreate 方法中进行 WebView 相关的操作，不会成功，
- * 因为 [mWebView]、[mX5WebViewWithErrorViewAndProgressBar]都为 null。
+ * 因为 [x5WebView]、[x5WebViewWithErrorViewAndProgressBar]都为 null。
  * 所以相关操作都要放到 onStart()或者onResume()（如果不需要懒加载 url）方法中。
  */
 class WebViewFragment : Fragment() {
     private val isLoaded = AtomicBoolean(false)
-    private var mX5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
-    private var mWebView: WebView? = null
+    private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
+    private var x5WebView: WebView? = null
     private var url: String? = null
     private var errorViewResId: Int = -1
     private var progressBarHeight: Float = 0f
@@ -40,17 +40,12 @@ class WebViewFragment : Fragment() {
     ): View {
         Log.e("Logger", "onCreateView")
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
-            mX5WebViewWithErrorViewAndProgressBar = this
-            mWebView = getWebView()?.apply {
+            x5WebViewWithErrorViewAndProgressBar = this
+            x5WebView = getX5WebView()?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
             }
-            // 这里也初始化一遍，避免使用者调用 init 方法的时机不对造成没有初始化。
-            init(
-                errorViewResId,
-                progressBarHeight,
-                progressBarBgColorResId,
-                progressBarProgressColorResId
-            )
+            setErrorViewResId(errorViewResId)
+            setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
         }
     }
 
@@ -81,34 +76,34 @@ class WebViewFragment : Fragment() {
         if (url.isNullOrEmpty()) {
             return
         }
-        mWebView?.loadUrl(url)
+        x5WebView?.loadUrl(url)
     }
 
     fun getWebView(): WebView? {
-        return mWebView
+        return x5WebView
     }
 
     fun setListener(listener: X5Listener) {
-        mX5WebViewWithErrorViewAndProgressBar?.setListener(listener)
+        x5WebViewWithErrorViewAndProgressBar?.setX5Listener(listener)
     }
 
     fun pageUp() {
-        mWebView?.pageUp(true)
+        x5WebView?.pageUp(true)
     }
 
     fun pageDown() {
-        mWebView?.pageDown(true)
+        x5WebView?.pageDown(true)
     }
 
     fun reload() {
-        mWebView?.reload()
+        x5WebView?.reload()
     }
 
     /**
      * js 调用 android 方法时使用
      */
     fun addJavascriptInterface(javascriptInterface: Any, interfaceName: String) {
-        mWebView?.addJavascriptInterface(javascriptInterface, interfaceName)
+        x5WebView?.addJavascriptInterface(javascriptInterface, interfaceName)
     }
 
     /**
@@ -119,17 +114,17 @@ class WebViewFragment : Fragment() {
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        mX5WebViewWithErrorViewAndProgressBar?.callJsMethod(methodName, paramsJsonString, callback)
+        x5WebViewWithErrorViewAndProgressBar?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
         super.onPause()
-        mWebView?.onPause()
+        x5WebView?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        mWebView?.onResume()
+        x5WebView?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             load(url)
         }
@@ -138,9 +133,9 @@ class WebViewFragment : Fragment() {
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        mX5WebViewWithErrorViewAndProgressBar?.destroy()
-        mX5WebViewWithErrorViewAndProgressBar = null
-        mWebView = null
+        x5WebViewWithErrorViewAndProgressBar?.destroy()
+        x5WebViewWithErrorViewAndProgressBar = null
+        x5WebView = null
         super.onDestroyView()
     }
 

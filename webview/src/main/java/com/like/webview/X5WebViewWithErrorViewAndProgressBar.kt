@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.tencent.smtt.sdk.WebView
 
@@ -21,32 +22,32 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
-    private var mListener: X5Listener? = null
+    private var x5Listener: X5Listener? = null
     private var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
 
     init {
         orientation = VERTICAL
         x5WebViewWithErrorView = X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            it.setListener(object : X5Listener {
+            it.setX5Listener(object : X5Listener {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                    mListener?.onReceivedIcon(webView, icon)
+                    x5Listener?.onReceivedIcon(webView, icon)
                 }
 
                 override fun onReceivedTitle(webView: WebView?, title: String?) {
-                    mListener?.onReceivedTitle(webView, title)
+                    x5Listener?.onReceivedTitle(webView, title)
                 }
 
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-                    mListener?.onPageStarted(webView, url, favicon)
+                    x5Listener?.onPageStarted(webView, url, favicon)
                 }
 
                 override fun onPageFinished(webView: WebView?, url: String?) {
-                    mListener?.onPageFinished(webView, url)
+                    x5Listener?.onPageFinished(webView, url)
                 }
 
                 override fun onReceivedError(webView: WebView?) {
-                    mListener?.onReceivedError(webView)
+                    x5Listener?.onReceivedError(webView)
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {
@@ -58,7 +59,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
                             pb.visibility = View.GONE
                         }
                     }
-                    mListener?.onProgressChanged(webView, progress)
+                    x5Listener?.onProgressChanged(webView, progress)
                 }
             })
             addView(it)
@@ -66,26 +67,26 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     }
 
     /**
-     * 初始化，设置错误视图和进度条。如果已经设置过了，不会重复设置。
+     * 为X5WebView添加错误页面。如果已经设置过了，不会重复设置。
+     */
+    fun setErrorViewResId(@LayoutRes resId: Int) {
+        if (resId != -1 && x5WebViewWithErrorView?.errorView == null) {
+            x5WebViewWithErrorView?.errorView = View.inflate(context, resId, null)
+        }
+    }
+
+    /**
+     * 设置进度条。如果已经设置过了，不会重复设置。
      *
-     * @param errorViewResId                错误视图。如果为 -1，表示无错误视图。
      * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
      * @param progressBarBgColorResId       进度条背景色
      * @param progressBarProgressColorResId 进度条颜色
      */
-    fun init(
-        errorViewResId: Int = R.layout.webview_error_view,
+    fun setProgressBar(
         progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
         progressBarBgColorResId: Int = R.color.colorPrimary,
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        // 为X5WebView添加错误页面
-        if (errorViewResId != -1 && x5WebViewWithErrorView?.errorView == null) {
-            val errorView = View.inflate(context, errorViewResId, null)
-            if (errorView != null) {
-                x5WebViewWithErrorView?.errorView = errorView
-            }
-        }
         if (progressBarHeight > 0 && progressBar == null) {
             progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
                 max = 100
@@ -106,10 +107,10 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         }
     }
 
-    fun getWebView(): WebView? = x5WebViewWithErrorView?.getWebView()
+    fun getX5WebView(): WebView? = x5WebViewWithErrorView?.getX5WebView()
 
-    fun setListener(listener: X5Listener) {
-        mListener = listener
+    fun setX5Listener(listener: X5Listener) {
+        x5Listener = listener
     }
 
     /**
@@ -128,7 +129,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
      */
     fun destroy() {
         progressBar = null
-        mListener = null
+        x5Listener = null
         x5WebViewWithErrorView?.destroy()
         x5WebViewWithErrorView = null
     }

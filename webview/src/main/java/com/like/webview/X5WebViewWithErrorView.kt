@@ -23,7 +23,7 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var tencentWebView: WebView? = null
-    private var mListener: X5Listener? = null
+    private var x5Listener: X5Listener? = null
     private var isErrorPage = false
     var errorView: View? = null
         set(value) {
@@ -59,35 +59,35 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         initWebSettings()// 初始化WebSettings
         val listener = object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                mListener?.onReceivedIcon(webView, icon)
+                x5Listener?.onReceivedIcon(webView, icon)
             }
 
             override fun onReceivedTitle(webView: WebView?, title: String?) {
-                mListener?.onReceivedTitle(webView, title)
+                x5Listener?.onReceivedTitle(webView, title)
             }
 
             override fun onProgressChanged(webView: WebView?, progress: Int?) {
                 if (!isNetworkAvailable(getContext())) {
                     showErrorView()
                 }
-                mListener?.onProgressChanged(webView, progress)
+                x5Listener?.onProgressChanged(webView, progress)
             }
 
             override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                 isErrorPage = false
-                mListener?.onPageStarted(webView, url, favicon)
+                x5Listener?.onPageStarted(webView, url, favicon)
             }
 
             override fun onPageFinished(webView: WebView?, url: String?) {
                 if (!isErrorPage) {
                     showWebView()
                 }
-                mListener?.onPageFinished(webView, url)
+                x5Listener?.onPageFinished(webView, url)
             }
 
             override fun onReceivedError(webView: WebView?) {
                 showErrorView()
-                mListener?.onReceivedError(webView)
+                x5Listener?.onReceivedError(webView)
             }
         }
         tencentWebView?.webViewClient = X5WebViewClient(listener)
@@ -95,10 +95,10 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         addView(tencentWebView)
     }
 
-    fun getWebView() = tencentWebView
+    fun getX5WebView() = tencentWebView
 
-    fun setListener(listener: X5Listener) {
-        mListener = listener
+    fun setX5Listener(listener: X5Listener) {
+        x5Listener = listener
     }
 
     /**
@@ -247,6 +247,6 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
             }
         }
         errorView = null
-        mListener = null
+        x5Listener = null
     }
 }
