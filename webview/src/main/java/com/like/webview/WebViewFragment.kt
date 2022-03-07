@@ -1,5 +1,6 @@
 package com.like.webview
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,15 @@ class WebViewFragment : Fragment() {
     private var progressBarHeight: Float = 0f
     private var progressBarBgColorResId: Int = -1
     private var progressBarProgressColorResId: Int = -1
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        x5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
+            x5WebView = getX5WebView()?.apply {
+                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
