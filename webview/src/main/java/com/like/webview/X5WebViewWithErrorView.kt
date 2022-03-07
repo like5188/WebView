@@ -179,9 +179,10 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
             // 通常没有禁止图片加载的需求的时候，完全不用管这个方法，因为当我们的app拥有访问Internet的权限时，这个flag的默认值就是false。
             blockNetworkImage = false
             // 支持自动加载图片
-            loadsImagesAutomatically = Build.VERSION.SDK_INT >= 19
+            loadsImagesAutomatically = true
             // 设置编码格式
             defaultTextEncodingName = "UTF-8"
+            setAppCacheMaxSize(1024 * 1024 * 8)
         }
     }
 
