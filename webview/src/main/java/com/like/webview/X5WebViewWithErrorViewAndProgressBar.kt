@@ -67,12 +67,10 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     }
 
     /**
-     * 为X5WebView添加错误页面。如果已经设置过了，不会重复设置。
+     * 为X5WebView添加错误页面。
      */
     fun setErrorViewResId(@LayoutRes resId: Int) {
-        if (resId != -1 && x5WebViewWithErrorView?.errorView == null) {
-            x5WebViewWithErrorView?.errorView = View.inflate(context, resId, null)
-        }
+        x5WebViewWithErrorView?.errorView = View.inflate(context, resId, null)
     }
 
     /**
@@ -87,23 +85,21 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         progressBarBgColorResId: Int = R.color.colorPrimary,
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        if (progressBarHeight > 0 && progressBar == null) {
-            progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
-                max = 100
-            }.apply {
-                // 设置进度条背景颜色
-                setBackgroundColor(ContextCompat.getColor(context, progressBarBgColorResId))
-                // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
-                progressDrawable = ClipDrawable(
-                    ColorDrawable(ContextCompat.getColor(context, progressBarProgressColorResId)),
-                    Gravity.START,
-                    ClipDrawable.HORIZONTAL
-                )
-                // 设置进度条高度
-                layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
-                // 添加进度条
-                addView(this, 0)
-            }
+        removeView(progressBar)
+        progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
+            max = 100
+        }.apply {
+            // 设置进度条背景颜色
+            setBackgroundColor(ContextCompat.getColor(context, progressBarBgColorResId))
+            // 设置进度条颜色。设置一个ClipDrawable,ClipDrawable是对Drawable进行剪切操作，可以控制这个Drawable的剪切区域，以及相对容器的对齐方式，android中的进度条就是使用一个ClipDrawable实现效果的，它根据level的属性值，决定剪切区域的大小。
+            progressDrawable = ClipDrawable(
+                ColorDrawable(ContextCompat.getColor(context, progressBarProgressColorResId)),
+                Gravity.START,
+                ClipDrawable.HORIZONTAL
+            )
+            // 设置进度条高度
+            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
+            addView(this, 0)
         }
     }
 
