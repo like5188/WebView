@@ -15,7 +15,6 @@ import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * todo 1、生命周期还没弄好。2、在ViewPagerActivity的WebViewFragment中也添加交互功能。
  * 包含了进度条的 WebView 的封装
  *
  * 注意：
@@ -25,36 +24,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 因为 [x5WebView]、[x5WebViewWithErrorViewAndProgressBar]都为 null。
  * 所以相关操作都要放到 onStart()或者onResume()（如果不需要懒加载 url）方法中。
  */
-class WebViewFragment : Fragment() {
+class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
     private val isLoaded = AtomicBoolean(false)
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
     private var x5WebView: WebView? = null
-
-    /**
-     * [url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
-     */
-    var url: String? = null
-
-    /**
-     * 错误页面资源 id
-     */
-    @LayoutRes
-    var errorViewResId: Int = R.layout.webview_error_view
-
-    /**
-     * 进度条高度，设置为 0 即隐藏进度条。
-     */
-    var progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
-
-    /**
-     * 进度条背景色
-     */
-    var progressBarBgColorResId: Int = R.color.colorPrimary
-
-    /**
-     * 进度条颜色
-     */
-    var progressBarProgressColorResId: Int = R.color.colorPrimaryDark
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,6 +35,9 @@ class WebViewFragment : Fragment() {
         x5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
             x5WebView = getX5WebView()?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
+                webViewFragmentConfig.javascriptInterfaceMap.forEach {
+                    addJavascriptInterface(it.value, it.key)
+                }
             }
         }
     }
@@ -73,8 +49,12 @@ class WebViewFragment : Fragment() {
     ): View? {
         Log.e("Logger", "WebViewFragment onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
         return x5WebViewWithErrorViewAndProgressBar?.apply {
-            setErrorViewResId(errorViewResId)
-            setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+            setErrorViewResId(webViewFragmentConfig.errorViewResId)
+            setProgressBar(
+                webViewFragmentConfig.progressBarHeight,
+                webViewFragmentConfig.progressBarBgColorResId,
+                webViewFragmentConfig.progressBarProgressColorResId
+            )
         }
     }
 
@@ -106,13 +86,6 @@ class WebViewFragment : Fragment() {
     }
 
     /**
-     * js 调用 android 方法时使用
-     */
-    fun addJavascriptInterface(javascriptInterface: Any, interfaceName: String) {
-        x5WebView?.addJavascriptInterface(javascriptInterface, interfaceName)
-    }
-
-    /**
      * android 调用 js 方法
      *
      * @param methodName        js 方法的名字
@@ -133,7 +106,7 @@ class WebViewFragment : Fragment() {
         Log.e("Logger", "WebViewFragment onResume")
         x5WebView?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
-            load(url)
+            load(webViewFragmentConfig.url)
         }
     }
 
@@ -147,4 +120,37 @@ class WebViewFragment : Fragment() {
         super.onDestroyView()
     }
 
+}
+
+class WebViewFragmentConfig {
+    /**
+     * [url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
+     */
+    var url: String? = null
+
+    /**
+     * 错误页面资源 id
+     */
+    @LayoutRes
+    var errorViewResId: Int = R.layout.webview_error_view
+
+    /**
+     * 进度条高度，设置为 0 即隐藏进度条。
+     */
+    var progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+
+    /**
+     * 进度条背景色
+     */
+    var progressBarBgColorResId: Int = R.color.colorPrimary
+
+    /**
+     * 进度条颜色
+     */
+    var progressBarProgressColorResId: Int = R.color.colorPrimaryDark
+
+    /**
+     * 注册 js 调用 android 方法
+     */
+    val javascriptInterfaceMap = mutableMapOf<String, Any>()
 }

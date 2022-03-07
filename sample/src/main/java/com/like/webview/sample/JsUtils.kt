@@ -9,10 +9,6 @@ import org.json.JSONObject
 js 与 android 交互的辅助工具类。配合 index.html 使用。
  */
 object JsUtils {
-    fun addJavascriptInterface(webViewFragment: WebViewFragment?) {
-        webViewFragment?.addJavascriptInterface(JavascriptInterface(), "appKcwc")
-    }
-
     fun callJSMethod(webViewFragment: WebViewFragment?) {
         webViewFragment?.callJsMethod("jsMethodName") {
             Logger.d("callJsMethod 返回值：$it")
@@ -32,7 +28,7 @@ object JsUtils {
         }
     }
 
-    private class JavascriptInterface {
+    class JavascriptInterface {
         @android.webkit.JavascriptInterface// API17及以上的版本中，需要此注解才能调用下面的方法
         fun androidMethod(params: String): String {
             try {

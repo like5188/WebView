@@ -20,19 +20,11 @@ abstract class BaseWebViewActivity : AppCompatActivity() {
         Log.w("Logger", "BaseWebViewActivity onCreate")
         if (webViewFragment == null) {
             supportFragmentManager.beginTransaction().apply {
-                WebViewFragment().apply {
+                WebViewFragment(getWebViewFragmentConfig()).apply {
                     add(getFragmentHolderResId(), this)
                     webViewFragment = this
                 }
             }.commit()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        webViewFragment?.let {
-            Log.w("Logger", "BaseWebViewActivity onStart")
-            intWebViewFragment(it)
         }
     }
 
@@ -41,9 +33,6 @@ abstract class BaseWebViewActivity : AppCompatActivity() {
      */
     abstract fun getFragmentHolderResId(): Int
 
-    /**
-     * 在此方法中进行[webViewFragment]相关的设置
-     */
-    abstract fun intWebViewFragment(webViewFragment: WebViewFragment)
+    abstract fun getWebViewFragmentConfig(): WebViewFragmentConfig
 
 }

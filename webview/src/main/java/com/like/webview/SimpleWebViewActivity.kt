@@ -64,14 +64,12 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
         return R.id.fragment_holder
     }
 
-    override fun intWebViewFragment(webViewFragment: WebViewFragment) {
-        with(webViewFragment) {
-            url = intent.getStringExtra(KEY_URL)
-            errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
-            progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
-            progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
-            progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        }
+    override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+        url = intent.getStringExtra(KEY_URL)
+        errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
+        progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
+        progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
+        progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
     }
 
 }

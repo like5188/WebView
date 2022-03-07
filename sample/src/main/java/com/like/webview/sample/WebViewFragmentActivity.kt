@@ -10,7 +10,7 @@ import android.util.TypedValue
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.like.webview.BaseWebViewActivity
-import com.like.webview.WebViewFragment
+import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.WebView
@@ -57,30 +57,28 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+        webViewFragment?.setListener(object : X5ListenerAdapter() {
+            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                mBinding.ivIcon.setImageBitmap(icon)
+            }
+
+            override fun onReceivedTitle(webView: WebView?, title: String?) {
+                mBinding.tvTitle.text = title
+            }
+        })
     }
 
     override fun getFragmentHolderResId(): Int {
         return R.id.fragment_holder
     }
 
-    override fun intWebViewFragment(webViewFragment: WebViewFragment) {
-        with(webViewFragment) {
-            url = intent.getStringExtra(KEY_URL)
-            errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
-            progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
-            progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
-            progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-            JsUtils.addJavascriptInterface(webViewFragment)
-            setListener(object : X5ListenerAdapter() {
-                override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                    mBinding.ivIcon.setImageBitmap(icon)
-                }
-
-                override fun onReceivedTitle(webView: WebView?, title: String?) {
-                    mBinding.tvTitle.text = title
-                }
-            })
-        }
+    override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+        url = intent.getStringExtra(KEY_URL)
+        errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
+        progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
+        progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
+        progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
+        javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
     }
 
     fun pageUp(view: View) {

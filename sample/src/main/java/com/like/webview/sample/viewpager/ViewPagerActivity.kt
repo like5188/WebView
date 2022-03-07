@@ -5,6 +5,8 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.like.webview.WebViewFragment
+import com.like.webview.WebViewFragmentConfig
+import com.like.webview.sample.JsUtils
 import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
@@ -13,18 +15,19 @@ class ViewPagerActivity : FragmentActivity() {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
-        WebViewFragment().apply {
+        WebViewFragment(WebViewFragmentConfig().apply {
+            url = "file:///android_asset/index.html"
+            javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
+        }),
+        WebViewFragment(WebViewFragmentConfig().apply {
             url = "https://cn.bing.com/"
-        },
-        WebViewFragment().apply {
+        }),
+        WebViewFragment(WebViewFragmentConfig().apply {
             url = "https://cn.bing.com/"
-        },
-        WebViewFragment().apply {
+        }),
+        WebViewFragment(WebViewFragmentConfig().apply {
             url = "https://cn.bing.com/"
-        },
-        WebViewFragment().apply {
-            url = "https://cn.bing.com/"
-        }
+        }),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
