@@ -15,7 +15,6 @@ import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragment
 import com.like.webview.X5Listener
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
-import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
@@ -98,10 +97,6 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun intWebViewFragment(webViewFragment: WebViewFragment) {
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.setAcceptCookie(true)
-        cookieManager.removeAllCookie()
-        cookieManager.setCookie("http://car1.i.cacf.cn", "mechine_type=android")
         with(webViewFragment) {
             url = intent.getStringExtra(KEY_URL)
             errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
