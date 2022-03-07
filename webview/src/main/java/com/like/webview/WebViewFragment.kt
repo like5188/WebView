@@ -35,6 +35,27 @@ class WebViewFragment : Fragment() {
      */
     var url: String? = null
 
+    /**
+     * 错误页面资源 id
+     */
+    @LayoutRes
+    var errorViewResId: Int = R.layout.webview_error_view
+
+    /**
+     * 进度条高度，设置为 0 即隐藏进度条。
+     */
+    var progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+
+    /**
+     * 进度条背景色
+     */
+    var progressBarBgColorResId: Int = R.color.colorPrimary
+
+    /**
+     * 进度条颜色
+     */
+    var progressBarProgressColorResId: Int = R.color.colorPrimaryDark
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.e("Logger", "WebViewFragment onAttach")
@@ -51,31 +72,10 @@ class WebViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.e("Logger", "WebViewFragment onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
-        return x5WebViewWithErrorViewAndProgressBar
-    }
-
-    /**
-     * 添加错误页面。
-     */
-    fun setErrorViewResId(@LayoutRes resId: Int = R.layout.webview_error_view) {
-        Log.e("Logger", "WebViewFragment setErrorViewResId x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
-        x5WebViewWithErrorViewAndProgressBar?.setErrorViewResId(resId)
-    }
-
-    /**
-     * 设置进度条。
-     *
-     * @param progressBarHeight             进度条高度
-     * @param progressBarBgColorResId       进度条背景色
-     * @param progressBarProgressColorResId 进度条颜色
-     */
-    fun setProgressBar(
-        progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics),
-        progressBarBgColorResId: Int = R.color.colorPrimary,
-        progressBarProgressColorResId: Int = R.color.colorPrimaryDark
-    ) {
-        Log.e("Logger", "WebViewFragment setProgressBar x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
-        x5WebViewWithErrorViewAndProgressBar?.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        return x5WebViewWithErrorViewAndProgressBar?.apply {
+            setErrorViewResId(errorViewResId)
+            setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        }
     }
 
     fun load(url: String?) {

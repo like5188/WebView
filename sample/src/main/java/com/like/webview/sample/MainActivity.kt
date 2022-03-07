@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun simpleWebViewActivity(view: View) {
-        SimpleWebViewActivity.start(this, "https://www.sina.com.cn/")
+        SimpleWebViewActivity.start(this, "https://cn.bing.com/")
     }
 
     fun webViewActivity(view: View) {

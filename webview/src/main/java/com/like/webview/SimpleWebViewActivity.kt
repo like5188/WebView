@@ -65,14 +65,13 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
     }
 
     override fun intWebViewFragment(webViewFragment: WebViewFragment) {
-        val url = intent.getStringExtra(KEY_URL)
-        val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
-        val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
-        val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
-        val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        webViewFragment.url = url
-        webViewFragment.setErrorViewResId(errorViewResId)
-        webViewFragment.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        with(webViewFragment) {
+            url = intent.getStringExtra(KEY_URL)
+            errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
+            progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
+            progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
+            progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
+        }
     }
 
 }

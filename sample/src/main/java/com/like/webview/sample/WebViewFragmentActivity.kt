@@ -98,40 +98,39 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun intWebViewFragment(webViewFragment: WebViewFragment) {
-        val url = intent.getStringExtra(KEY_URL)
-        val errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
-        val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
-        val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
-        val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        webViewFragment.url = url
-        webViewFragment.setErrorViewResId(errorViewResId)
-        webViewFragment.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
-        webViewFragment.addJavascriptInterface(JavascriptInterface(), "appKcwc")
         val cookieManager = CookieManager.getInstance()
         cookieManager.setAcceptCookie(true)
         cookieManager.removeAllCookie()
         cookieManager.setCookie("http://car1.i.cacf.cn", "mechine_type=android")
-        webViewFragment.setListener(object : X5Listener {
-            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                mBinding.ivIcon.setImageBitmap(icon)
-            }
+        with(webViewFragment) {
+            url = intent.getStringExtra(KEY_URL)
+            errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
+            progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
+            progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
+            progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
+            addJavascriptInterface(JavascriptInterface(), "appKcwc")
+            setListener(object : X5Listener {
+                override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                    mBinding.ivIcon.setImageBitmap(icon)
+                }
 
-            override fun onReceivedTitle(webView: WebView?, title: String?) {
-                mBinding.tvTitle.text = title
-            }
+                override fun onReceivedTitle(webView: WebView?, title: String?) {
+                    mBinding.tvTitle.text = title
+                }
 
-            override fun onProgressChanged(webView: WebView?, progress: Int?) {
-            }
+                override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                }
 
-            override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-            }
+                override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
+                }
 
-            override fun onPageFinished(webView: WebView?, url: String?) {
-            }
+                override fun onPageFinished(webView: WebView?, url: String?) {
+                }
 
-            override fun onReceivedError(webView: WebView?) {
-            }
-        })
+                override fun onReceivedError(webView: WebView?) {
+                }
+            })
+        }
     }
 
     fun pageUp(view: View) {
