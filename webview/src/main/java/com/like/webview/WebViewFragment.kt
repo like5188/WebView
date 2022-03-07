@@ -28,14 +28,14 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     ): View {
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             x5WebViewWithErrorViewAndProgressBar = this
-            setErrorViewResId(webViewFragmentConfig.errorViewResId)
+            x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             setProgressBar(
                 webViewFragmentConfig.progressBarHeight,
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
             x5Listener = webViewFragmentConfig.x5Listener
-            x5WebView = getX5WebView()?.apply {
+            x5WebView = x5WebViewWithErrorView?.tencentWebView?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
                 webViewFragmentConfig.javascriptInterfaceMap.forEach {
                     addJavascriptInterface(it.value, it.key)
@@ -68,7 +68,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     }
 
     fun localStorage(key: String, value: String) {
-        x5WebViewWithErrorViewAndProgressBar?.localStorage(key, value)
+        x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.localStorage(key, value)
     }
 
     /**
@@ -79,7 +79,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        x5WebViewWithErrorViewAndProgressBar?.callJsMethod(methodName, paramsJsonString, callback)
+        x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {

@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.tencent.smtt.sdk.WebView
 
@@ -20,7 +19,8 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
-    private var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
+    var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
+        private set
     var x5Listener: X5Listener? = null
 
     init {
@@ -65,17 +65,6 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     }
 
     /**
-     * 为X5WebView添加错误页面。
-     */
-    fun setErrorViewResId(@LayoutRes resId: Int) {
-        x5WebViewWithErrorView?.errorView = View.inflate(context, resId, null)
-    }
-
-    fun localStorage(key: String, value: String) {
-        x5WebViewWithErrorView?.localStorage(key, value)
-    }
-
-    /**
      * 设置进度条。
      *
      * @param progressBarHeight             进度条高度
@@ -104,19 +93,6 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
             addView(this, 0)
         }
-    }
-
-    fun getX5WebView(): WebView? = x5WebViewWithErrorView?.tencentWebView
-
-    /**
-     * android 调用 js 方法
-     *
-     * @param methodName        js 方法的名字
-     * @param paramsJsonString  js 方法的参数
-     * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
-     */
-    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        x5WebViewWithErrorView?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     /**

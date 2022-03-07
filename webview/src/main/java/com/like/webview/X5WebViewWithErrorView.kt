@@ -98,6 +98,9 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         addView(tencentWebView)
     }
 
+    /**
+     * 往浏览器的 localStorage 中写入数据。
+     */
     fun localStorage(key: String, value: String) {
         val jsString = "window.localStorage.setItem($key,'$value');"
         tencentWebView?.evaluateJavascript(jsString, null)
@@ -158,7 +161,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
             // 缓存模式有四种：
             // LOAD_DEFAULT：默认的缓存使用模式。在进行页面前进或后退的操作时，如果缓存可用并未过期就优先加载缓存，否则从网络上加载数据。这样可以减少页面的网络请求次数。
             // LOAD_CACHE_ELSE_NETWORK：只要缓存可用就加载缓存，哪怕它们已经过期失效。如果缓存不可用就从网络上加载数据。
-            // LOAD_NO_CACHE：不加载缓存，只从网络加载数据。
+            // LOAD_NO_CACHE：不加载缓存，只从网络加载数据。微信H5支付时需要设置。
             // LOAD_CACHE_ONLY：不从网络加载数据，只从缓存加载数据。
             cacheMode = WebSettings.LOAD_DEFAULT
             domStorageEnabled = true// 启用或禁用DOM缓存。
