@@ -84,7 +84,7 @@ class WebViewFragment : Fragment() {
     }
 
     fun setListener(listener: X5Listener) {
-        x5WebViewWithErrorViewAndProgressBar?.setX5Listener(listener)
+        x5WebViewWithErrorViewAndProgressBar?.x5Listener = listener
     }
 
     fun pageUp() {
