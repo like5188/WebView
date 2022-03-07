@@ -9,9 +9,8 @@
 		    return "3"
 	   }
 
-	   function jsMethodName(){
-		    alert("Android 调用了 JS 的 jsMethodName 方法");
-		    return "4"
+	   function getLocalStorage(){
+            alert(window.localStorage.getItem('appKcwc'))
 	   }
 
 	   function callAndroidMethod(){
@@ -21,8 +20,6 @@
             var str=window.appKcwc.androidMethod(JSON.stringify(user));
             alert("调用了 Android 的 androidMethod 方法，返回值：" + str);
        }
-
-
 
     </script>
 </head>

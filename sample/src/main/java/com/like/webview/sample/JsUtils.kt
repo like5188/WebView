@@ -9,10 +9,8 @@ import org.json.JSONObject
 js 与 android 交互的辅助工具类。配合 index.html 使用。
  */
 object JsUtils {
-    fun callJSMethod(webViewFragment: WebViewFragment?) {
-        webViewFragment?.callJsMethod("jsMethodName") {
-            Logger.d("callJsMethod 返回值：$it")
-        }
+    fun callGetLocalStorage(webViewFragment: WebViewFragment?) {
+        webViewFragment?.callJsMethod("getLocalStorage")
     }
 
     fun callJSMethodWithParams(webViewFragment: WebViewFragment?) {
