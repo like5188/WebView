@@ -70,7 +70,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
             progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
             progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-            addJavascriptInterface(webViewFragment)
+            JsUtils.addJavascriptInterface(webViewFragment)
             setListener(object : X5ListenerAdapter() {
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     mBinding.ivIcon.setImageBitmap(icon)
@@ -96,11 +96,11 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun callJSMethod(view: View) {
-        callJSMethod(webViewFragment)
+        JsUtils.callJSMethod(webViewFragment)
     }
 
     fun callJSMethodWithParams(view: View) {
-        callJSMethodWithParams(webViewFragment)
+        JsUtils.callJSMethodWithParams(webViewFragment)
     }
 
 }
