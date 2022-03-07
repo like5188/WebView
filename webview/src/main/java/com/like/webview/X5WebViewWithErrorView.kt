@@ -28,11 +28,14 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
     var x5Listener: X5Listener? = null
     var errorView: View? = null
         set(value) {
-            removeView(field)
-            value?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            value?.visibility = View.GONE
-            addView(value, 0)
-            field = value
+            field?.let {
+                removeView(it)
+            }
+            field = value?.apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                visibility = View.GONE
+                addView(this, 0)
+            }
         }
 
     init {

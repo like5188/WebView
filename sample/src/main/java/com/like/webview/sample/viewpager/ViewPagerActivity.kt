@@ -14,16 +14,16 @@ class ViewPagerActivity : FragmentActivity() {
     }
     private val fragments = listOf(
         WebViewFragment().apply {
-            init("https://cn.bing.com/")
+            url = "https://cn.bing.com/"
         },
         WebViewFragment().apply {
-            init("https://cn.bing.com/")
+            url = "https://cn.bing.com/"
         },
         WebViewFragment().apply {
-            init("https://cn.bing.com/")
+            url = "https://cn.bing.com/"
         },
         WebViewFragment().apply {
-            init("https://cn.bing.com/")
+            url = "https://cn.bing.com/"
         }
     )
 

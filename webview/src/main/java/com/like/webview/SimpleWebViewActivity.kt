@@ -70,7 +70,9 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
         val progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
         val progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)
         val progressBarProgressColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_PROGRESS_COLOR_RES_ID, -1)
-        webViewFragment.init(url, errorViewResId, progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
+        webViewFragment.url = url
+        webViewFragment.setErrorViewResId(errorViewResId)
+        webViewFragment.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
 }

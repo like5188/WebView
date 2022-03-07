@@ -37,7 +37,7 @@ class WebViewFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.e("Logger", "onAttach")
+        Log.e("Logger", "WebViewFragment onAttach")
         x5WebViewWithErrorViewAndProgressBar = X5WebViewWithErrorViewAndProgressBar(context).apply {
             x5WebView = getX5WebView()?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
@@ -50,7 +50,7 @@ class WebViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.e("Logger", "onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        Log.e("Logger", "WebViewFragment onCreateView x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
         return x5WebViewWithErrorViewAndProgressBar
     }
 
@@ -58,7 +58,7 @@ class WebViewFragment : Fragment() {
      * 添加错误页面。
      */
     fun setErrorViewResId(@LayoutRes resId: Int = R.layout.webview_error_view) {
-        Log.e("Logger", "setErrorViewResId x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        Log.e("Logger", "WebViewFragment setErrorViewResId x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
         x5WebViewWithErrorViewAndProgressBar?.setErrorViewResId(resId)
     }
 
@@ -74,7 +74,7 @@ class WebViewFragment : Fragment() {
         progressBarBgColorResId: Int = R.color.colorPrimary,
         progressBarProgressColorResId: Int = R.color.colorPrimaryDark
     ) {
-        Log.e("Logger", "setProgressBar x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
+        Log.e("Logger", "WebViewFragment setProgressBar x5WebViewWithErrorViewAndProgressBar=$x5WebViewWithErrorViewAndProgressBar")
         x5WebViewWithErrorViewAndProgressBar?.setProgressBar(progressBarHeight, progressBarBgColorResId, progressBarProgressColorResId)
     }
 
@@ -130,6 +130,7 @@ class WebViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.e("Logger", "WebViewFragment onResume")
         x5WebView?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             load(url)
@@ -137,6 +138,7 @@ class WebViewFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        Log.e("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
