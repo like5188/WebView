@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
     private val isLoaded = AtomicBoolean(false)// 懒加载控制
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
-    private var x5WebView: WebView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,14 +27,14 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     ): View {
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             x5WebViewWithErrorViewAndProgressBar = this
-            x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             setProgressBar(
                 webViewFragmentConfig.progressBarHeight,
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
             x5Listener = webViewFragmentConfig.x5Listener
-            x5WebView = x5WebViewWithErrorView?.tencentWebView?.apply {
+            x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
+            x5WebViewWithErrorView?.tencentWebView?.apply {
                 settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
                 webViewFragmentConfig.javascriptInterfaceMap.forEach {
                     addJavascriptInterface(it.value, it.key)
@@ -44,31 +43,39 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    fun getWebView(): WebView? {
-        return x5WebView
+    fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
+        return x5WebViewWithErrorViewAndProgressBar
+    }
+
+    fun getX5WebViewWithErrorView(): X5WebViewWithErrorView? {
+        return getX5WebViewWithErrorViewAndProgressBar()?.x5WebViewWithErrorView
+    }
+
+    fun getX5WebView(): WebView? {
+        return getX5WebViewWithErrorView()?.tencentWebView
     }
 
     fun load(url: String?) {
         if (url.isNullOrEmpty()) {
             return
         }
-        x5WebView?.loadUrl(url)
+        getX5WebView()?.loadUrl(url)
     }
 
     fun pageUp() {
-        x5WebView?.pageUp(true)
+        getX5WebView()?.pageUp(true)
     }
 
     fun pageDown() {
-        x5WebView?.pageDown(true)
+        getX5WebView()?.pageDown(true)
     }
 
     fun reload() {
-        x5WebView?.reload()
+        getX5WebView()?.reload()
     }
 
     fun localStorage(key: String, value: String) {
-        x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.localStorage(key, value)
+        getX5WebViewWithErrorView()?.localStorage(key, value)
     }
 
     /**
@@ -79,18 +86,18 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.callJsMethod(methodName, paramsJsonString, callback)
+        getX5WebViewWithErrorView()?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
         super.onPause()
-        x5WebView?.onPause()
+        getX5WebView()?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
         Log.e("Logger", "WebViewFragment onResume")
-        x5WebView?.onResume()
+        getX5WebView()?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             load(webViewFragmentConfig.url)
         }
@@ -102,7 +109,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
-        x5WebView = null
         super.onDestroyView()
     }
 
