@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import com.like.common.util.Logger
 import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
@@ -37,11 +36,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
                 mBinding.tvTitle.text = title
             }
 
-            override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-            }
-
             override fun onPageFinished(webView: WebView?, url: String?) {
-                Logger.e("webViewFragment=$webViewFragment")
                 webViewFragment?.localStorage("appKcwc", "123")
             }
         }
