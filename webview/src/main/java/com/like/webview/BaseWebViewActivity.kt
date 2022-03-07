@@ -2,7 +2,6 @@ package com.like.webview
 
 import android.graphics.PixelFormat
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
 
 /**
@@ -16,8 +15,6 @@ abstract class BaseWebViewActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-
-        Log.w("Logger", "BaseWebViewActivity onCreate")
         if (webViewFragment == null) {
             supportFragmentManager.beginTransaction().apply {
                 WebViewFragment(getWebViewFragmentConfig()).apply {

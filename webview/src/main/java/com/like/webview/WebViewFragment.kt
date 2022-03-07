@@ -2,7 +2,6 @@ package com.like.webview
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -96,7 +95,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
 
     override fun onResume() {
         super.onResume()
-        Log.e("Logger", "WebViewFragment onResume")
         getX5WebView()?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             load(webViewFragmentConfig.url)
@@ -104,7 +102,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     }
 
     override fun onDestroyView() {
-        Log.e("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
         getX5WebView()?.apply {
             webViewFragmentConfig.javascriptInterfaceMap.forEach {
