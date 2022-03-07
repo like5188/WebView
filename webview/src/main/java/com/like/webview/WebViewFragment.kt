@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -34,7 +33,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
             x5Listener = webViewFragmentConfig.x5Listener
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             x5WebViewWithErrorView?.tencentWebView?.apply {
-                settings?.cacheMode = WebSettings.LOAD_NO_CACHE// 支持微信H5支付
                 webViewFragmentConfig.javascriptInterfaceMap.forEach {
                     addJavascriptInterface(it.value, it.key)
                 }
