@@ -3,12 +3,12 @@ package com.like.webview
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 
 /**
  * 对 [WebViewFragment] 的封装
  */
-abstract class BaseWebViewActivity : AppCompatActivity() {
+abstract class BaseWebViewActivity : FragmentActivity() {
     protected var webViewFragment: WebViewFragment? = null
         private set
 
