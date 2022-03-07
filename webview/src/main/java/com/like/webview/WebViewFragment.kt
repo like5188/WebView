@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 包含了进度条的 WebView 的封装
  */
 class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
-    private val isLoaded = AtomicBoolean(false)
+    private val isLoaded = AtomicBoolean(false)// 懒加载控制
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
     private var x5WebView: WebView? = null
 
