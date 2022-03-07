@@ -71,6 +71,10 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         x5WebViewWithErrorView?.errorView = View.inflate(context, resId, null)
     }
 
+    fun localStorage(key: String, value: String) {
+        x5WebViewWithErrorView?.localStorage(key, value)
+    }
+
     /**
      * 设置进度条。
      *

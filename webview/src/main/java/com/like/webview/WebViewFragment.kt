@@ -67,6 +67,10 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         x5WebView?.reload()
     }
 
+    fun localStorage(key: String, value: String) {
+        x5WebViewWithErrorViewAndProgressBar?.localStorage(key, value)
+    }
+
     /**
      * android 调用 js 方法
      *

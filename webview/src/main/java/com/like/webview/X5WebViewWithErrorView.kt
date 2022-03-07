@@ -98,6 +98,11 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         addView(tencentWebView)
     }
 
+    fun localStorage(key: String, value: String) {
+        val jsString = "window.localStorage.setItem($key,'$value');"
+        tencentWebView?.evaluateJavascript(jsString, null)
+    }
+
     /**
      * android 调用 js 方法
      *
