@@ -74,7 +74,7 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
     }
 
     /**
-     * 设置进度条。如果已经设置过了，不会重复设置。
+     * 设置进度条。
      *
      * @param progressBarHeight             进度条高度，dp。如果小于等于0，表示无进度条。
      * @param progressBarBgColorResId       进度条背景色
