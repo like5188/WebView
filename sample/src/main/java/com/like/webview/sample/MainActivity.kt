@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun webViewActivity(view: View) {
-        WebViewFragmentActivity.start(this, "file:///android_asset/index.html")
+        startActivity(Intent(this, WebViewFragmentActivity::class.java))
     }
 
     fun viewPager(view: View) {
