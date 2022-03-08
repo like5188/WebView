@@ -54,8 +54,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
-//        url = "file:///android_asset/index.html"
-        url = "http://192.168.0.188/my/userInfo?client=Android"
+        url = "file:///android_asset/index.html"
+//        url = "http://192.168.0.188/my/userInfo?client=Android"
         javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
         cookieMap[URL(url).host] =
             "source={\"token\":\"JRY2j000Ybt2UNE7YcXCgZZqfp0\",\"refreshToken\":\"6Teb3Ozkb8B_MAKaGr0MjxIAtZ0\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
@@ -100,6 +100,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     fun callGetLocalStorage(view: View) {
         JsUtils.callGetLocalStorage(webViewFragment)
+    }
+
+    fun clearLocalStorage(view: View) {
+        webViewFragment?.clearLocalStorage()
     }
 
     fun callJSMethodWithParams(view: View) {
