@@ -190,6 +190,10 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
+    suspend fun getLocalStorageItem(key: String): String {
+        return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
+    }
+
     fun clearLocalStorage() {
         getX5WebViewWithErrorView()?.clearLocalStorage()
     }

@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
 import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.WebView
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.URL
 
@@ -98,7 +100,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun callGetLocalStorage(view: View) {
-        webViewFragment?.callJsMethod("getLocalStorage")
+        lifecycleScope.launch {
+            Log.e("Logger", webViewFragment?.getLocalStorageItem("kwcw4-h5") ?: "")
+        }
+//        webViewFragment?.callJsMethod("getLocalStorage")
     }
 
     fun callJSMethodWithParams(view: View) {

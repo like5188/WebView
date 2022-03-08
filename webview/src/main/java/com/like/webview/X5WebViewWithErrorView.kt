@@ -15,6 +15,8 @@ import com.tencent.smtt.sdk.CookieSyncManager
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * 包含了tencent的[WebView]、错误视图[errorView]
@@ -102,6 +104,12 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
      */
     fun setLocalStorageItem(key: String, value: String) {
         tencentWebView?.evaluateJavascript("window.localStorage.setItem('$key','$value');", null)
+    }
+
+    suspend fun getLocalStorageItem(key: String): String = suspendCoroutine { cont ->
+        tencentWebView?.evaluateJavascript("window.localStorage.getItem('$key');") {
+            cont.resume(it)
+        }
     }
 
     fun clearLocalStorage() {
