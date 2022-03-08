@@ -12,7 +12,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
-import java.net.URL
 import java.util.concurrent.atomic.AtomicBoolean
 
 /*
@@ -76,10 +75,8 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
             CookieManager.getInstance().apply {
                 setAcceptCookie(true)
                 removeAllCookies(null)
-                val uri = URL(webViewFragmentConfig.url)
-                Log.e("Logger", "host = ${uri.host}")
-                webViewFragmentConfig.cookies.forEach {
-                    setCookie(uri.host, it)
+                webViewFragmentConfig.cookieMap.forEach {
+                    setCookie(it.key, it.value)
                 }
             }
         }
@@ -227,7 +224,7 @@ class WebViewFragmentConfig {
      */
     val javascriptInterfaceMap = mutableMapOf<String, Any>()
 
-    val cookies = mutableListOf<String>()
+    val cookieMap = mutableMapOf<String, String>()
 
     fun destroy() {
         url = null
@@ -237,6 +234,6 @@ class WebViewFragmentConfig {
         progressBarProgressColorResId = -1
         x5Listener = null
         javascriptInterfaceMap.clear()
-        cookies.clear()
+        cookieMap.clear()
     }
 }

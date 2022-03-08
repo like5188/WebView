@@ -10,6 +10,7 @@ import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.WebView
+import java.net.URL
 
 class WebViewFragmentActivity : BaseWebViewActivity() {
     private val mBinding by lazy {
@@ -55,9 +56,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 //        url = "file:///android_asset/index.html"
         url = "http://192.168.0.188/my/userInfo?client=android"
         javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
-        cookies.add(
-            "source={\"token\":\"cDaxVHpdMjNvAueIQ3R56svRryk\",\"refreshToken\":\"X8rweH2v7PvsSEr7rEC9ES8vedQ\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}",
-        )
+        cookieMap[URL(url).host] =
+            "source={\"token\":\"cDaxVHpdMjNvAueIQ3R56svRryk\",\"refreshToken\":\"X8rweH2v7PvsSEr7rEC9ES8vedQ\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
         x5Listener = object : X5ListenerAdapter() {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
