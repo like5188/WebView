@@ -98,6 +98,9 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
+    /**
+     * 添加 JavascriptInterface
+     */
     fun addJavascriptInterfaces(map: Map<String, Any>) {
         getX5WebView()?.apply {
             map.forEach {
@@ -115,7 +118,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     }
 
     /**
-     * cookie的设置
+     * 添加 cookie
      * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      */
     fun addCookies(map: Map<String, String>) {
@@ -176,6 +179,9 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         getX5WebView()?.reload()
     }
 
+    /**
+     * 添加 localStorage
+     */
     fun addLocalStorages(map: Map<String, String>) {
         getX5WebViewWithErrorView()?.apply {
             map.forEach {
