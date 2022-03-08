@@ -24,7 +24,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     override fun onResume() {
         super.onResume()
-        // 注意：cookie 的设置必须在 loadUrl 之前，否则H5在第一次进入页面时获取不到。
+        // 注意：cookie 要在 WebView 的 setting 设置完之后调用，否则无效。
         try {
             CookieManager.getInstance().apply {
                 setAcceptCookie(true)
@@ -37,7 +37,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-//        webViewFragment?.loadUrl("http://192.168.0.188/my/userInfo?client=android")
+        webViewFragment?.loadUrl("http://192.168.0.188/my/userInfo?client=android")
     }
 
     override fun getFragmentHolderResId(): Int {
@@ -45,7 +45,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
-        url = "file:///android_asset/index.html"
+//        url = "file:///android_asset/index.html"
         javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
         x5Listener = object : X5ListenerAdapter() {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
