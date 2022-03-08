@@ -1,10 +1,8 @@
 package com.like.webview
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -43,22 +41,11 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     private val isLoaded = AtomicBoolean(false)// 懒加载控制
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.w("Logger", "WebViewFragment onAttach")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.w("Logger", "WebViewFragment onCreate")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.w("Logger", "WebViewFragment onCreateView")
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             x5WebViewWithErrorViewAndProgressBar = this
             setProgressBar(
@@ -138,14 +125,24 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         CookieManager.getInstance().removeAllCookies(null)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.w("Logger", "WebViewFragment onViewCreated")
+    /**
+     * 添加 localStorage
+     * 注意：必须要在 X5Listener 中调用，否则无效。
+     */
+    fun addLocalStorages(map: Map<String, String>) {
+        getX5WebViewWithErrorView()?.apply {
+            map.forEach {
+                setLocalStorageItem(it.key, it.value)
+            }
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.w("Logger", "WebViewFragment onStart")
+    suspend fun getLocalStorageItem(key: String): String {
+        return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
+    }
+
+    fun clearLocalStorage() {
+        getX5WebViewWithErrorView()?.clearLocalStorage()
     }
 
     fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
@@ -180,25 +177,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     }
 
     /**
-     * 添加 localStorage
-     */
-    fun addLocalStorages(map: Map<String, String>) {
-        getX5WebViewWithErrorView()?.apply {
-            map.forEach {
-                setLocalStorageItem(it.key, it.value)
-            }
-        }
-    }
-
-    suspend fun getLocalStorageItem(key: String): String {
-        return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
-    }
-
-    fun clearLocalStorage() {
-        getX5WebViewWithErrorView()?.clearLocalStorage()
-    }
-
-    /**
      * android 调用 js 方法
      *
      * @param methodName        js 方法的名字
@@ -211,26 +189,18 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
 
     override fun onPause() {
         super.onPause()
-        Log.w("Logger", "WebViewFragment onPause")
         getX5WebView()?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.w("Logger", "WebViewFragment onResume")
         getX5WebView()?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             loadUrl(webViewFragmentConfig.url)
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.w("Logger", "WebViewFragment onStop")
-    }
-
     override fun onDestroyView() {
-        Log.w("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
         removeJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap.keys)
         clearCookies()
@@ -240,16 +210,6 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.w("Logger", "WebViewFragment onDestroy")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.w("Logger", "WebViewFragment onDetach")
     }
 
 }
