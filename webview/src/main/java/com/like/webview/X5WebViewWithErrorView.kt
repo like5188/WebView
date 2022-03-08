@@ -49,52 +49,52 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         )
         tencentWebView = WebView(context).apply {
             layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        }
-        // 此处必须用getView()，因为TBS对WebView进行了封装
-        tencentWebView?.view?.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && tencentWebView?.canGoBack() == true) {
-                tencentWebView?.goBack()
-                return@setOnKeyListener true
+            // 此处必须用getView()，因为TBS对WebView进行了封装
+            view?.setOnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack()) {
+                    goBack()
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
             }
-            return@setOnKeyListener false
-        }
-        val listener = object : X5Listener {
-            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                x5Listener?.onReceivedIcon(webView, icon)
-            }
+            val listener = object : X5Listener {
+                override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                    x5Listener?.onReceivedIcon(webView, icon)
+                }
 
-            override fun onReceivedTitle(webView: WebView?, title: String?) {
-                x5Listener?.onReceivedTitle(webView, title)
-            }
+                override fun onReceivedTitle(webView: WebView?, title: String?) {
+                    x5Listener?.onReceivedTitle(webView, title)
+                }
 
-            override fun onProgressChanged(webView: WebView?, progress: Int?) {
-                if (!isNetworkAvailable(getContext())) {
+                override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                    if (!isNetworkAvailable(getContext())) {
+                        showErrorView()
+                    }
+                    x5Listener?.onProgressChanged(webView, progress)
+                }
+
+                override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
+                    isErrorPage = false
+                    x5Listener?.onPageStarted(webView, url, favicon)
+                }
+
+                override fun onPageFinished(webView: WebView?, url: String?) {
+                    if (!isErrorPage) {
+                        showWebView()
+                    }
+                    x5Listener?.onPageFinished(webView, url)
+                }
+
+                override fun onReceivedError(webView: WebView?) {
                     showErrorView()
+                    x5Listener?.onReceivedError(webView)
                 }
-                x5Listener?.onProgressChanged(webView, progress)
             }
-
-            override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-                isErrorPage = false
-                x5Listener?.onPageStarted(webView, url, favicon)
-            }
-
-            override fun onPageFinished(webView: WebView?, url: String?) {
-                if (!isErrorPage) {
-                    showWebView()
-                }
-                x5Listener?.onPageFinished(webView, url)
-            }
-
-            override fun onReceivedError(webView: WebView?) {
-                showErrorView()
-                x5Listener?.onReceivedError(webView)
-            }
+            webViewClient = X5WebViewClient(listener)
+            webChromeClient = X5WebChromeClient(context as Activity, listener)
+            initWebSettings(settings)
+            this@X5WebViewWithErrorView.addView(this)
         }
-        tencentWebView?.webViewClient = X5WebViewClient(listener)
-        tencentWebView?.webChromeClient = X5WebChromeClient(context as Activity, listener)
-        initWebSettings()// 初始化WebSettings
-        addView(tencentWebView)
     }
 
     /**
@@ -126,8 +126,8 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         }
     }
 
-    private fun initWebSettings() {
-        tencentWebView?.settings?.apply {
+    private fun initWebSettings(settings: WebSettings) {
+        with(settings) {
             // 支持JS
             javaScriptEnabled = true
             // 设置WebView是否可以由JavaScript自动打开窗口，默认为false，通常与JavaScript的window.open()配合使用。
