@@ -11,7 +11,6 @@ import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.WebView
 
-
 class WebViewFragmentActivity : BaseWebViewActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityWebviewFragmentBinding>(this, R.layout.activity_webview_fragment)
