@@ -24,32 +24,6 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
-        Log.e("Logger", "WebViewFragmentActivity onCreate")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.e("Logger", "WebViewFragmentActivity onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e("Logger", "WebViewFragmentActivity onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("Logger", "WebViewFragmentActivity onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("Logger", "WebViewFragmentActivity onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("Logger", "WebViewFragmentActivity onDestroy")
     }
 
     override fun getFragmentHolderResId(): Int {
@@ -99,11 +73,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         webViewFragment?.clearLocalStorage()
     }
 
-    fun callGetLocalStorage(view: View) {
+    fun getLocalStorage(view: View) {
         lifecycleScope.launch {
             Log.e("Logger", webViewFragment?.getLocalStorageItem("kwcw4-h5") ?: "")
         }
-//        webViewFragment?.callJsMethod("getLocalStorage")
     }
 
     fun callJSMethodWithParams(view: View) {
