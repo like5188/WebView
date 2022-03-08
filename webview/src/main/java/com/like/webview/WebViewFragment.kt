@@ -67,20 +67,47 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
             )
             x5Listener = webViewFragmentConfig.x5Listener
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
-            x5WebViewWithErrorView?.tencentWebView?.apply {
-                webViewFragmentConfig.javascriptInterfaceMap.forEach {
-                    addJavascriptInterface(it.value, it.key)
-                }
-            }
-            // 注意：cookie的设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
-            CookieManager.getInstance().apply {
-                setAcceptCookie(true)
-                removeAllCookies(null)
-                webViewFragmentConfig.cookieMap.forEach {
-                    setCookie(it.key, it.value)
-                }
+            addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
+            setCookies(webViewFragmentConfig.cookieMap)
+        }
+    }
+
+    fun addJavascriptInterfaces(map: Map<String, Any>) {
+        getX5WebView()?.apply {
+            map.forEach {
+                addJavascriptInterface(it.value, it.key)
             }
         }
+    }
+
+    fun removeJavascriptInterfaces(keys: Iterable<String>) {
+        getX5WebView()?.apply {
+            keys.forEach {
+                removeJavascriptInterface(it)
+            }
+        }
+    }
+
+    /**
+     * cookie的设置
+     * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
+     */
+    fun setCookies(map: Map<String, String>) {
+        CookieManager.getInstance().apply {
+            setAcceptCookie(true)
+            clearCookies()
+            map.forEach {
+                setCookie(it.key, it.value)
+            }
+        }
+    }
+
+    fun getCookie(key: String): String {
+        return CookieManager.getInstance().getCookie(key) ?: ""
+    }
+
+    fun clearCookies() {
+        CookieManager.getInstance().removeAllCookies(null)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -166,12 +193,8 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     override fun onDestroyView() {
         Log.w("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
-        getX5WebView()?.apply {
-            webViewFragmentConfig.javascriptInterfaceMap.forEach {
-                removeJavascriptInterface(it.key)
-            }
-        }
-        CookieManager.getInstance().removeAllCookies(null)
+        removeJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap.keys)
+        clearCookies()
         webViewFragmentConfig.destroy()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
