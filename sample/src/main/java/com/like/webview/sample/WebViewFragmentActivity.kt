@@ -55,10 +55,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
 //        url = "file:///android_asset/index.html"
-        url = "http://192.168.0.188/my/userInfo?client=android"
+        url = "http://192.168.0.188/my/userInfo?client=Android"
         javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
         cookieMap[URL(url).host] =
-            "source={\"token\":\"cDaxVHpdMjNvAueIQ3R56svRryk\",\"refreshToken\":\"X8rweH2v7PvsSEr7rEC9ES8vedQ\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
+            "source={\"token\":\"JRY2j000Ybt2UNE7YcXCgZZqfp0\",\"refreshToken\":\"6Teb3Ozkb8B_MAKaGr0MjxIAtZ0\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
         x5Listener = object : X5ListenerAdapter() {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
@@ -78,7 +78,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getCookies(view: View) {
-        val url = "http://192.168.0.188/my/userInfo?client=android"
+        val url = "http://192.168.0.188/my/userInfo?client=Android"
         Log.e("Logger", CookieManager.getInstance().getCookie(URL(url).host) ?: "")
     }
 
