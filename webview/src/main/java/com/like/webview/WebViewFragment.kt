@@ -3,7 +3,6 @@ package com.like.webview
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -11,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
+import java.net.URL
 import java.util.concurrent.atomic.AtomicBoolean
 
 /*
@@ -72,6 +73,15 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                     addJavascriptInterface(it.value, it.key)
                 }
             }
+            CookieManager.getInstance().apply {
+                setAcceptCookie(true)
+                removeAllCookies(null)
+                val uri = URL(webViewFragmentConfig.url)
+                Log.e("Logger", "host = ${uri.host}")
+                webViewFragmentConfig.cookies.forEach {
+                    setCookie(uri.host, it)
+                }
+            }
         }
     }
 
@@ -116,8 +126,12 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         getX5WebView()?.reload()
     }
 
-    fun localStorage(key: String, value: String) {
-        getX5WebViewWithErrorView()?.localStorage(key, value)
+    fun setLocalStorageItem(key: String, value: String) {
+        getX5WebViewWithErrorView()?.setLocalStorageItem(key, value)
+    }
+
+    fun clearLocalStorage() {
+        getX5WebViewWithErrorView()?.clearLocalStorage()
     }
 
     /**
@@ -159,6 +173,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 removeJavascriptInterface(it.key)
             }
         }
+        CookieManager.getInstance().removeAllCookies(null)
         webViewFragmentConfig.destroy()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
@@ -205,12 +220,14 @@ class WebViewFragmentConfig {
      */
     var progressBarProgressColorResId: Int = R.color.colorPrimaryDark
 
+    var x5Listener: X5Listener? = null
+
     /**
      * 注册 js 调用 android 方法
      */
     val javascriptInterfaceMap = mutableMapOf<String, Any>()
 
-    var x5Listener: X5Listener? = null
+    val cookies = mutableListOf<String>()
 
     fun destroy() {
         url = null
@@ -220,5 +237,6 @@ class WebViewFragmentConfig {
         progressBarProgressColorResId = -1
         x5Listener = null
         javascriptInterfaceMap.clear()
+        cookies.clear()
     }
 }

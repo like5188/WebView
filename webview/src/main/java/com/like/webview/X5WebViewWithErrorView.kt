@@ -100,8 +100,12 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
     /**
      * 往浏览器的 localStorage 中写入数据。
      */
-    fun localStorage(key: String, value: String) {
+    fun setLocalStorageItem(key: String, value: String) {
         tencentWebView?.evaluateJavascript("window.localStorage.setItem('$key','$value');", null)
+    }
+
+    fun clearLocalStorage() {
+        tencentWebView?.evaluateJavascript("window.localStorage.clear();", null)
     }
 
     /**
