@@ -58,7 +58,6 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
             }
             return@setOnKeyListener false
         }
-        initWebSettings()// 初始化WebSettings
         val listener = object : X5Listener {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 x5Listener?.onReceivedIcon(webView, icon)
@@ -94,6 +93,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         }
         tencentWebView?.webViewClient = X5WebViewClient(listener)
         tencentWebView?.webChromeClient = X5WebChromeClient(context as Activity, listener)
+        initWebSettings()// 初始化WebSettings
         addView(tencentWebView)
     }
 
