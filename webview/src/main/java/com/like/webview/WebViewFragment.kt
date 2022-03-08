@@ -72,6 +72,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                     addJavascriptInterface(it.value, it.key)
                 }
             }
+            // 注意：cookie的设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
             CookieManager.getInstance().apply {
                 setAcceptCookie(true)
                 removeAllCookies(null)
