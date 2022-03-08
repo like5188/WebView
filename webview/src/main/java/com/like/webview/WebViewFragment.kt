@@ -2,6 +2,7 @@ package com.like.webview
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -65,10 +66,35 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
-            x5Listener = webViewFragmentConfig.x5Listener
+            x5Listener = object : X5Listener {
+                override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                    webViewFragmentConfig.x5Listener?.onReceivedIcon(webView, icon)
+                }
+
+                override fun onReceivedTitle(webView: WebView?, title: String?) {
+                    webViewFragmentConfig.x5Listener?.onReceivedTitle(webView, title)
+                }
+
+                override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                    webViewFragmentConfig.x5Listener?.onProgressChanged(webView, progress)
+                }
+
+                override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
+                    webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
+                    addLocalStorages(webViewFragmentConfig.localStorageMap)
+                }
+
+                override fun onPageFinished(webView: WebView?, url: String?) {
+                    webViewFragmentConfig.x5Listener?.onPageFinished(webView, url)
+                }
+
+                override fun onReceivedError(webView: WebView?) {
+                    webViewFragmentConfig.x5Listener?.onReceivedError(webView)
+                }
+            }
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
-            setCookies(webViewFragmentConfig.cookieMap)
+            addCookies(webViewFragmentConfig.cookieMap)
         }
     }
 
@@ -92,10 +118,9 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * cookie的设置
      * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      */
-    fun setCookies(map: Map<String, String>) {
+    fun addCookies(map: Map<String, String>) {
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
-            clearCookies()
             map.forEach {
                 setCookie(it.key, it.value)
             }
@@ -151,8 +176,12 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         getX5WebView()?.reload()
     }
 
-    fun setLocalStorageItem(key: String, value: String) {
-        getX5WebViewWithErrorView()?.setLocalStorageItem(key, value)
+    fun addLocalStorages(map: Map<String, String>) {
+        getX5WebViewWithErrorView()?.apply {
+            map.forEach {
+                setLocalStorageItem(it.key, it.value)
+            }
+        }
     }
 
     fun clearLocalStorage() {
@@ -195,6 +224,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         isLoaded.compareAndSet(true, false)
         removeJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap.keys)
         clearCookies()
+        clearLocalStorage()
         webViewFragmentConfig.destroy()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
@@ -244,11 +274,19 @@ class WebViewFragmentConfig {
     var x5Listener: X5Listener? = null
 
     /**
-     * 注册 js 调用 android 方法
+     * js 调用 android 的所有方法
      */
     val javascriptInterfaceMap = mutableMapOf<String, Any>()
 
+    /**
+     * cookie 数据
+     */
     val cookieMap = mutableMapOf<String, String>()
+
+    /**
+     * localStorage 数据
+     */
+    val localStorageMap = mutableMapOf<String, String>()
 
     fun destroy() {
         url = null
@@ -259,5 +297,6 @@ class WebViewFragmentConfig {
         x5Listener = null
         javascriptInterfaceMap.clear()
         cookieMap.clear()
+        localStorageMap.clear()
     }
 }

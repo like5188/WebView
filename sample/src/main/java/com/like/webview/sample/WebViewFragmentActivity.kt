@@ -60,6 +60,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap[URL(url).host] =
             "source={\"token\":\"JRY2j000Ybt2UNE7YcXCgZZqfp0\",\"refreshToken\":\"6Teb3Ozkb8B_MAKaGr0MjxIAtZ0\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
+        localStorageMap["kwcw4-h5"] = "123123"
         x5Listener = object : X5ListenerAdapter() {
             override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                 mBinding.ivIcon.setImageBitmap(icon)
@@ -68,13 +69,6 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             override fun onReceivedTitle(webView: WebView?, title: String?) {
                 mBinding.tvTitle.text = title
             }
-
-            override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(webView, url, favicon)
-                // localStorage
-                webViewFragment?.setLocalStorageItem("kwcw4-h5", "1111111111")
-            }
-
         }
     }
 
