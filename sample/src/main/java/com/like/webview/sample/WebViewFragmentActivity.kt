@@ -57,6 +57,16 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         webViewFragment?.clearCookies()
     }
 
+    fun getLocalStorage(view: View) {
+        lifecycleScope.launch {
+            Log.e("Logger", webViewFragment?.getLocalStorageItem("kwcw4-h5") ?: "")
+        }
+    }
+
+    fun clearLocalStorage(view: View) {
+        webViewFragment?.clearLocalStorage()
+    }
+
     fun pageUp(view: View) {
         webViewFragment?.pageUp()
     }
@@ -67,16 +77,6 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     fun reload(view: View) {
         webViewFragment?.reload()
-    }
-
-    fun clearLocalStorage(view: View) {
-        webViewFragment?.clearLocalStorage()
-    }
-
-    fun getLocalStorage(view: View) {
-        lifecycleScope.launch {
-            Log.e("Logger", webViewFragment?.getLocalStorageItem("kwcw4-h5") ?: "")
-        }
     }
 
     fun callJSMethodWithParams(view: View) {
