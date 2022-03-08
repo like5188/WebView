@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.like.webview.WebViewFragment
 import com.like.webview.WebViewFragmentConfig
-import com.like.webview.sample.JsUtils
+import com.like.webview.sample.MyJavascriptInterface
 import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
 
@@ -17,7 +17,7 @@ class ViewPagerActivity : FragmentActivity() {
     private val fragments = listOf(
         WebViewFragment(WebViewFragmentConfig().apply {
             url = "file:///android_asset/index.html"
-            javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
+            javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         }),
         WebViewFragment(WebViewFragmentConfig().apply {
             url = "https://cn.bing.com/"

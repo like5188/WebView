@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import com.like.common.util.Logger
 import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
+import org.json.JSONObject
 import java.net.URL
 
 class WebViewFragmentActivity : BaseWebViewActivity() {
@@ -56,7 +58,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
         url = "file:///android_asset/index.html"
 //        url = "http://192.168.0.188/my/userInfo?client=Android"
-        javascriptInterfaceMap["appKcwc"] = JsUtils.JavascriptInterface()
+        javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap[URL(url).host] =
             "source={\"token\":\"JRY2j000Ybt2UNE7YcXCgZZqfp0\",\"refreshToken\":\"6Teb3Ozkb8B_MAKaGr0MjxIAtZ0\",\"tokenArray\":{\"tel\":\"13399857800\",\"type\":3,\"source\":\"Pc\"},\"oldtoken\":\"IPNPx563jakGvZrej2FP8IA7yQA58Coh\"}"
         x5Listener = object : X5ListenerAdapter() {
@@ -98,16 +100,24 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         webViewFragment?.reload()
     }
 
-    fun callGetLocalStorage(view: View) {
-        JsUtils.callGetLocalStorage(webViewFragment)
-    }
-
     fun clearLocalStorage(view: View) {
         webViewFragment?.clearLocalStorage()
     }
 
+    fun callGetLocalStorage(view: View) {
+        webViewFragment?.callJsMethod("getLocalStorage")
+    }
+
     fun callJSMethodWithParams(view: View) {
-        JsUtils.callJSMethodWithParams(webViewFragment)
+        val params = JSONObject()
+        params.put("name", "like")
+        params.put("age", 1)
+        webViewFragment?.callJsMethod(
+            "jsMethodNameWithParams",
+            params.toString()
+        ) {
+            Logger.d("callJSMethodWithParams 返回值：$it")
+        }
     }
 
 }
