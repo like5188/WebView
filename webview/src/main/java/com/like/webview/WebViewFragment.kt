@@ -1,7 +1,10 @@
 package com.like.webview
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,27 @@ import androidx.fragment.app.Fragment
 import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
+/*
+生命周期：
+E/Logger: WebViewFragmentActivity onCreate
+W/Logger: WebViewFragment onAttach
+W/Logger: WebViewFragment onCreate
+W/Logger: WebViewFragment onCreateView
+W/Logger: WebViewFragment onViewCreated
+W/Logger: WebViewFragment onStart
+E/Logger: WebViewFragmentActivity onStart
+E/Logger: WebViewFragmentActivity onResume
+W/Logger: WebViewFragment onResume
+W/Logger: WebViewFragment onPause
+E/Logger: WebViewFragmentActivity onPause
+W/Logger: WebViewFragment onStop
+E/Logger: WebViewFragmentActivity onStop
+W/Logger: WebViewFragment onDestroyView
+W/Logger: WebViewFragment onDestroy
+W/Logger: WebViewFragment onDetach
+E/Logger: WebViewFragmentActivity onDestroy
+ */
+
 /**
  * 包含了进度条的 WebView 的封装
  */
@@ -18,11 +42,22 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     private val isLoaded = AtomicBoolean(false)// 懒加载控制
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.w("Logger", "WebViewFragment onAttach")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.w("Logger", "WebViewFragment onCreate")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.w("Logger", "WebViewFragment onCreateView")
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             x5WebViewWithErrorViewAndProgressBar = this
             setProgressBar(
@@ -38,6 +73,16 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 }
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.w("Logger", "WebViewFragment onViewCreated")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.w("Logger", "WebViewFragment onStart")
     }
 
     fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
@@ -88,18 +133,26 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
 
     override fun onPause() {
         super.onPause()
+        Log.w("Logger", "WebViewFragment onPause")
         getX5WebView()?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
+        Log.w("Logger", "WebViewFragment onResume")
         getX5WebView()?.onResume()
         if (isLoaded.compareAndSet(false, true)) {
             loadUrl(webViewFragmentConfig.url)
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.w("Logger", "WebViewFragment onStop")
+    }
+
     override fun onDestroyView() {
+        Log.w("Logger", "WebViewFragment onDestroyView")
         isLoaded.compareAndSet(true, false)
         getX5WebView()?.apply {
             webViewFragmentConfig.javascriptInterfaceMap.forEach {
@@ -111,6 +164,16 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.w("Logger", "WebViewFragment onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.w("Logger", "WebViewFragment onDetach")
     }
 
 }

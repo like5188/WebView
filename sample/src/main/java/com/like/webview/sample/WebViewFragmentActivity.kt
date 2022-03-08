@@ -2,6 +2,7 @@ package com.like.webview.sample
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.like.webview.BaseWebViewActivity
@@ -20,10 +21,17 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding
+        Log.e("Logger", "WebViewFragmentActivity onCreate")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.e("Logger", "WebViewFragmentActivity onStart")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.e("Logger", "WebViewFragmentActivity onResume")
         // 注意：cookie 要在 WebView 的 setting 设置完之后调用，否则无效。
         try {
             CookieManager.getInstance().apply {
@@ -38,6 +46,21 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             e.printStackTrace()
         }
         webViewFragment?.loadUrl("http://192.168.0.188/my/userInfo?client=android")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e("Logger", "WebViewFragmentActivity onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("Logger", "WebViewFragmentActivity onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("Logger", "WebViewFragmentActivity onDestroy")
     }
 
     override fun getFragmentHolderResId(): Int {
