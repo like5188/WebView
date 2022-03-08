@@ -9,6 +9,7 @@ import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
+import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
 import java.net.URL
 
@@ -74,6 +75,15 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
             }
 
         }
+    }
+
+    fun getCookies(view: View) {
+        val url = "http://192.168.0.188/my/userInfo?client=android"
+        Log.e("Logger", CookieManager.getInstance().getCookie(URL(url).host) ?: "")
+    }
+
+    fun clearCookies(view: View) {
+        CookieManager.getInstance().removeAllCookies(null)
     }
 
     fun pageUp(view: View) {
