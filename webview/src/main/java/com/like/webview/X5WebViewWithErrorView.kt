@@ -249,6 +249,8 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
                 }
                 stopLoading()
                 settings?.javaScriptEnabled = false
+                clearFormData()
+                clearSslPreferences()
                 clearHistory()
                 clearCache(true)
                 removeAllViewsInLayout()
