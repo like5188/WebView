@@ -224,7 +224,7 @@ class WebViewFragmentConfig {
      * 错误页面资源 id
      */
     @LayoutRes
-    var errorViewResId: Int = R.layout.webview_error_view
+    var errorViewResId: Int = R.layout.view_error_view
 
     /**
      * 进度条高度，设置为 0 即隐藏进度条。
