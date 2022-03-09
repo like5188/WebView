@@ -115,10 +115,10 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    fun getCookies(): List<String> {
-        val result = mutableListOf<String>()
+    fun getCookies(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
         webViewFragmentConfig.cookieMap.keys.forEach {
-            result.add(getCookie(it))
+            result[it] = getCookie(it)
         }
         return result
     }
@@ -143,10 +143,10 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    suspend fun getLocalStorages(): List<String> {
-        val result = mutableListOf<String>()
+    suspend fun getLocalStorages(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
         webViewFragmentConfig.localStorageMap.keys.forEach {
-            result.add(getLocalStorageItem(it))
+            result[it] = getLocalStorageItem(it)
         }
         return result
     }

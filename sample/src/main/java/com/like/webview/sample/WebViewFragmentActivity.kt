@@ -2,7 +2,6 @@ package com.like.webview.sample
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -48,16 +47,12 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getCookies(view: View) {
-        webViewFragment?.getCookies()?.forEach {
-            Log.e("Logger", it)
-        }
+        Logger.printMap(webViewFragment?.getCookies())
     }
 
     fun getLocalStorages(view: View) {
         lifecycleScope.launch {
-            webViewFragment?.getLocalStorages()?.forEach {
-                Log.e("Logger", it)
-            }
+            Logger.printMap(webViewFragment?.getLocalStorages())
         }
     }
 
