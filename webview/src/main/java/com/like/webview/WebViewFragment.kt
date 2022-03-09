@@ -96,9 +96,9 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    fun removeJavascriptInterfaces(keys: Iterable<String>) {
+    fun removeJavascriptInterfaces() {
         getX5WebView()?.apply {
-            keys.forEach {
+            webViewFragmentConfig.javascriptInterfaceMap.keys.forEach {
                 removeJavascriptInterface(it)
             }
         }
@@ -113,6 +113,14 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
             setAcceptCookie(true)
             setCookies(map)
         }
+    }
+
+    fun getCookies(): List<String> {
+        val result = mutableListOf<String>()
+        webViewFragmentConfig.cookieMap.keys.forEach {
+            result.add(getCookie(it))
+        }
+        return result
     }
 
     fun getCookie(key: String): String {
@@ -133,6 +141,14 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 setLocalStorageItem(it.key, it.value)
             }
         }
+    }
+
+    suspend fun getLocalStorages(): List<String> {
+        val result = mutableListOf<String>()
+        webViewFragmentConfig.localStorageMap.keys.forEach {
+            result.add(getLocalStorageItem(it))
+        }
+        return result
     }
 
     suspend fun getLocalStorageItem(key: String): String {
@@ -200,7 +216,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
 
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
-        removeJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap.keys)
+        removeJavascriptInterfaces()
         clearCookies()
         clearLocalStorage()
         webViewFragmentConfig.destroy()
