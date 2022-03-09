@@ -108,12 +108,10 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * 添加 cookie
      * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      */
-    fun addCookies(map: Map<String, String>) {
+    fun addCookies(map: Map<String, Array<String>>) {
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
-            map.forEach {
-                setCookie(it.key, it.value)
-            }
+            setCookies(map)
         }
     }
 
@@ -251,7 +249,7 @@ class WebViewFragmentConfig {
     /**
      * cookie 数据
      */
-    val cookieMap = mutableMapOf<String, String>()
+    val cookieMap = mutableMapOf<String, Array<String>>()
 
     /**
      * localStorage 数据
