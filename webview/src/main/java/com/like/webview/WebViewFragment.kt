@@ -2,6 +2,7 @@ package com.like.webview
 
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.tencent.smtt.sdk.CookieManager
+import com.tencent.smtt.sdk.ValueCallback
+import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -54,6 +57,14 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
                 webViewFragmentConfig.progressBarProgressColorResId
             )
             x5Listener = object : X5Listener {
+                override fun onShowFileChooser(
+                    webView: WebView?,
+                    callback: ValueCallback<Array<Uri>>?,
+                    params: WebChromeClient.FileChooserParams?
+                ): Boolean {
+                    return webViewFragmentConfig.x5Listener?.onShowFileChooser(webView, callback, params) ?: false
+                }
+
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     webViewFragmentConfig.x5Listener?.onReceivedIcon(webView, icon)
                 }

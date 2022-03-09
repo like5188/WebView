@@ -1,10 +1,21 @@
 package com.like.webview
 
 import android.graphics.Bitmap
+import android.net.Uri
+import com.tencent.smtt.sdk.ValueCallback
+import com.tencent.smtt.sdk.WebChromeClient
 
 import com.tencent.smtt.sdk.WebView
 
 open class X5ListenerAdapter : X5Listener {
+    override fun onShowFileChooser(
+        webView: WebView?,
+        callback: ValueCallback<Array<Uri>>?,
+        params: WebChromeClient.FileChooserParams?
+    ): Boolean {
+        return false
+    }
+
     override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
     }
 

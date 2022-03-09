@@ -1,18 +1,24 @@
 package com.like.webview.sample
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
+import com.like.common.util.selectSinglePhoto
+import com.like.common.util.uploadPath
 import com.like.webview.BaseWebViewActivity
 import com.like.webview.WebViewFragmentConfig
 import com.like.webview.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
+import com.tencent.smtt.sdk.ValueCallback
+import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.File
 
 class WebViewFragmentActivity : BaseWebViewActivity() {
     private val mBinding by lazy {
@@ -29,7 +35,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
-        url = "file:///android_asset/index.html"
+//        url = "file:///android_asset/index.html"
+        url = "http://192.168.0.188/my/userInfo"
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
@@ -42,6 +49,25 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
             override fun onReceivedTitle(webView: WebView?, title: String?) {
                 mBinding.tvTitle.text = title
+            }
+
+            override fun onShowFileChooser(
+                webView: WebView?,
+                callback: ValueCallback<Array<Uri>>?,
+                params: WebChromeClient.FileChooserParams?
+            ): Boolean {
+                lifecycleScope.launch {
+                    //选择照片
+                    val result = selectSinglePhoto()
+                    val compressPath = result?.compressPath
+                    val uploadPath = result?.uploadPath
+                    if (compressPath.isNullOrEmpty() || uploadPath.isNullOrEmpty()) {
+                        callback?.onReceiveValue(null)
+                    } else {
+                        callback?.onReceiveValue(arrayOf(Uri.fromFile(File(uploadPath))))
+                    }
+                }
+                return true
             }
         }
     }

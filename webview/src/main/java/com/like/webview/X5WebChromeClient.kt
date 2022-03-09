@@ -4,14 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
+import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 
@@ -28,6 +29,11 @@ internal class X5WebChromeClient(private val mActivity: Activity, private val mL
     private val mDecorView: FrameLayout = mActivity.window.decorView as FrameLayout
     private var mFullscreenContainer: FrameLayout? = null
     private var mCustomViewCallback: IX5WebChromeClient.CustomViewCallback? = null
+
+    override fun onShowFileChooser(p0: WebView?, p1: ValueCallback<Array<Uri>>?, p2: FileChooserParams?): Boolean {
+        Log.d(TAG, "onShowFileChooser")
+        return mListener?.onShowFileChooser(p0, p1, p2) ?: super.onShowFileChooser(p0, p1, p2)
+    }
 
     override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
         super.onReceivedIcon(webView, icon)

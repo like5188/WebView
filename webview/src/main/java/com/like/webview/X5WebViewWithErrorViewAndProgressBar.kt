@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -11,6 +12,8 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
+import com.tencent.smtt.sdk.ValueCallback
+import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 
 /**
@@ -28,6 +31,14 @@ class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Co
         x5WebViewWithErrorView = X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.x5Listener = object : X5Listener {
+                override fun onShowFileChooser(
+                    webView: WebView?,
+                    callback: ValueCallback<Array<Uri>>?,
+                    params: WebChromeClient.FileChooserParams?
+                ): Boolean {
+                    return x5Listener?.onShowFileChooser(webView, callback, params) ?: false
+                }
+
                 override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
                     x5Listener?.onReceivedIcon(webView, icon)
                 }
