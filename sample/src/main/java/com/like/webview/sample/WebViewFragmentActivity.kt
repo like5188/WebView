@@ -32,8 +32,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
         url = "file:///android_asset/index.html"
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
-        cookieMap["cookieKey1"] = arrayOf("mechine_type=android", "source={\"token\":\"5xn9mAkIqmj5qWA9x0ijr24t8xY\"}")
-        cookieMap["cookieKey2"] = arrayOf("1=1", "2=2", "3=3")
+        cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
+        cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
         localStorageMap["localStorageKey1"] = "1111111111"
         localStorageMap["localStorageKey2"] = "2222"
         x5Listener = object : X5ListenerAdapter() {
@@ -53,20 +53,12 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         }
     }
 
-    fun clearCookies(view: View) {
-        webViewFragment?.clearCookies()
-    }
-
     fun getLocalStorages(view: View) {
         lifecycleScope.launch {
             webViewFragment?.getLocalStorages()?.forEach {
                 Log.e("Logger", it)
             }
         }
-    }
-
-    fun clearLocalStorage(view: View) {
-        webViewFragment?.clearLocalStorage()
     }
 
     fun pageUp(view: View) {

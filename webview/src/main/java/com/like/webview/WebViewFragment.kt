@@ -88,7 +88,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     /**
      * 添加 JavascriptInterface
      */
-    fun addJavascriptInterfaces(map: Map<String, Any>) {
+    private fun addJavascriptInterfaces(map: Map<String, Any>) {
         getX5WebView()?.apply {
             map.forEach {
                 addJavascriptInterface(it.value, it.key)
@@ -96,7 +96,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    fun removeJavascriptInterfaces() {
+    private fun removeJavascriptInterfaces() {
         getX5WebView()?.apply {
             webViewFragmentConfig.javascriptInterfaceMap.keys.forEach {
                 removeJavascriptInterface(it)
@@ -108,7 +108,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * 添加 cookie
      * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      */
-    fun addCookies(map: Map<String, Array<String>>) {
+    private fun addCookies(map: Map<String, Array<String>>) {
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
             setCookies(map)
@@ -127,7 +127,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         return CookieManager.getInstance().getCookie(key) ?: ""
     }
 
-    fun clearCookies() {
+    private fun clearCookies() {
         CookieManager.getInstance().removeAllCookies(null)
     }
 
@@ -135,7 +135,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
      * 添加 localStorage
      * 注意：必须要在 X5Listener 中调用，否则无效。
      */
-    fun addLocalStorages(map: Map<String, String>) {
+    private fun addLocalStorages(map: Map<String, String>) {
         getX5WebViewWithErrorView()?.apply {
             map.forEach {
                 setLocalStorageItem(it.key, it.value)
@@ -155,7 +155,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
     }
 
-    fun clearLocalStorage() {
+    private fun clearLocalStorage() {
         getX5WebViewWithErrorView()?.clearLocalStorage()
     }
 
