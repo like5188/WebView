@@ -74,10 +74,16 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     fun getCookies(view: View) {
         Logger.printMap(webViewFragment?.getCookies())
+        webViewFragment?.clearCookies()
+        webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))
+        Logger.printMap(webViewFragment?.getCookies())
     }
 
     fun getLocalStorages(view: View) {
         lifecycleScope.launch {
+            Logger.printMap(webViewFragment?.getLocalStorages())
+            webViewFragment?.clearLocalStorage()
+            webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "1"))
             Logger.printMap(webViewFragment?.getLocalStorages())
         }
     }

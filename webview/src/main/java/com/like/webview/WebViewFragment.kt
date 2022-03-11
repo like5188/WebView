@@ -117,9 +117,9 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
 
     /**
      * 添加 cookie
-     * 注意：必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
+     * 注意：第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      */
-    private fun addCookies(map: Map<String, Array<String>>) {
+    fun addCookies(map: Map<String, Array<String>>) {
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
             setCookies(map)
@@ -138,15 +138,15 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         return CookieManager.getInstance().getCookie(key) ?: ""
     }
 
-    private fun clearCookies() {
+    fun clearCookies() {
         CookieManager.getInstance().removeAllCookies(null)
     }
 
     /**
      * 添加 localStorage
-     * 注意：必须要在 X5Listener 中调用，否则无效。
+     * 注意：第一次必须要在 X5Listener 中调用，否则无效。
      */
-    private fun addLocalStorages(map: Map<String, String>) {
+    fun addLocalStorages(map: Map<String, String>) {
         getX5WebViewWithErrorView()?.apply {
             map.forEach {
                 setLocalStorageItem(it.key, it.value)
@@ -166,7 +166,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
     }
 
-    private fun clearLocalStorage() {
+    fun clearLocalStorage() {
         getX5WebViewWithErrorView()?.clearLocalStorage()
     }
 
