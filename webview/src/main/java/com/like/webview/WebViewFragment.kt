@@ -141,19 +141,15 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
      * @param map   key：相同的key会覆盖；
      */
     fun addLocalStorages(map: Map<String, String>) {
-        getX5WebViewWithErrorView()?.apply {
-            map.forEach {
-                setLocalStorageItem(it.key, it.value)
-            }
-        }
+        getX5WebView()?.addLocalStorages(map)
     }
 
     suspend fun getLocalStorageItem(key: String): String {
-        return getX5WebViewWithErrorView()?.getLocalStorageItem(key) ?: ""
+        return getX5WebView()?.getLocalStorage(key) ?: ""
     }
 
     fun clearLocalStorage() {
-        getX5WebViewWithErrorView()?.clearLocalStorage()
+        getX5WebView()?.clearLocalStorages()
     }
 
     fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
@@ -165,7 +161,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
     }
 
     fun getX5WebView(): WebView? {
-        return getX5WebViewWithErrorView()?.tencentWebView
+        return getX5WebViewWithErrorView()?.x5WebView
     }
 
     fun loadUrl(url: String?) {
@@ -195,7 +191,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
      * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
      */
     fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        getX5WebViewWithErrorView()?.callJsMethod(methodName, paramsJsonString, callback)
+        getX5WebView()?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {

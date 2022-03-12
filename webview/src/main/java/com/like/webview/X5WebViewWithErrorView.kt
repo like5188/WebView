@@ -13,16 +13,14 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
- * 包含了tencent的[WebView]、错误视图[errorView]
+ * 包含了tencent的[WebView]的创建与设置、错误视图[errorView]
  */
 class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var isErrorPage = false
-    var tencentWebView: WebView? = null
+    var x5WebView: WebView? = null
         private set
     var x5Listener: X5Listener? = null
     var errorView: View? = null
@@ -47,7 +45,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
                 TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
             )
         )
-        tencentWebView = WebView(context).apply {
+        x5WebView = WebView(context).apply {
             layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             // 此处必须用getView()，因为TBS对WebView进行了封装
             view?.setOnKeyListener { v, keyCode, event ->
@@ -102,45 +100,6 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
             webChromeClient = X5WebChromeClient(context as Activity, listener)
             initWebSettings(settings)
             this@X5WebViewWithErrorView.addView(this)
-        }
-    }
-
-    /**
-     * 往浏览器的 localStorage 中写入数据。
-     */
-    fun setLocalStorageItem(key: String, value: String) {
-        tencentWebView?.evaluateJavascript("window.localStorage.setItem('$key','$value');", null)
-    }
-
-    suspend fun getLocalStorageItem(key: String): String = suspendCoroutine { cont ->
-        tencentWebView?.evaluateJavascript("window.localStorage.getItem('$key');") {
-            cont.resume(it)
-        }
-    }
-
-    fun clearLocalStorage() {
-        tencentWebView?.evaluateJavascript("window.localStorage.clear();", null)
-    }
-
-    /**
-     * android 调用 js 方法
-     *
-     * @param methodName        js 方法的名字
-     * @param paramsJsonString  js 方法的参数
-     * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
-     */
-    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        if (methodName.isEmpty()) return
-        val jsString = if (paramsJsonString.isNullOrEmpty()) {
-            "javascript:$methodName()"
-        } else {
-            "javascript:$methodName('$paramsJsonString')"
-        }
-//        webView.post { webView.loadUrl(jsString) }// Ui线程
-        // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
-        // b)Android 4.4 后才可使用
-        tencentWebView?.evaluateJavascript(jsString) {
-            callback?.invoke(it)
         }
     }
 
@@ -208,28 +167,28 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
                 it.visibility = View.GONE
             }
         }
-        if (tencentWebView?.visibility != View.VISIBLE) {
-            tencentWebView?.visibility = View.VISIBLE
+        if (x5WebView?.visibility != View.VISIBLE) {
+            x5WebView?.visibility = View.VISIBLE
         }
     }
 
     private fun showErrorView() {
         if (!isErrorViewShow()) {
-            tencentWebView?.clearHistory()
+            x5WebView?.clearHistory()
             errorView?.let {
                 if (it.visibility != View.VISIBLE) {
                     it.visibility = View.VISIBLE
                     it.setOnClickListener { v ->
                         isErrorPage = false
-                        tencentWebView?.reload()
+                        x5WebView?.reload()
                     }
                 }
             }
-            if (tencentWebView?.visibility != View.GONE) {
-                tencentWebView?.visibility = View.GONE
+            if (x5WebView?.visibility != View.GONE) {
+                x5WebView?.visibility = View.GONE
             }
         }
-        tencentWebView?.stopLoading()
+        x5WebView?.stopLoading()
         isErrorPage = true
     }
 
@@ -248,7 +207,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
      * 需要放在super.onDestroy();之前调用，防止内存泄漏。
      */
     fun destroy() {
-        tencentWebView?.apply {
+        x5WebView?.apply {
             try {
                 parent?.let {
                     (it as ViewGroup).removeView(this)
@@ -265,7 +224,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
                 webChromeClient = null
                 CookieSyncManager.getInstance().stopSync()
                 destroy()
-                tencentWebView = null
+                x5WebView = null
             } catch (e: Exception) {
                 e.printStackTrace()
             }
