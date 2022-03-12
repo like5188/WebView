@@ -40,7 +40,7 @@ E/Logger: WebViewFragmentActivity onDestroy
 /**
  * 包含了进度条的 WebView 的封装
  */
-class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
+open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
     private val isLoaded = AtomicBoolean(false)// 懒加载控制
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
 
@@ -99,7 +99,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
     /**
      * 添加 JavascriptInterface
      */
-    private fun addJavascriptInterfaces(map: Map<String, Any>) {
+    fun addJavascriptInterfaces(map: Map<String, Any>) {
         getX5WebView()?.apply {
             map.forEach {
                 addJavascriptInterface(it.value, it.key)
@@ -107,7 +107,7 @@ class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) 
         }
     }
 
-    private fun removeJavascriptInterfaces() {
+    fun removeJavascriptInterfaces() {
         getX5WebView()?.apply {
             webViewFragmentConfig.javascriptInterfaceMap.keys.forEach {
                 removeJavascriptInterface(it)
