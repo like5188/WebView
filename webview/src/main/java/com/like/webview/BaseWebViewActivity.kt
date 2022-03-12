@@ -9,8 +9,7 @@ import com.tencent.smtt.sdk.WebView
  * 对 [WebViewFragment] 的封装
  */
 abstract class BaseWebViewActivity : FragmentActivity() {
-    protected var webViewFragment: WebViewFragment? = null
-        private set
+    private var webViewFragment: WebViewFragment? = null
     protected val x5WebView: WebView?
         get() = webViewFragment?.getX5WebView()
 
