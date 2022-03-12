@@ -81,34 +81,34 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getLocalStorages(view: View) {
-        webViewFragment?.getX5WebView()?.addLocalStorages(mapOf("localStorageKey1" to "3"))
+        x5WebView?.addLocalStorages(mapOf("localStorageKey1" to "3"))
         lifecycleScope.launch {
-            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey1"))
-            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey2"))
-            webViewFragment?.getX5WebView()?.clearLocalStorages()
-            webViewFragment?.getX5WebView()?.addLocalStorages(mapOf("localStorageKey1" to "1"))
-            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey1"))
-            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey2"))
+            Logger.e(x5WebView?.getLocalStorage("localStorageKey1"))
+            Logger.e(x5WebView?.getLocalStorage("localStorageKey2"))
+            x5WebView?.clearLocalStorages()
+            x5WebView?.addLocalStorages(mapOf("localStorageKey1" to "1"))
+            Logger.e(x5WebView?.getLocalStorage("localStorageKey1"))
+            Logger.e(x5WebView?.getLocalStorage("localStorageKey2"))
         }
     }
 
     fun pageUp(view: View) {
-        webViewFragment?.getX5WebView()?.pageUp(true)
+        x5WebView?.pageUp(true)
     }
 
     fun pageDown(view: View) {
-        webViewFragment?.getX5WebView()?.pageDown(true)
+        x5WebView?.pageDown(true)
     }
 
     fun reload(view: View) {
-        webViewFragment?.getX5WebView()?.reload()
+        x5WebView?.reload()
     }
 
     fun callJSMethodWithParams(view: View) {
         val params = JSONObject()
         params.put("name", "like")
         params.put("age", 1)
-        webViewFragment?.getX5WebView()?.callJsMethod(
+        x5WebView?.callJsMethod(
             "jsMethodNameWithParams",
             params.toString()
         ) {

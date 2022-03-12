@@ -3,6 +3,7 @@ package com.like.webview
 import android.graphics.PixelFormat
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.tencent.smtt.sdk.WebView
 
 /**
  * 对 [WebViewFragment] 的封装
@@ -10,6 +11,8 @@ import androidx.fragment.app.FragmentActivity
 abstract class BaseWebViewActivity : FragmentActivity() {
     protected var webViewFragment: WebViewFragment? = null
         private set
+    protected val x5WebView: WebView?
+        get() = webViewFragment?.getX5WebView()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
