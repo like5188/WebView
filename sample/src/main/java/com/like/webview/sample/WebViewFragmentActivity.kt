@@ -9,9 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
 import com.like.common.util.selectSinglePhoto
 import com.like.common.util.uploadPath
-import com.like.webview.BaseWebViewActivity
-import com.like.webview.WebViewFragmentConfig
-import com.like.webview.X5ListenerAdapter
+import com.like.webview.*
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
@@ -73,24 +71,24 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getCookies(view: View) {
-        webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
-        Logger.e(webViewFragment?.getCookie("cookieKey1"))
-        Logger.e(webViewFragment?.getCookie("cookieKey2"))
-        webViewFragment?.clearCookies()
-        webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))
-        Logger.e(webViewFragment?.getCookie("cookieKey1"))
-        Logger.e(webViewFragment?.getCookie("cookieKey2"))
+        addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
+        Logger.e(getCookie("cookieKey1"))
+        Logger.e(getCookie("cookieKey2"))
+        clearCookies()
+        addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))
+        Logger.e(getCookie("cookieKey1"))
+        Logger.e(getCookie("cookieKey2"))
     }
 
     fun getLocalStorages(view: View) {
-        webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "3"))
+        webViewFragment?.getX5WebView()?.addLocalStorages(mapOf("localStorageKey1" to "3"))
         lifecycleScope.launch {
-            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey1"))
-            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey2"))
-            webViewFragment?.clearLocalStorage()
-            webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "1"))
-            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey1"))
-            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey2"))
+            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey1"))
+            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey2"))
+            webViewFragment?.getX5WebView()?.clearLocalStorages()
+            webViewFragment?.getX5WebView()?.addLocalStorages(mapOf("localStorageKey1" to "1"))
+            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey1"))
+            Logger.e(webViewFragment?.getX5WebView()?.getLocalStorage("localStorageKey2"))
         }
     }
 

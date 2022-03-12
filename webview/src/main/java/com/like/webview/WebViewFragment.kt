@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -80,7 +79,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                     webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
                     // 第一次必须要在 X5Listener 中调用，否则无效。
-                    addLocalStorages(webViewFragmentConfig.localStorageMap)
+                    getX5WebView()?.addLocalStorages(webViewFragmentConfig.localStorageMap)
                     webViewFragmentConfig.localStorageMap.clear()
                 }
 
@@ -93,63 +92,12 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                 }
             }
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
-            addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
+            getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
             webViewFragmentConfig.javascriptInterfaceMap.clear()
             // 第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
             addCookies(webViewFragmentConfig.cookieMap)
             webViewFragmentConfig.cookieMap.clear()
         }
-    }
-
-    /**
-     * 添加 JavascriptInterface
-     * @param map   key：相同的key会覆盖；
-     */
-    fun addJavascriptInterfaces(map: Map<String, Any>) {
-        getX5WebView()?.apply {
-            map.forEach {
-                addJavascriptInterface(it.value, it.key)
-            }
-        }
-    }
-
-    fun removeJavascriptInterface(key: String) {
-        getX5WebView()?.removeJavascriptInterface(key)
-    }
-
-    /**
-     * 添加 cookie
-     * @param map   key：相同的key会追加；value：字符串数组，其中每个字符串的格式为"key=value"，相同的key会覆盖；
-     */
-    fun addCookies(map: Map<String, Array<String>>) {
-        CookieManager.getInstance().apply {
-            setAcceptCookie(true)
-            setCookies(map)
-        }
-    }
-
-    fun getCookie(key: String): String {
-        return CookieManager.getInstance().getCookie(key) ?: ""
-    }
-
-    fun clearCookies() {
-        CookieManager.getInstance().removeAllCookies(null)
-    }
-
-    /**
-     * 添加 localStorage
-     * @param map   key：相同的key会覆盖；
-     */
-    fun addLocalStorages(map: Map<String, String>) {
-        getX5WebView()?.addLocalStorages(map)
-    }
-
-    suspend fun getLocalStorageItem(key: String): String {
-        return getX5WebView()?.getLocalStorage(key) ?: ""
-    }
-
-    fun clearLocalStorage() {
-        getX5WebView()?.clearLocalStorages()
     }
 
     fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
@@ -210,7 +158,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         clearCookies()
-        clearLocalStorage()
+        getX5WebView()?.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
