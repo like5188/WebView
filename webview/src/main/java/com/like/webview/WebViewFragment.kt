@@ -98,6 +98,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     /**
      * 添加 JavascriptInterface
+     * @param map   key：相同的key会覆盖；
      */
     fun addJavascriptInterfaces(map: Map<String, Any>) {
         getX5WebView()?.apply {
@@ -146,6 +147,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
     /**
      * 添加 localStorage
      * 注意：第一次必须要在 X5Listener 中调用，否则无效。
+     * @param map   key：相同的key会覆盖；
      */
     fun addLocalStorages(map: Map<String, String>) {
         getX5WebViewWithErrorView()?.apply {

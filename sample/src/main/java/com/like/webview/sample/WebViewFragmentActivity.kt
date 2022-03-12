@@ -81,6 +81,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getLocalStorages(view: View) {
+        webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "3"))
         lifecycleScope.launch {
             Logger.printMap(webViewFragment?.getLocalStorages())
             webViewFragment?.clearLocalStorage()
