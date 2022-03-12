@@ -74,19 +74,23 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     fun getCookies(view: View) {
         webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
-        Logger.printMap(webViewFragment?.getCookies())
+        Logger.e(webViewFragment?.getCookie("cookieKey1"))
+        Logger.e(webViewFragment?.getCookie("cookieKey2"))
         webViewFragment?.clearCookies()
         webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))
-        Logger.printMap(webViewFragment?.getCookies())
+        Logger.e(webViewFragment?.getCookie("cookieKey1"))
+        Logger.e(webViewFragment?.getCookie("cookieKey2"))
     }
 
     fun getLocalStorages(view: View) {
         webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "3"))
         lifecycleScope.launch {
-            Logger.printMap(webViewFragment?.getLocalStorages())
+            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey1"))
+            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey2"))
             webViewFragment?.clearLocalStorage()
             webViewFragment?.addLocalStorages(mapOf("localStorageKey1" to "1"))
-            Logger.printMap(webViewFragment?.getLocalStorages())
+            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey1"))
+            Logger.e(webViewFragment?.getLocalStorageItem("localStorageKey2"))
         }
     }
 

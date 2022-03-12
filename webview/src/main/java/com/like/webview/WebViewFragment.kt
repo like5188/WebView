@@ -80,6 +80,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                     webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
                     addLocalStorages(webViewFragmentConfig.localStorageMap)
+                    webViewFragmentConfig.localStorageMap.clear()
                 }
 
                 override fun onPageFinished(webView: WebView?, url: String?) {
@@ -92,7 +93,9 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
             }
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
+            webViewFragmentConfig.javascriptInterfaceMap.clear()
             addCookies(webViewFragmentConfig.cookieMap)
+            webViewFragmentConfig.cookieMap.clear()
         }
     }
 
@@ -108,12 +111,8 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
         }
     }
 
-    fun removeJavascriptInterfaces() {
-        getX5WebView()?.apply {
-            webViewFragmentConfig.javascriptInterfaceMap.keys.forEach {
-                removeJavascriptInterface(it)
-            }
-        }
+    fun removeJavascriptInterface(key: String) {
+        getX5WebView()?.removeJavascriptInterface(key)
     }
 
     /**
@@ -126,14 +125,6 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
             setAcceptCookie(true)
             setCookies(map)
         }
-    }
-
-    fun getCookies(): Map<String, String> {
-        val result = mutableMapOf<String, String>()
-        webViewFragmentConfig.cookieMap.keys.forEach {
-            result[it] = getCookie(it)
-        }
-        return result
     }
 
     fun getCookie(key: String): String {
@@ -155,14 +146,6 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                 setLocalStorageItem(it.key, it.value)
             }
         }
-    }
-
-    suspend fun getLocalStorages(): Map<String, String> {
-        val result = mutableMapOf<String, String>()
-        webViewFragmentConfig.localStorageMap.keys.forEach {
-            result[it] = getLocalStorageItem(it)
-        }
-        return result
     }
 
     suspend fun getLocalStorageItem(key: String): String {
@@ -230,10 +213,8 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
-        removeJavascriptInterfaces()
         clearCookies()
         clearLocalStorage()
-        webViewFragmentConfig.destroy()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
@@ -285,16 +266,4 @@ class WebViewFragmentConfig {
      * localStorage 数据
      */
     val localStorageMap = mutableMapOf<String, String>()
-
-    fun destroy() {
-        url = null
-        errorViewResId = -1
-        progressBarHeight = 0f
-        progressBarBgColorResId = -1
-        progressBarProgressColorResId = -1
-        x5Listener = null
-        javascriptInterfaceMap.clear()
-        cookieMap.clear()
-        localStorageMap.clear()
-    }
 }
