@@ -93,22 +93,22 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun pageUp(view: View) {
-        webViewFragment?.pageUp()
+        webViewFragment?.getX5WebView()?.pageUp(true)
     }
 
     fun pageDown(view: View) {
-        webViewFragment?.pageDown()
+        webViewFragment?.getX5WebView()?.pageDown(true)
     }
 
     fun reload(view: View) {
-        webViewFragment?.reload()
+        webViewFragment?.getX5WebView()?.reload()
     }
 
     fun callJSMethodWithParams(view: View) {
         val params = JSONObject()
         params.put("name", "like")
         params.put("age", 1)
-        webViewFragment?.callJsMethod(
+        webViewFragment?.getX5WebView()?.callJsMethod(
             "jsMethodNameWithParams",
             params.toString()
         ) {

@@ -55,6 +55,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                 webViewFragmentConfig.progressBarBgColorResId,
                 webViewFragmentConfig.progressBarProgressColorResId
             )
+
             x5Listener = object : X5Listener {
                 override fun onShowFileChooser(
                     webView: WebView?,
@@ -78,9 +79,8 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                     webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
-                    // 第一次必须要在 X5Listener 中调用，否则无效。
-                    getX5WebView()?.addLocalStorages(webViewFragmentConfig.localStorageMap)
-                    webViewFragmentConfig.localStorageMap.clear()
+                    // 必须要在 X5Listener 中调用，否则无效。
+                    webView?.addLocalStorages(webViewFragmentConfig.localStorageMap)
                 }
 
                 override fun onPageFinished(webView: WebView?, url: String?) {
@@ -91,55 +91,13 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
                     webViewFragmentConfig.x5Listener?.onReceivedError(webView)
                 }
             }
+
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
-            webViewFragmentConfig.javascriptInterfaceMap.clear()
-            // 第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
+
+            // 必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
             addCookies(webViewFragmentConfig.cookieMap)
-            webViewFragmentConfig.cookieMap.clear()
         }
-    }
-
-    fun getX5WebViewWithErrorViewAndProgressBar(): X5WebViewWithErrorViewAndProgressBar? {
-        return x5WebViewWithErrorViewAndProgressBar
-    }
-
-    fun getX5WebViewWithErrorView(): X5WebViewWithErrorView? {
-        return getX5WebViewWithErrorViewAndProgressBar()?.x5WebViewWithErrorView
-    }
-
-    fun getX5WebView(): WebView? {
-        return getX5WebViewWithErrorView()?.x5WebView
-    }
-
-    fun loadUrl(url: String?) {
-        if (url.isNullOrEmpty()) {
-            return
-        }
-        getX5WebView()?.loadUrl(url)
-    }
-
-    fun pageUp() {
-        getX5WebView()?.pageUp(true)
-    }
-
-    fun pageDown() {
-        getX5WebView()?.pageDown(true)
-    }
-
-    fun reload() {
-        getX5WebView()?.reload()
-    }
-
-    /**
-     * android 调用 js 方法
-     *
-     * @param methodName        js 方法的名字
-     * @param paramsJsonString  js 方法的参数
-     * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
-     */
-    fun callJsMethod(methodName: String, paramsJsonString: String? = null, callback: ((String?) -> Unit)? = null) {
-        getX5WebView()?.callJsMethod(methodName, paramsJsonString, callback)
     }
 
     override fun onPause() {
@@ -149,9 +107,11 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     override fun onResume() {
         super.onResume()
-        getX5WebView()?.onResume()
-        if (isLoaded.compareAndSet(false, true)) {
-            loadUrl(webViewFragmentConfig.url)
+        getX5WebView()?.apply {
+            onResume()
+            if (isLoaded.compareAndSet(false, true)) {
+                loadUrl(webViewFragmentConfig.url)
+            }
         }
     }
 
@@ -163,6 +123,10 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
         super.onDestroyView()
+    }
+
+    fun getX5WebView(): WebView? {
+        return x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.x5WebView
     }
 
 }
