@@ -1,12 +1,10 @@
 package com.like.webview
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.util.AttributeSet
-import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -36,17 +34,9 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
         }
 
     init {
-        x5WebView = X5WebView(context).apply {
-            layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-            // 此处必须用getView()，因为TBS对WebView进行了封装
-            view?.setOnKeyListener { v, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack()) {
-                    goBack()
-                    return@setOnKeyListener true
-                }
-                return@setOnKeyListener false
-            }
-            val listener = object : X5Listener {
+        x5WebView = X5WebView(context).also {
+            it.layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            it.x5Listener = object : X5Listener {
                 override fun onShowFileChooser(
                     webView: WebView?,
                     callback: ValueCallback<Array<Uri>>?,
@@ -87,9 +77,7 @@ class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: 
                     x5Listener?.onReceivedError(webView)
                 }
             }
-            webViewClient = X5WebViewClient(listener)
-            webChromeClient = X5WebChromeClient(context as Activity, listener)
-            this@X5WebViewWithErrorView.addView(this)
+            addView(it)
         }
     }
 

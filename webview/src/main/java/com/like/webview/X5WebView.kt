@@ -1,19 +1,22 @@
 package com.like.webview
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
+import android.view.KeyEvent
 import android.view.ViewGroup
 import com.tencent.smtt.export.external.TbsCoreSettings
-import com.tencent.smtt.sdk.CookieSyncManager
-import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.WebSettings
-import com.tencent.smtt.sdk.WebView
+import com.tencent.smtt.sdk.*
 
 /**
  * tencent 的[WebView]的设置
  */
 class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     WebView(context, attrs, defStyleAttr) {
+    var x5Listener: X5Listener? = null
 
     init {
         // 支持获取手势焦点
@@ -25,6 +28,49 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
             )
         )
+        // 此处必须用getView()，因为TBS对WebView进行了封装
+        view?.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack()) {
+                goBack()
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+        val listener = object : X5Listener {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                callback: ValueCallback<Array<Uri>>?,
+                params: WebChromeClient.FileChooserParams?
+            ): Boolean {
+                return x5Listener?.onShowFileChooser(webView, callback, params) ?: false
+            }
+
+            override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                x5Listener?.onReceivedIcon(webView, icon)
+            }
+
+            override fun onReceivedTitle(webView: WebView?, title: String?) {
+                x5Listener?.onReceivedTitle(webView, title)
+            }
+
+            override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                x5Listener?.onProgressChanged(webView, progress)
+            }
+
+            override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
+                x5Listener?.onPageStarted(webView, url, favicon)
+            }
+
+            override fun onPageFinished(webView: WebView?, url: String?) {
+                x5Listener?.onPageFinished(webView, url)
+            }
+
+            override fun onReceivedError(webView: WebView?) {
+                x5Listener?.onReceivedError(webView)
+            }
+        }
+        webViewClient = X5WebViewClient(listener)
+        webChromeClient = X5WebChromeClient(context as Activity, listener)
         with(settings) {
             // 支持JS
             javaScriptEnabled = true
@@ -86,6 +132,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
      * 需要放在super.onDestroy();之前调用，防止内存泄漏。
      */
     override fun destroy() {
+        x5Listener = null
         try {
             parent?.let {
                 (it as ViewGroup).removeView(this)
@@ -102,6 +149,7 @@ class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             webChromeClient = null
             CookieSyncManager.getInstance().stopSync()
             super.destroy()
+            Log.d("X5WebView", "destroy")
         } catch (e: Exception) {
             e.printStackTrace()
         }
