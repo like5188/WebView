@@ -98,7 +98,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
 
-            // 必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
+            // 必须要在WebView的settings设置完之后调用，否则无效。
             addCookies(webViewFragmentConfig.cookieMap)
         }
     }
