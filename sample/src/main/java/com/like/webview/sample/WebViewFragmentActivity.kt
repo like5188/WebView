@@ -35,8 +35,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
-//        url = "file:///android_asset/index.html"
-        url = "http://192.168.0.188/my/userInfo"
+        url = "file:///android_asset/index.html"
+//        url = "http://192.168.0.188/my/userInfo"
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
@@ -73,6 +73,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getCookies(view: View) {
+        webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
         Logger.printMap(webViewFragment?.getCookies())
         webViewFragment?.clearCookies()
         webViewFragment?.addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))

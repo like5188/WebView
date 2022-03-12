@@ -118,6 +118,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
     /**
      * 添加 cookie
      * 注意：第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
+     * @param map   key：相同的key会追加；value：字符串数组，其中每个字符串的格式为"key=value"，相同的key会覆盖；
      */
     fun addCookies(map: Map<String, Array<String>>) {
         CookieManager.getInstance().apply {
