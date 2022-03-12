@@ -79,6 +79,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
                 override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
                     webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
+                    // 第一次必须要在 X5Listener 中调用，否则无效。
                     addLocalStorages(webViewFragmentConfig.localStorageMap)
                     webViewFragmentConfig.localStorageMap.clear()
                 }
@@ -94,6 +95,7 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
             x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
             addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
             webViewFragmentConfig.javascriptInterfaceMap.clear()
+            // 第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
             addCookies(webViewFragmentConfig.cookieMap)
             webViewFragmentConfig.cookieMap.clear()
         }
@@ -117,7 +119,6 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     /**
      * 添加 cookie
-     * 注意：第一次设置必须要在WebView的settings设置完之后，并且在loadUrl之前调用，否则无效。
      * @param map   key：相同的key会追加；value：字符串数组，其中每个字符串的格式为"key=value"，相同的key会覆盖；
      */
     fun addCookies(map: Map<String, Array<String>>) {
@@ -137,7 +138,6 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     /**
      * 添加 localStorage
-     * 注意：第一次必须要在 X5Listener 中调用，否则无效。
      * @param map   key：相同的key会覆盖；
      */
     fun addLocalStorages(map: Map<String, String>) {
