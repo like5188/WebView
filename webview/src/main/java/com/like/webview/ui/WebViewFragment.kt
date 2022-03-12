@@ -1,4 +1,4 @@
-package com.like.webview
+package com.like.webview.ui
 
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.like.webview.*
+import com.like.webview.core.X5WebViewWithErrorViewAndProgressBar
+import com.like.webview.listener.X5Listener
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView

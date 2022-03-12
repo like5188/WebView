@@ -1,4 +1,4 @@
-package com.like.webview
+package com.like.webview.ui
 
 import android.graphics.PixelFormat
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.like.webview
+package com.like.webview.ui
 
 import android.app.Activity
 import android.content.Context
@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.databinding.DataBindingUtil
+import com.like.webview.R
 import com.like.webview.databinding.ActivityWebviewBinding
 
 /**

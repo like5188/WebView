@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.like.webview.SimpleWebViewActivity
+import com.like.webview.ui.SimpleWebViewActivity
 import com.like.webview.sample.viewpager.ViewPagerActivity
 
 class MainActivity : AppCompatActivity() {

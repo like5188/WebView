@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import com.like.webview.WebViewFragment
-import com.like.webview.WebViewFragmentConfig
+import com.like.webview.ui.WebViewFragment
+import com.like.webview.ui.WebViewFragmentConfig
 import com.like.webview.sample.MyJavascriptInterface
 import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
