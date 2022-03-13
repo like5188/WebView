@@ -42,7 +42,9 @@ E/Logger: WebViewFragmentActivity onDestroy
 
 /**
  * 包含了进度条的 WebView 的封装。
- * url 只懒加载一次。在[onResume]（如果先[init]了）或者[init]的时候。
+ * url 只懒加载一次。分两种情况：
+ * 1、先[init]，在[onResume]时会加载。
+ * 2、先[onResume]，在[init]时会判断如果[isOnResume]为 true，就会直接加载，如果[isOnResume]为 false，就会等下次[onResume]时加载。
  */
 open class WebViewFragment : Fragment() {
     private val isOnResume = AtomicBoolean(false)
