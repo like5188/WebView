@@ -29,6 +29,7 @@ W/Logger: WebViewFragment onStart
 E/Logger: WebViewFragmentActivity onStart
 E/Logger: WebViewFragmentActivity onResume
 W/Logger: WebViewFragment onResume
+
 W/Logger: WebViewFragment onPause
 E/Logger: WebViewFragmentActivity onPause
 W/Logger: WebViewFragment onStop
@@ -40,11 +41,71 @@ E/Logger: WebViewFragmentActivity onDestroy
  */
 
 /**
- * 包含了进度条的 WebView 的封装
+ * 包含了进度条的 WebView 的封装。
+ * url 只懒加载一次。在[onResume]（如果先[init]了）或者[init]的时候。
  */
-open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentConfig) : Fragment() {
+open class WebViewFragment : Fragment() {
+    private val isOnResume = AtomicBoolean(false)
     private val isLoaded = AtomicBoolean(false)// 懒加载控制
+    private var webViewFragmentConfig: WebViewFragmentConfig? = null
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
+
+    fun init(webViewFragmentConfig: WebViewFragmentConfig?) {
+        webViewFragmentConfig ?: return
+        this.webViewFragmentConfig = webViewFragmentConfig
+        if (isOnResume.get() && isLoaded.compareAndSet(false, true)) {
+            x5WebViewWithErrorViewAndProgressBar?.apply {
+                setProgressBar(
+                    webViewFragmentConfig.progressBarHeight,
+                    webViewFragmentConfig.progressBarBgColorResId,
+                    webViewFragmentConfig.progressBarProgressColorResId
+                )
+
+                x5Listener = object : X5Listener {
+                    override fun onShowFileChooser(
+                        webView: WebView?,
+                        callback: ValueCallback<Array<Uri>>?,
+                        params: WebChromeClient.FileChooserParams?
+                    ): Boolean {
+                        return webViewFragmentConfig.x5Listener?.onShowFileChooser(webView, callback, params) ?: false
+                    }
+
+                    override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
+                        webViewFragmentConfig.x5Listener?.onReceivedIcon(webView, icon)
+                    }
+
+                    override fun onReceivedTitle(webView: WebView?, title: String?) {
+                        webViewFragmentConfig.x5Listener?.onReceivedTitle(webView, title)
+                    }
+
+                    override fun onProgressChanged(webView: WebView?, progress: Int?) {
+                        webViewFragmentConfig.x5Listener?.onProgressChanged(webView, progress)
+                    }
+
+                    override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
+                        webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
+                        // 必须要在 X5Listener 中调用，否则无效。
+                        webView?.addLocalStorages(webViewFragmentConfig.localStorageMap)
+                    }
+
+                    override fun onPageFinished(webView: WebView?, url: String?) {
+                        webViewFragmentConfig.x5Listener?.onPageFinished(webView, url)
+                    }
+
+                    override fun onReceivedError(webView: WebView?) {
+                        webViewFragmentConfig.x5Listener?.onReceivedError(webView)
+                    }
+                }
+
+                x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
+                getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
+
+                // 必须要在WebView的settings设置完之后调用，否则无效。
+                addCookies(webViewFragmentConfig.cookieMap)
+            }
+            getX5WebView()?.loadUrl(webViewFragmentConfig.url)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,53 +114,6 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
     ): View {
         return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
             x5WebViewWithErrorViewAndProgressBar = this
-            setProgressBar(
-                webViewFragmentConfig.progressBarHeight,
-                webViewFragmentConfig.progressBarBgColorResId,
-                webViewFragmentConfig.progressBarProgressColorResId
-            )
-
-            x5Listener = object : X5Listener {
-                override fun onShowFileChooser(
-                    webView: WebView?,
-                    callback: ValueCallback<Array<Uri>>?,
-                    params: WebChromeClient.FileChooserParams?
-                ): Boolean {
-                    return webViewFragmentConfig.x5Listener?.onShowFileChooser(webView, callback, params) ?: false
-                }
-
-                override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                    webViewFragmentConfig.x5Listener?.onReceivedIcon(webView, icon)
-                }
-
-                override fun onReceivedTitle(webView: WebView?, title: String?) {
-                    webViewFragmentConfig.x5Listener?.onReceivedTitle(webView, title)
-                }
-
-                override fun onProgressChanged(webView: WebView?, progress: Int?) {
-                    webViewFragmentConfig.x5Listener?.onProgressChanged(webView, progress)
-                }
-
-                override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-                    webViewFragmentConfig.x5Listener?.onPageStarted(webView, url, favicon)
-                    // 必须要在 X5Listener 中调用，否则无效。
-                    webView?.addLocalStorages(webViewFragmentConfig.localStorageMap)
-                }
-
-                override fun onPageFinished(webView: WebView?, url: String?) {
-                    webViewFragmentConfig.x5Listener?.onPageFinished(webView, url)
-                }
-
-                override fun onReceivedError(webView: WebView?) {
-                    webViewFragmentConfig.x5Listener?.onReceivedError(webView)
-                }
-            }
-
-            x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
-            getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
-
-            // 必须要在WebView的settings设置完之后调用，否则无效。
-            addCookies(webViewFragmentConfig.cookieMap)
         }
     }
 
@@ -110,18 +124,16 @@ open class WebViewFragment(private val webViewFragmentConfig: WebViewFragmentCon
 
     override fun onResume() {
         super.onResume()
-        getX5WebView()?.apply {
-            onResume()
-            if (isLoaded.compareAndSet(false, true)) {
-                loadUrl(webViewFragmentConfig.url)
-            }
-        }
+        isOnResume.set(true)
+        getX5WebView()?.onResume()
+        init(webViewFragmentConfig)
     }
 
     override fun onDestroyView() {
         isLoaded.compareAndSet(true, false)
         clearCookies()
         getX5WebView()?.clearLocalStorages()
+        webViewFragmentConfig = null
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithErrorViewAndProgressBar?.destroy()
         x5WebViewWithErrorViewAndProgressBar = null
