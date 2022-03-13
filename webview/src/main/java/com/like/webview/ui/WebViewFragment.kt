@@ -122,6 +122,7 @@ open class WebViewFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         getX5WebView()?.onPause()
+        isOnResume.set(false)
     }
 
     override fun onResume() {
