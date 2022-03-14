@@ -29,6 +29,7 @@ abstract class BaseWebViewActivity : FragmentActivity() {
 
     override fun onStart() {
         super.onStart()
+        // 此方法必须在 WebViewFragment.onCreateView() 之后调用，才能使得 WebViewFragment.init() 方法中的配置生效（x5WebViewWithErrorViewAndProgressBar?.apply{}）。
         webViewFragment?.init(getWebViewFragmentConfig())
     }
 
