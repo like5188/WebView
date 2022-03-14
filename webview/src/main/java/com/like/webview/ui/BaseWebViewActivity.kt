@@ -20,12 +20,16 @@ abstract class BaseWebViewActivity : FragmentActivity() {
         if (webViewFragment == null) {
             supportFragmentManager.beginTransaction().apply {
                 WebViewFragment().apply {
-                    init(getWebViewFragmentConfig())
                     add(getFragmentHolderResId(), this)
                     webViewFragment = this
                 }
             }.commit()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        webViewFragment?.init(getWebViewFragmentConfig())
     }
 
     /**

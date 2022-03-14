@@ -1,6 +1,7 @@
 package com.like.webview.sample
 
 import android.util.Log
+import com.like.common.util.Logger
 import org.json.JSONObject
 
 class MyJavascriptInterface {
@@ -17,5 +18,24 @@ class MyJavascriptInterface {
             e.printStackTrace()
         }
         return "js 调用 android 的 androidMethod 方法成功"
+    }
+
+    @android.webkit.JavascriptInterface
+    fun executeAppAction(param: String) {
+        val paramJsonObject = JSONObject(param)
+        val action = paramJsonObject.optString("action")
+        val dataJsonObject = paramJsonObject.optJSONObject("data")
+        Logger.d("$action $dataJsonObject")
+        when (action) {
+            "openAppPage" -> {
+                val name = dataJsonObject?.optString("name")
+                val params = dataJsonObject?.optJSONObject("params")
+                when (name) {
+                    "Login" -> {// 登录
+                        Logger.e("登录")
+                    }
+                }
+            }
+        }
     }
 }

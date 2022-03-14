@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
 import com.like.common.util.selectSinglePhoto
 import com.like.common.util.uploadPath
-import com.like.webview.*
 import com.like.webview.listener.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.like.webview.ui.BaseWebViewActivity
@@ -42,6 +41,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
+        cookieMap["192.168.0.188"] = arrayOf("mechine_type=android")
         localStorageMap["localStorageKey1"] = "1111111111"
         localStorageMap["localStorageKey2"] = "2222"
         x5Listener = object : X5ListenerAdapter() {
@@ -78,10 +78,12 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
         Logger.e(getCookie("cookieKey1"))
         Logger.e(getCookie("cookieKey2"))
+        Logger.e(getCookie("192.168.0.188"))
         clearCookies()
         addCookies(mapOf("cookieKey1" to arrayOf("7=7", "8=8")))
         Logger.e(getCookie("cookieKey1"))
         Logger.e(getCookie("cookieKey2"))
+        Logger.e(getCookie("192.168.0.188"))
     }
 
     fun getLocalStorages(view: View) {
@@ -112,11 +114,12 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         val params = JSONObject()
         params.put("name", "like")
         params.put("age", 1)
-        x5WebView?.callJsMethod(
-            "jsMethodNameWithParams",
-            params.toString()
-        ) {
-            Logger.d("callJSMethodWithParams 返回值：$it")
+        lifecycleScope.launch {
+            val result = x5WebView?.callJsMethod(
+                "jsMethodNameWithParams",
+                params.toString()
+            )
+            Logger.d("callJSMethodWithParams 返回值：$result")
         }
     }
 

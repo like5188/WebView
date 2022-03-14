@@ -103,7 +103,7 @@ open class WebViewFragment : Fragment() {
                 x5WebViewWithErrorView?.errorView = View.inflate(context, webViewFragmentConfig.errorViewResId, null)
                 getX5WebView()?.addJavascriptInterfaces(webViewFragmentConfig.javascriptInterfaceMap)
 
-                // 必须要在WebView的settings设置完之后调用，否则无效。
+                // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
                 addCookies(webViewFragmentConfig.cookieMap)
             }
         }
