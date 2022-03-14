@@ -14,6 +14,7 @@ import com.like.webview.listener.X5ListenerAdapter
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.like.webview.ui.BaseWebViewActivity
 import com.like.webview.ui.WebViewFragmentConfig
+import com.like.webview.util.*
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView

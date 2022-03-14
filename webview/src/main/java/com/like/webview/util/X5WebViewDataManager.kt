@@ -1,7 +1,9 @@
-package com.like.webview
+package com.like.webview.util
 
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -10,20 +12,24 @@ import kotlin.coroutines.suspendCoroutine
  *
  * @param methodName        js 方法的名字
  * @param params            js 方法的参数
- * @param callback          回调方法，用于处理 js 方法返回的 String 类型的结果。
  */
-fun WebView.callJsMethod(methodName: String, params: String? = null, callback: ((String?) -> Unit)? = null) {
-    if (methodName.isEmpty()) return
-    val jsString = if (params.isNullOrEmpty()) {
-        "javascript:$methodName()"
-    } else {
-        "javascript:$methodName('$params')"
-    }
+suspend fun WebView.callJsMethod(methodName: String, params: String? = null): String? = withContext(Dispatchers.Main) {
+    suspendCoroutine { continuation ->
+        if (methodName.isEmpty()) {
+            continuation.resume(null)
+            return@suspendCoroutine
+        }
+        val js = if (params.isNullOrEmpty()) {
+            "javascript:$methodName()"
+        } else {
+            "javascript:$methodName('$params')"
+        }
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
-    // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
-    // b)Android 4.4 后才可使用
-    evaluateJavascript(jsString) {
-        callback?.invoke(it)
+        // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
+        // b)Android 4.4 后才可使用
+        evaluateJavascript(js) {
+            continuation.resume(it)
+        }
     }
 }
 
