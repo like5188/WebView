@@ -106,7 +106,9 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                     }
                 }
 
-                x5WebViewWithErrorView.errorView = View.inflate(context, it.errorViewResId, null)
+                if (it.errorViewResId != -1) {
+                    x5WebViewWithErrorView.errorView = View.inflate(context, it.errorViewResId, null)
+                }
                 x5WebView.addJavascriptInterfaces(it.javascriptInterfaceMap)
 
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
@@ -148,7 +150,7 @@ class WebViewFragmentConfig {
     var url: String? = null
 
     /**
-     * 错误页面资源 id
+     * 错误页面资源 id，设置为 -1 即不添加错误页面。
      */
     @LayoutRes
     var errorViewResId: Int = R.layout.view_error_view
