@@ -112,8 +112,10 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                     }
                 }
 
-                if (it.errorViewResId != -1) {
-                    x5WebViewWithErrorView.errorView = View.inflate(context, it.errorViewResId, null)
+                x5WebViewWithErrorView.errorView = try {
+                    View.inflate(context, it.errorViewResId, null)
+                } catch (e: Exception) {
+                    null
                 }
                 x5WebView.addJavascriptInterfaces(it.javascriptInterfaceMap)
 
@@ -156,7 +158,7 @@ class WebViewFragmentConfig {
     var url: String? = null
 
     /**
-     * 错误页面资源 id，设置为 -1 即不添加错误页面。
+     * 错误页面资源 id
      */
     @LayoutRes
     var errorViewResId: Int = R.layout.view_error_view
