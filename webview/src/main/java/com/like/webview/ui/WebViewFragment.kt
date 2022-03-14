@@ -55,8 +55,8 @@ open class WebViewFragment : Fragment() {
 
     fun init(webViewFragmentConfig: WebViewFragmentConfig?) {
         webViewFragmentConfig ?: return
-        if (this.webViewFragmentConfig == null) {
-            this.webViewFragmentConfig = webViewFragmentConfig
+        this.webViewFragmentConfig = webViewFragmentConfig
+        if (resumed.get() && loaded.compareAndSet(false, true)) {
             x5WebViewWithErrorViewAndProgressBar?.apply {
                 setProgressBar(
                     webViewFragmentConfig.progressBarHeight,
@@ -106,8 +106,6 @@ open class WebViewFragment : Fragment() {
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
                 addCookies(webViewFragmentConfig.cookieMap)
             }
-        }
-        if (resumed.get() && loaded.compareAndSet(false, true)) {
             getX5WebView()?.loadUrl(webViewFragmentConfig.url)
         }
     }

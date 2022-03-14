@@ -36,8 +36,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
-        url = "file:///android_asset/index.html"
-//        url = "http://192.168.0.188/my/userInfo"
+//        url = "file:///android_asset/index.html"
+        url = "http://192.168.0.188/my/userInfo"
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")

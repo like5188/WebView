@@ -20,17 +20,12 @@ abstract class BaseWebViewActivity : FragmentActivity() {
         if (webViewFragment == null) {
             supportFragmentManager.beginTransaction().apply {
                 WebViewFragment().apply {
+                    init(getWebViewFragmentConfig())
                     add(getFragmentHolderResId(), this)
                     webViewFragment = this
                 }
             }.commit()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // 此方法必须在 WebViewFragment.onCreateView() 之后调用，才能使得 WebViewFragment.init() 方法中的配置生效（x5WebViewWithErrorViewAndProgressBar?.apply{}）。
-        webViewFragment?.init(getWebViewFragmentConfig())
     }
 
     /**
