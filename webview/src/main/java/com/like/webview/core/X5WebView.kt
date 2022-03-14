@@ -137,6 +137,7 @@ class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int
     override fun destroy() {
         x5Listener = null
         try {
+            loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
             parent?.let {
                 (it as ViewGroup).removeView(this)
             }
