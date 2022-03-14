@@ -45,11 +45,11 @@ E/Logger: WebViewFragmentActivity onDestroy
  * 包含了进度条的 WebView 的封装。
  * url 只懒加载一次。分两种情况：
  * 1、先[init]，在[onResume]时会加载。
- * 2、先[onResume]，在[init]时会判断如果[isOnResume]为 true，就会直接加载，如果[isOnResume]为 false，就会等下次[onResume]时加载。
+ * 2、先[onResume]，在[init]时会判断如果[resumed]为 true，就会直接加载，如果[resumed]为 false，就会等下次[onResume]时加载。
  */
 open class WebViewFragment : Fragment() {
-    private val isOnResume = AtomicBoolean(false)
-    private val isLoaded = AtomicBoolean(false)// 懒加载控制
+    private val resumed = AtomicBoolean(false)
+    private val loaded = AtomicBoolean(false)// 懒加载控制
     private var webViewFragmentConfig: WebViewFragmentConfig? = null
     private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
 
@@ -107,7 +107,7 @@ open class WebViewFragment : Fragment() {
                 addCookies(webViewFragmentConfig.cookieMap)
             }
         }
-        if (isOnResume.get() && isLoaded.compareAndSet(false, true)) {
+        if (resumed.get() && loaded.compareAndSet(false, true)) {
             getX5WebView()?.loadUrl(webViewFragmentConfig.url)
         }
     }
@@ -125,18 +125,18 @@ open class WebViewFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         getX5WebView()?.onPause()
-        isOnResume.set(false)
+        resumed.set(false)
     }
 
     override fun onResume() {
         super.onResume()
         getX5WebView()?.onResume()
-        isOnResume.set(true)
+        resumed.set(true)
         init(webViewFragmentConfig)
     }
 
     override fun onDestroyView() {
-        isLoaded.compareAndSet(true, false)
+        loaded.compareAndSet(true, false)
         clearCookies()
         getX5WebView()?.clearLocalStorages()
         webViewFragmentConfig = null
