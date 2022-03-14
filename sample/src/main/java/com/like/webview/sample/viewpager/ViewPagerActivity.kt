@@ -18,7 +18,7 @@ class ViewPagerActivity : FragmentActivity() {
         WebViewFragment {
             WebViewFragmentConfig().apply {
                 url = "file:///android_asset/index.html"
-                javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
+                javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(it)
             }
         },
         WebViewFragment {

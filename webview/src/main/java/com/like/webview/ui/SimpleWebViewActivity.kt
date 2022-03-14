@@ -9,6 +9,7 @@ import android.util.TypedValue
 import androidx.databinding.DataBindingUtil
 import com.like.webview.R
 import com.like.webview.databinding.ActivityWebviewBinding
+import com.tencent.smtt.sdk.WebView
 
 /**
  * 用于简单显示网页，而不进行交互。
@@ -65,7 +66,7 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
         return R.id.fragment_holder
     }
 
-    override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+    override fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig = WebViewFragmentConfig().apply {
         url = intent.getStringExtra(KEY_URL)
         errorViewResId = intent.getIntExtra(KEY_ERROR_VIEW_RES_ID, -1)
         progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)

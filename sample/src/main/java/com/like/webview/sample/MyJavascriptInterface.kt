@@ -2,9 +2,15 @@ package com.like.webview.sample
 
 import android.util.Log
 import com.like.common.util.Logger
+import com.like.webview.core.X5WebView
+import com.tencent.smtt.sdk.WebView
 import org.json.JSONObject
 
-class MyJavascriptInterface {
+class MyJavascriptInterface(private val x5WebView: WebView) {
+    init {
+        Logger.e("MyJavascriptInterface init $x5WebView")
+    }
+
     // 注意线程。如果在方法中操作 WebView，就必须在主线程执行。
     // 否则会出现：java.lang.Throwable: A WebView method was called on thread 'JavaBridge'. All WebView methods must be called on the same thread. (Expected Looper Looper (main, tid 2) {75a8318} called on Looper (JavaBridge, tid 89) {424971f}, FYI main Looper is Looper (main, tid 2) {75a8318})
     @android.webkit.JavascriptInterface// API17及以上的版本中，需要此注解才能调用下面的方法
@@ -22,6 +28,7 @@ class MyJavascriptInterface {
 
     @android.webkit.JavascriptInterface
     fun executeAppAction(param: String) {
+        Logger.e("MyJavascriptInterface executeAppAction $x5WebView")
         val paramJsonObject = JSONObject(param)
         val action = paramJsonObject.optString("action")
         val dataJsonObject = paramJsonObject.optJSONObject("data")

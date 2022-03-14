@@ -23,13 +23,9 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
-    var x5WebViewWithErrorView: X5WebViewWithErrorView? = null
-        private set
-    var x5Listener: X5Listener? = null
-
-    init {
-        orientation = VERTICAL
-        x5WebViewWithErrorView = X5WebViewWithErrorView(context).also {
+    private var x5Listener: X5Listener? = null
+    val x5WebViewWithErrorView: X5WebViewWithErrorView by lazy {
+        X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.x5Listener = object : X5Listener {
                 override fun onShowFileChooser(
@@ -76,6 +72,10 @@ class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet
         }
     }
 
+    init {
+        orientation = VERTICAL
+    }
+
     /**
      * 设置进度条。
      *
@@ -113,7 +113,6 @@ class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet
     fun destroy() {
         progressBar = null
         x5Listener = null
-        x5WebViewWithErrorView?.destroy()
-        x5WebViewWithErrorView = null
+        x5WebViewWithErrorView.destroy()
     }
 }

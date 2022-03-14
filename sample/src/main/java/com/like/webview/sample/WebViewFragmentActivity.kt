@@ -25,6 +25,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     private val mBinding by lazy {
         DataBindingUtil.setContentView<ActivityWebviewFragmentBinding>(this, R.layout.activity_webview_fragment)
     }
+    private lateinit var x5WebView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +36,11 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         return R.id.fragment_holder
     }
 
-    override fun getWebViewFragmentConfig(): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+    override fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+        this@WebViewFragmentActivity.x5WebView = webView
 //        url = "file:///android_asset/index.html"
         url = "http://192.168.0.188/my/userInfo"
-        javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface()
+        javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(webView)
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
         cookieMap["192.168.0.188"] = arrayOf("mechine_type=android")
@@ -87,27 +89,27 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getLocalStorages(view: View) {
-        x5WebView?.addLocalStorages(mapOf("localStorageKey1" to "3"))
+        x5WebView.addLocalStorages(mapOf("localStorageKey1" to "3"))
         lifecycleScope.launch {
-            Logger.e(x5WebView?.getLocalStorage("localStorageKey1"))
-            Logger.e(x5WebView?.getLocalStorage("localStorageKey2"))
-            x5WebView?.clearLocalStorages()
-            x5WebView?.addLocalStorages(mapOf("localStorageKey1" to "1"))
-            Logger.e(x5WebView?.getLocalStorage("localStorageKey1"))
-            Logger.e(x5WebView?.getLocalStorage("localStorageKey2"))
+            Logger.e(x5WebView.getLocalStorage("localStorageKey1"))
+            Logger.e(x5WebView.getLocalStorage("localStorageKey2"))
+            x5WebView.clearLocalStorages()
+            x5WebView.addLocalStorages(mapOf("localStorageKey1" to "1"))
+            Logger.e(x5WebView.getLocalStorage("localStorageKey1"))
+            Logger.e(x5WebView.getLocalStorage("localStorageKey2"))
         }
     }
 
     fun pageUp(view: View) {
-        x5WebView?.pageUp(true)
+        x5WebView.pageUp(true)
     }
 
     fun pageDown(view: View) {
-        x5WebView?.pageDown(true)
+        x5WebView.pageDown(true)
     }
 
     fun reload(view: View) {
-        x5WebView?.reload()
+        x5WebView.reload()
     }
 
     fun callJSMethodWithParams(view: View) {
@@ -115,7 +117,7 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
         params.put("name", "like")
         params.put("age", 1)
         lifecycleScope.launch {
-            val result = x5WebView?.callJsMethod(
+            val result = x5WebView.callJsMethod(
                 "jsMethodNameWithParams",
                 params.toString()
             )

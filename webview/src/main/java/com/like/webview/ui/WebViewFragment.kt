@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.like.webview.*
+import com.like.webview.R
 import com.like.webview.core.X5WebViewWithErrorViewAndProgressBar
 import com.like.webview.listener.X5Listener
 import com.like.webview.util.*
@@ -45,19 +45,23 @@ E/Logger: WebViewFragmentActivity onDestroy
  * 包含了 [X5WebViewWithErrorViewAndProgressBar] 的封装。
  * url 只懒加载一次。
  */
-class WebViewFragment(private val getWebViewFragmentConfig: () -> WebViewFragmentConfig) : Fragment() {
+class WebViewFragment(private val getWebViewFragmentConfig: (WebView) -> WebViewFragmentConfig) : Fragment() {
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
-    private var x5WebViewWithErrorViewAndProgressBar: X5WebViewWithErrorViewAndProgressBar? = null
+    private val x5WebViewWithErrorViewAndProgressBar by lazy {
+        X5WebViewWithErrorViewAndProgressBar(requireContext())
+    }
+    private val x5WebView by lazy {
+        x5WebViewWithErrorViewAndProgressBar.x5WebViewWithErrorView.x5WebView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return X5WebViewWithErrorViewAndProgressBar(requireContext()).apply {
-            x5WebViewWithErrorViewAndProgressBar = this
-            getWebViewFragmentConfig().apply {
+        return x5WebViewWithErrorViewAndProgressBar.apply {
+            getWebViewFragmentConfig(x5WebView).apply {
                 this@WebViewFragment.url = url
 
                 setProgressBar(
@@ -102,8 +106,8 @@ class WebViewFragment(private val getWebViewFragmentConfig: () -> WebViewFragmen
                     }
                 }
 
-                x5WebViewWithErrorView?.errorView = View.inflate(context, errorViewResId, null)
-                getX5WebView()?.addJavascriptInterfaces(javascriptInterfaceMap)
+                x5WebViewWithErrorView.errorView = View.inflate(context, errorViewResId, null)
+                x5WebView.addJavascriptInterfaces(javascriptInterfaceMap)
 
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
                 addCookies(cookieMap)
@@ -113,15 +117,15 @@ class WebViewFragment(private val getWebViewFragmentConfig: () -> WebViewFragmen
 
     override fun onPause() {
         super.onPause()
-        getX5WebView()?.onPause()
+        x5WebView.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        getX5WebView()?.onResume()
+        x5WebView.onResume()
         if (loaded.compareAndSet(false, true)) {
             url?.let {
-                getX5WebView()?.loadUrl(it)
+                x5WebView.loadUrl(it)
             }
         }
     }
@@ -129,22 +133,17 @@ class WebViewFragment(private val getWebViewFragmentConfig: () -> WebViewFragmen
     override fun onDestroyView() {
         loaded.compareAndSet(true, false)
         clearCookies()
-        getX5WebView()?.clearLocalStorages()
+        x5WebView.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        x5WebViewWithErrorViewAndProgressBar?.destroy()
-        x5WebViewWithErrorViewAndProgressBar = null
+        x5WebViewWithErrorViewAndProgressBar.destroy()
         super.onDestroyView()
-    }
-
-    fun getX5WebView(): WebView? {
-        return x5WebViewWithErrorViewAndProgressBar?.x5WebViewWithErrorView?.x5WebView
     }
 
 }
 
 class WebViewFragmentConfig {
     /**
-     * [url] 的加载时机是在第一次 [onResume] 时。如果不传此参数，可以自行调用 [load] 方法。
+     * [url] 的加载时机是在第一次 [Fragment.onResume] 时。如果不传此参数，可以自行调用 [WebView.loadUrl] 方法。
      */
     var url: String? = null
 

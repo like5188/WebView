@@ -19,23 +19,8 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var isErrorPage = false
-    var x5WebView: X5WebView? = null
-        private set
-    var x5Listener: X5Listener? = null
-    var errorView: View? = null
-        set(value) {
-            field?.let {
-                removeView(it)
-            }
-            field = value?.apply {
-                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-                visibility = View.GONE
-                addView(this, 0)
-            }
-        }
-
-    init {
-        x5WebView = X5WebView(context).also {
+    val x5WebView: X5WebView by lazy {
+        X5WebView(context).also {
             it.layoutParams = LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             it.x5Listener = object : X5Listener {
                 override fun onShowFileChooser(
@@ -81,6 +66,18 @@ class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defS
             addView(it)
         }
     }
+    var x5Listener: X5Listener? = null
+    var errorView: View? = null
+        set(value) {
+            field?.let {
+                removeView(it)
+            }
+            field = value?.apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                visibility = View.GONE
+                addView(this, 0)
+            }
+        }
 
     private fun showWebView() {
         errorView?.let {
@@ -88,28 +85,28 @@ class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defS
                 it.visibility = View.GONE
             }
         }
-        if (x5WebView?.visibility != View.VISIBLE) {
-            x5WebView?.visibility = View.VISIBLE
+        if (x5WebView.visibility != View.VISIBLE) {
+            x5WebView.visibility = View.VISIBLE
         }
     }
 
     private fun showErrorView() {
         if (!isErrorViewShow()) {
-            x5WebView?.clearHistory()
+            x5WebView.clearHistory()
             errorView?.let {
                 if (it.visibility != View.VISIBLE) {
                     it.visibility = View.VISIBLE
                     it.setOnClickListener { v ->
                         isErrorPage = false
-                        x5WebView?.reload()
+                        x5WebView.reload()
                     }
                 }
             }
-            if (x5WebView?.visibility != View.GONE) {
-                x5WebView?.visibility = View.GONE
+            if (x5WebView.visibility != View.GONE) {
+                x5WebView.visibility = View.GONE
             }
         }
-        x5WebView?.stopLoading()
+        x5WebView.stopLoading()
         isErrorPage = true
     }
 
@@ -130,7 +127,6 @@ class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defS
     fun destroy() {
         errorView = null
         x5Listener = null
-        x5WebView?.destroy()
-        x5WebView = null
+        x5WebView.destroy()
     }
 }
