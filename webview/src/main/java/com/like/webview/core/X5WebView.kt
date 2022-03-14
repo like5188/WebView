@@ -17,7 +17,7 @@ import com.tencent.smtt.sdk.*
 /**
  * tencent 的[WebView]的设置
  */
-class X5WebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     WebView(context, attrs, defStyleAttr) {
     var x5Listener: X5Listener? = null
 

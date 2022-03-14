@@ -20,7 +20,7 @@ import com.tencent.smtt.sdk.WebView
 /**
  * 包含了[X5WebViewWithErrorView]，进度条[progressBar]
  */
-class X5WebViewWithErrorViewAndProgressBar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
     var x5WebViewWithErrorView: X5WebViewWithErrorView? = null

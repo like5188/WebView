@@ -16,7 +16,7 @@ import com.tencent.smtt.sdk.WebView
 /**
  * 包含了[X5WebView]、错误视图[errorView]
  */
-class X5WebViewWithErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var isErrorPage = false
     var x5WebView: X5WebView? = null
