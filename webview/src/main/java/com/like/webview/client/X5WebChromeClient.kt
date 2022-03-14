@@ -38,20 +38,13 @@ internal class X5WebChromeClient(private val mActivity: Activity, private val mL
 
     override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
         super.onReceivedIcon(webView, icon)
-        // 用来接收web页面的icon，我们可以在这里将该页面的icon设置到Toolbar。
         mListener?.onReceivedIcon(webView, icon)
         Log.d(TAG, "onReceivedIcon")
     }
 
     override fun onReceivedTitle(webView: WebView?, title: String?) {
         super.onReceivedTitle(webView, title)
-        if (title!!.contains("404") || title.contains("500") || title.contains("Error")) {
-//            mListener?.onReceivedError(webView)
-            mListener?.onReceivedTitle(webView, "")
-        } else {
-            // 用来接收web页面的title，我们可以在这里将页面的title设置到Toolbar。
-            mListener?.onReceivedTitle(webView, title)
-        }
+        mListener?.onReceivedTitle(webView, title)
         Log.d(TAG, "onReceivedTitle title=$title")
     }
 
