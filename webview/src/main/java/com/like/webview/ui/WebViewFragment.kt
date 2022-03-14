@@ -61,13 +61,13 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         savedInstanceState: Bundle?
     ): View {
         return x5WebViewWithErrorViewAndProgressBar.apply {
-            getWebViewFragmentConfig(this@WebViewFragment, x5WebView).apply {
-                this@WebViewFragment.url = url
+            getWebViewFragmentConfig(this@WebViewFragment, x5WebView).let {
+                this@WebViewFragment.url = it.url
 
                 setProgressBar(
-                    progressBarHeight,
-                    progressBarBgColorResId,
-                    progressBarProgressColorResId
+                    it.progressBarHeight,
+                    it.progressBarBgColorResId,
+                    it.progressBarProgressColorResId
                 )
 
                 x5Listener = object : X5Listener {
@@ -76,41 +76,41 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                         callback: ValueCallback<Array<Uri>>?,
                         params: WebChromeClient.FileChooserParams?
                     ): Boolean {
-                        return x5Listener?.onShowFileChooser(webView, callback, params) ?: false
+                        return it.x5Listener?.onShowFileChooser(webView, callback, params) ?: false
                     }
 
                     override fun onReceivedIcon(webView: WebView?, icon: Bitmap?) {
-                        x5Listener?.onReceivedIcon(webView, icon)
+                        it.x5Listener?.onReceivedIcon(webView, icon)
                     }
 
                     override fun onReceivedTitle(webView: WebView?, title: String?) {
-                        x5Listener?.onReceivedTitle(webView, title)
+                        it.x5Listener?.onReceivedTitle(webView, title)
                     }
 
                     override fun onProgressChanged(webView: WebView?, progress: Int?) {
-                        x5Listener?.onProgressChanged(webView, progress)
+                        it.x5Listener?.onProgressChanged(webView, progress)
                     }
 
                     override fun onPageStarted(webView: WebView?, url: String?, favicon: Bitmap?) {
-                        x5Listener?.onPageStarted(webView, url, favicon)
+                        it.x5Listener?.onPageStarted(webView, url, favicon)
                         // 必须要在 X5Listener 中调用，否则无效。
-                        webView?.addLocalStorages(localStorageMap)
+                        webView?.addLocalStorages(it.localStorageMap)
                     }
 
                     override fun onPageFinished(webView: WebView?, url: String?) {
-                        x5Listener?.onPageFinished(webView, url)
+                        it.x5Listener?.onPageFinished(webView, url)
                     }
 
                     override fun onReceivedError(webView: WebView?) {
-                        x5Listener?.onReceivedError(webView)
+                        it.x5Listener?.onReceivedError(webView)
                     }
                 }
 
-                x5WebViewWithErrorView.errorView = View.inflate(context, errorViewResId, null)
-                x5WebView.addJavascriptInterfaces(javascriptInterfaceMap)
+                x5WebViewWithErrorView.errorView = View.inflate(context, it.errorViewResId, null)
+                x5WebView.addJavascriptInterfaces(it.javascriptInterfaceMap)
 
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
-                addCookies(cookieMap)
+                addCookies(it.cookieMap)
             }
         }
     }

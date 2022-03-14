@@ -23,7 +23,7 @@ import com.tencent.smtt.sdk.WebView
 class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
-    private var x5Listener: X5Listener? = null
+    var x5Listener: X5Listener? = null
     val x5WebViewWithErrorView: X5WebViewWithErrorView by lazy {
         X5WebViewWithErrorView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
