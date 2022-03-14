@@ -10,7 +10,9 @@ import com.tencent.smtt.sdk.WebView
  */
 abstract class BaseWebViewActivity : FragmentActivity() {
     private val webViewFragment: WebViewFragment by lazy {
-        WebViewFragment(::getWebViewFragmentConfig)
+        WebViewFragment { webViewFragment, webView ->
+            getWebViewFragmentConfig(webView)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

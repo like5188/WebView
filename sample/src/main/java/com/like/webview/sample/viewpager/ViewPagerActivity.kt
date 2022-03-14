@@ -15,23 +15,23 @@ class ViewPagerActivity : FragmentActivity() {
         DataBindingUtil.setContentView<ActivityViewPagerBinding>(this, R.layout.activity_view_pager)
     }
     private val fragments = listOf(
-        WebViewFragment {
+        WebViewFragment { webViewFragment, webView ->
             WebViewFragmentConfig().apply {
                 url = "file:///android_asset/index.html"
-                javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(it)
+                javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(webView)
             }
         },
-        WebViewFragment {
+        WebViewFragment { webViewFragment, webView ->
             WebViewFragmentConfig().apply {
                 url = "https://cn.bing.com/"
             }
         },
-        WebViewFragment {
+        WebViewFragment { webViewFragment, webView ->
             WebViewFragmentConfig().apply {
                 url = "https://cn.bing.com/"
             }
         },
-        WebViewFragment {
+        WebViewFragment { webViewFragment, webView ->
             WebViewFragmentConfig().apply {
                 url = "https://cn.bing.com/"
             }

@@ -45,7 +45,7 @@ E/Logger: WebViewFragmentActivity onDestroy
  * 包含了 [X5WebViewWithErrorViewAndProgressBar] 的封装。
  * url 只懒加载一次。
  */
-class WebViewFragment(private val getWebViewFragmentConfig: (WebView) -> WebViewFragmentConfig) : Fragment() {
+class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, WebView) -> WebViewFragmentConfig) : Fragment() {
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
     private val x5WebViewWithErrorViewAndProgressBar by lazy {
@@ -61,7 +61,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebView) -> WebView
         savedInstanceState: Bundle?
     ): View {
         return x5WebViewWithErrorViewAndProgressBar.apply {
-            getWebViewFragmentConfig(x5WebView).apply {
+            getWebViewFragmentConfig(this@WebViewFragment, x5WebView).apply {
                 this@WebViewFragment.url = url
 
                 setProgressBar(
