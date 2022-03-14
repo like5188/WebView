@@ -19,8 +19,7 @@ abstract class BaseWebViewActivity : FragmentActivity() {
         window.setFormat(PixelFormat.TRANSLUCENT)
         if (webViewFragment == null) {
             supportFragmentManager.beginTransaction().apply {
-                WebViewFragment().apply {
-                    init(getWebViewFragmentConfig())
+                WebViewFragment(::getWebViewFragmentConfig).apply {
                     add(getFragmentHolderResId(), this)
                     webViewFragment = this
                 }
