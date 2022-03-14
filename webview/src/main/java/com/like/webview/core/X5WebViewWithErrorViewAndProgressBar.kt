@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.like.webview.listener.X5Listener
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -52,8 +54,12 @@ class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet
                     x5Listener?.onPageFinished(webView, url)
                 }
 
-                override fun onReceivedError(webView: WebView?) {
-                    x5Listener?.onReceivedError(webView)
+                override fun onReceivedError(
+                    webView: WebView?,
+                    webResourceRequest: WebResourceRequest,
+                    webResourceError: WebResourceError
+                ) {
+                    x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
                 }
 
                 override fun onProgressChanged(webView: WebView?, progress: Int?) {

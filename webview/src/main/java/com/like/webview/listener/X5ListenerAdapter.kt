@@ -2,10 +2,10 @@ package com.like.webview.listener
 
 import android.graphics.Bitmap
 import android.net.Uri
-import com.like.webview.listener.X5Listener
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
-
 import com.tencent.smtt.sdk.WebView
 
 open class X5ListenerAdapter : X5Listener {
@@ -32,6 +32,6 @@ open class X5ListenerAdapter : X5Listener {
     override fun onPageFinished(webView: WebView?, url: String?) {
     }
 
-    override fun onReceivedError(webView: WebView?) {
+    override fun onReceivedError(webView: WebView?, webResourceRequest: WebResourceRequest, webResourceError: WebResourceError) {
     }
 }

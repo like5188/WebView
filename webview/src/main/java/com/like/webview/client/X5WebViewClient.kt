@@ -55,9 +55,12 @@ internal class X5WebViewClient(private val mListener: X5Listener?) : WebViewClie
         // 尤其是如果Html用了本地化技术，’ERR_FILE_NOT_FOUND’开始变得特别常见。
         // 为了避免这样的错误。获取当前的网络请求是否是为main frame创建的。
         if (webResourceRequest.isForMainFrame) {
-            mListener?.onReceivedError(webView)
+            mListener?.onReceivedError(webView, webResourceRequest, webResourceError)
         }
-        Log.v(TAG, "onReceivedError url=${webResourceRequest.url}")
+        Log.v(
+            TAG,
+            "onReceivedError url=${webResourceRequest.url} errorCode=${webResourceError.errorCode} description=${webResourceError.description}"
+        )
     }
 
     override fun shouldOverrideUrlLoading(webView: WebView?, url: String?): Boolean {

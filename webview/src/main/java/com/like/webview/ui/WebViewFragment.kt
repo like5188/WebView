@@ -14,6 +14,8 @@ import com.like.webview.R
 import com.like.webview.core.X5WebViewWithErrorViewAndProgressBar
 import com.like.webview.listener.X5Listener
 import com.like.webview.util.*
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -101,8 +103,12 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                         it.x5Listener?.onPageFinished(webView, url)
                     }
 
-                    override fun onReceivedError(webView: WebView?) {
-                        it.x5Listener?.onReceivedError(webView)
+                    override fun onReceivedError(
+                        webView: WebView?,
+                        webResourceRequest: WebResourceRequest,
+                        webResourceError: WebResourceError
+                    ) {
+                        it.x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
                     }
                 }
 

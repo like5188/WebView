@@ -12,6 +12,8 @@ import com.like.webview.client.X5WebChromeClient
 import com.like.webview.client.X5WebViewClient
 import com.like.webview.listener.X5Listener
 import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.*
 
 /**
@@ -68,8 +70,8 @@ class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int
                 x5Listener?.onPageFinished(webView, url)
             }
 
-            override fun onReceivedError(webView: WebView?) {
-                x5Listener?.onReceivedError(webView)
+            override fun onReceivedError(webView: WebView?, webResourceRequest: WebResourceRequest, webResourceError: WebResourceError) {
+                x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
             }
         }
         webViewClient = X5WebViewClient(listener)

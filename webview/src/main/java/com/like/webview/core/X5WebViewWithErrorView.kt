@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.like.webview.listener.X5Listener
+import com.tencent.smtt.export.external.interfaces.WebResourceError
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -58,9 +60,13 @@ class X5WebViewWithErrorView(context: Context, attrs: AttributeSet? = null, defS
                     x5Listener?.onPageFinished(webView, url)
                 }
 
-                override fun onReceivedError(webView: WebView?) {
+                override fun onReceivedError(
+                    webView: WebView?,
+                    webResourceRequest: WebResourceRequest,
+                    webResourceError: WebResourceError
+                ) {
                     showErrorView()
-                    x5Listener?.onReceivedError(webView)
+                    x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
                 }
             }
             addView(it)

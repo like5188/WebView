@@ -46,7 +46,7 @@ internal class X5WebChromeClient(private val mActivity: Activity, private val mL
     override fun onReceivedTitle(webView: WebView?, title: String?) {
         super.onReceivedTitle(webView, title)
         if (title!!.contains("404") || title.contains("500") || title.contains("Error")) {
-            mListener?.onReceivedError(webView)
+//            mListener?.onReceivedError(webView)
             mListener?.onReceivedTitle(webView, "")
         } else {
             // 用来接收web页面的title，我们可以在这里将页面的title设置到Toolbar。
