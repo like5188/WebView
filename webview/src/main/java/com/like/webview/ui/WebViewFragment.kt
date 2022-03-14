@@ -1,16 +1,13 @@
 package com.like.webview.ui
 
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.like.webview.R
 import com.like.webview.core.X5WebViewWithErrorViewAndProgressBar
 import com.like.webview.listener.X5Listener
 import com.like.webview.util.*
@@ -161,22 +158,22 @@ class WebViewFragmentConfig {
      * 错误页面资源 id
      */
     @LayoutRes
-    var errorViewResId: Int = R.layout.view_error_view
+    var errorViewResId: Int = -1
 
     /**
      * 进度条高度，设置为 0 即隐藏进度条。
      */
-    var progressBarHeight: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3f, Resources.getSystem().displayMetrics)
+    var progressBarHeight: Float = 0f
 
     /**
      * 进度条背景色
      */
-    var progressBarBgColorResId: Int = R.color.colorPrimary
+    var progressBarBgColorResId: Int = -1
 
     /**
      * 进度条颜色
      */
-    var progressBarProgressColorResId: Int = R.color.colorPrimaryDark
+    var progressBarProgressColorResId: Int = -1
 
     var x5Listener: X5Listener? = null
 
