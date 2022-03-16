@@ -1,5 +1,6 @@
 package com.like.webview.ext
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -45,17 +46,20 @@ E/Logger: WebViewFragmentActivity onDestroy
 class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, WebView) -> WebViewFragmentConfig) : Fragment() {
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
-    private val x5WebViewWithProgressBar by lazy {
+    private var x5WebViewWithProgressBar: X5WebViewWithProgressBar? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         // 此处如果使用 applicationContext，会造成 index.html 中的 alert 弹不出来。
-        X5WebViewWithProgressBar(requireContext())
+        x5WebViewWithProgressBar = X5WebViewWithProgressBar(context)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return x5WebViewWithProgressBar.apply {
+    ): View? {
+        return x5WebViewWithProgressBar?.apply {
             getWebViewFragmentConfig(this@WebViewFragment, this).let {
                 this@WebViewFragment.url = it.url
 
@@ -113,7 +117,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                     }
                 }
 
-                x5WebViewWithProgressBar.addJavascriptInterfaces(it.javascriptInterfaceMap)
+                addJavascriptInterfaces(it.javascriptInterfaceMap)
 
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
                 addCookies(it.cookieMap)
@@ -123,15 +127,15 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
 
     override fun onPause() {
         super.onPause()
-        x5WebViewWithProgressBar.onPause()
+        x5WebViewWithProgressBar?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        x5WebViewWithProgressBar.onResume()
+        x5WebViewWithProgressBar?.onResume()
         if (loaded.compareAndSet(false, true)) {
             url?.let {
-                x5WebViewWithProgressBar.loadUrl(it)
+                x5WebViewWithProgressBar?.loadUrl(it)
             }
         }
     }
@@ -140,9 +144,10 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         url = null
         loaded.compareAndSet(true, false)
         clearCookies()
-        x5WebViewWithProgressBar.clearLocalStorages()
+        x5WebViewWithProgressBar?.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        x5WebViewWithProgressBar.destroy()
+        x5WebViewWithProgressBar?.destroy()
+        x5WebViewWithProgressBar = null
         super.onDestroyView()
     }
 
