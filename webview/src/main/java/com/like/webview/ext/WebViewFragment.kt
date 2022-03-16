@@ -46,7 +46,8 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
     private val x5WebViewWithProgressBar by lazy {
-        X5WebViewWithProgressBar(requireContext().applicationContext)
+        // 此处如果使用 applicationContext，会造成 index.html 中的 alert 弹不出来。
+        X5WebViewWithProgressBar(requireContext())
     }
 
     override fun onCreateView(
