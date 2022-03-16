@@ -17,9 +17,9 @@ import com.tencent.smtt.sdk.*
 /**
  * tencent 的[WebView]的设置
  */
-class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+open class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     WebView(context, attrs, defStyleAttr) {
-    var x5Listener: X5Listener? = null
+    open var x5Listener: X5Listener? = null
 
     init {
         // 支持获取手势焦点
