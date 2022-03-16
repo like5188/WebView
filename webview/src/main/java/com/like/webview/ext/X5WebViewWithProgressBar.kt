@@ -20,7 +20,7 @@ import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 
 /**
- * 添加了进度条[progressBar]
+ * 包含顶部进度条[ProgressBar]的[X5WebView]
  */
 class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     X5WebView(context, attrs, defStyleAttr) {

@@ -15,7 +15,7 @@ import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.*
 
 /**
- * tencent 的[WebView]的设置
+ * 设置好的[WebView]
  */
 open class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     WebView(context, attrs, defStyleAttr) {
