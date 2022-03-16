@@ -23,7 +23,7 @@ import com.tencent.smtt.sdk.WebView
 /**
  * 包含了[X5WebView]，进度条[progressBar]
  */
-class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithProgress(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
     var x5Listener: X5Listener? = null

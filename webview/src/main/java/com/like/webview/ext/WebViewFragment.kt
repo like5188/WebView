@@ -39,17 +39,17 @@ E/Logger: WebViewFragmentActivity onDestroy
  */
 
 /**
- * 包含了 [X5WebViewWithProgressBar] 的封装。
+ * 包含了 [X5WebViewWithProgress] 的封装。
  * url 只懒加载一次。
  */
 class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, WebView) -> WebViewFragmentConfig) : Fragment() {
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
-    private val x5WebViewWithProgressBar by lazy {
-        X5WebViewWithProgressBar(requireContext().applicationContext)
+    private val x5WebViewWithProgress by lazy {
+        X5WebViewWithProgress(requireContext().applicationContext)
     }
     private val x5WebView by lazy {
-        x5WebViewWithProgressBar.x5WebView
+        x5WebViewWithProgress.x5WebView
     }
 
     override fun onCreateView(
@@ -57,7 +57,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return x5WebViewWithProgressBar.apply {
+        return x5WebViewWithProgress.apply {
             getWebViewFragmentConfig(this@WebViewFragment, x5WebView).let {
                 this@WebViewFragment.url = it.url
 
@@ -143,7 +143,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         clearCookies()
         x5WebView.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        x5WebViewWithProgressBar.destroy()
+        x5WebViewWithProgress.destroy()
         super.onDestroyView()
     }
 
