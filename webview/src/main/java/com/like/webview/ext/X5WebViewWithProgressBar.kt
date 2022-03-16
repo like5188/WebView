@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.like.webview.core.X5Listener
+import com.like.webview.core.X5WebView
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
@@ -21,14 +22,14 @@ import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 
 /**
- * 包含了[X5WebViewWithErrorView]，进度条[progressBar]
+ * 包含了[X5WebView]，进度条[progressBar]
  */
-class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
     var x5Listener: X5Listener? = null
-    val x5WebViewWithErrorView: X5WebViewWithErrorView by lazy {
-        X5WebViewWithErrorView(context).also {
+    val x5WebView by lazy {
+        X5WebView(context).also {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             it.x5Listener = object : X5Listener {
                 override fun onShowFileChooser(
@@ -140,6 +141,6 @@ class X5WebViewWithErrorViewAndProgressBar(context: Context, attrs: AttributeSet
     fun destroy() {
         progressBar = null
         x5Listener = null
-        x5WebViewWithErrorView.destroy()
+        x5WebView.destroy()
     }
 }

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.like.webview.core.*
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
@@ -40,17 +39,17 @@ E/Logger: WebViewFragmentActivity onDestroy
  */
 
 /**
- * 包含了 [X5WebViewWithErrorViewAndProgressBar] 的封装。
+ * 包含了 [X5WebViewWithProgressBar] 的封装。
  * url 只懒加载一次。
  */
 class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, WebView) -> WebViewFragmentConfig) : Fragment() {
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
-    private val x5WebViewWithErrorViewAndProgressBar by lazy {
-        X5WebViewWithErrorViewAndProgressBar(requireContext().applicationContext)
+    private val x5WebViewWithProgressBar by lazy {
+        X5WebViewWithProgressBar(requireContext().applicationContext)
     }
     private val x5WebView by lazy {
-        x5WebViewWithErrorViewAndProgressBar.x5WebViewWithErrorView.x5WebView
+        x5WebViewWithProgressBar.x5WebView
     }
 
     override fun onCreateView(
@@ -58,7 +57,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return x5WebViewWithErrorViewAndProgressBar.apply {
+        return x5WebViewWithProgressBar.apply {
             getWebViewFragmentConfig(this@WebViewFragment, x5WebView).let {
                 this@WebViewFragment.url = it.url
 
@@ -116,11 +115,6 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                     }
                 }
 
-                x5WebViewWithErrorView.errorView = try {
-                    View.inflate(context, it.errorViewResId, null)
-                } catch (e: Exception) {
-                    null
-                }
                 x5WebView.addJavascriptInterfaces(it.javascriptInterfaceMap)
 
                 // 必须要在WebView的settings设置完之后调用，即必须在 x5WebViewWithErrorViewAndProgressBar 创建完成之后调用，否则无效。
@@ -149,7 +143,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
         clearCookies()
         x5WebView.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
-        x5WebViewWithErrorViewAndProgressBar.destroy()
+        x5WebViewWithProgressBar.destroy()
         super.onDestroyView()
     }
 
@@ -160,12 +154,6 @@ class WebViewFragmentConfig {
      * [url] 的加载时机是在第一次 [Fragment.onResume] 时。如果不传此参数，可以自行调用 [WebView.loadUrl] 方法。
      */
     var url: String? = null
-
-    /**
-     * 错误页面资源 id
-     */
-    @LayoutRes
-    var errorViewResId: Int = -1
 
     /**
      * 进度条高度，设置为 0 即隐藏进度条。
