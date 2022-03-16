@@ -76,7 +76,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
     }
 
     fun getCookies(view: View) {
-        addCookies(mapOf("cookieKey1" to arrayOf("3=3", "3=4")))
+        Logger.e(getCookie("cookieKey1"))
+        Logger.e(getCookie("cookieKey2"))
+        Logger.e(getCookie("192.168.0.188"))
+        addCookies(mapOf("cookieKey1" to arrayOf("1=1", "2=3", "4")))
         Logger.e(getCookie("cookieKey1"))
         Logger.e(getCookie("cookieKey2"))
         Logger.e(getCookie("192.168.0.188"))

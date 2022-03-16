@@ -66,14 +66,21 @@ fun WebView.addJavascriptInterfaces(map: Map<String, Any>) {
 /**
  * 添加 cookies
  * 注意：必须要在 WebView 的 settings 设置完之后调用才有效。
- * @param map   key：相同的 key 会追加；value：字符串数组，其中每个字符串的格式为 "key=value"，相同的key会覆盖；
+ * @param map
+ * key：相同的 key 会追加；
+ * value：字符串数组，其中每个字符串的格式为 "key=value"，相同的key会覆盖；
  */
 fun addCookies(map: Map<String, Array<String>>) {
     CookieManager.getInstance().apply {
         if (!acceptCookie()) {
             setAcceptCookie(true)
         }
-        setCookies(map)
+        // 注意：这里不能直接使用 com.tencent.smtt.sdk.CookieManager.setCookies 方法，因为经常会失败。要使用 setCookie 方法多次设置。
+        map.forEach { entry ->
+            entry.value.forEach { value ->
+                setCookie(entry.key, value)
+            }
+        }
     }
 }
 
