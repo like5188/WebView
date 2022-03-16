@@ -137,6 +137,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
     }
 
     override fun onDestroyView() {
+        url = null
         loaded.compareAndSet(true, false)
         clearCookies()
         x5WebViewWithProgressBar.clearLocalStorages()
