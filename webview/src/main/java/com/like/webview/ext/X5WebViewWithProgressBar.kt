@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.like.webview.core.X5Listener
@@ -25,7 +24,7 @@ import com.tencent.smtt.sdk.WebView
  * 包含了[X5WebView]，进度条[progressBar]
  */
 class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr) {
+    FrameLayout(context, attrs, defStyleAttr) {
     private var progressBar: ProgressBar? = null
     var x5Listener: X5Listener? = null
     val x5WebView by lazy {
@@ -89,7 +88,7 @@ class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, de
     }
 
     init {
-        orientation = VERTICAL
+        x5WebView
     }
 
     /**
@@ -129,8 +128,8 @@ class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, de
                 }
 
                 // 设置进度条高度
-                layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
-                addView(this, 0)
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, progressBarHeight.toInt())
+                addView(this)
             }
         }
     }

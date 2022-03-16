@@ -7,6 +7,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
+import com.like.common.util.dp
 import com.like.common.util.selectSinglePhoto
 import com.like.common.util.uploadPath
 import com.like.webview.core.*
@@ -37,8 +38,9 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     override fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig = WebViewFragmentConfig().apply {
         this@WebViewFragmentActivity.x5WebView = webView
-//        url = "file:///android_asset/index.html"
-        url = "http://192.168.0.188/my/userInfo"
+        url = "file:///android_asset/index.html"
+//        url = "http://192.168.0.188/my/userInfo"
+        progressBarHeight = 3f.dp
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(webView)
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
         cookieMap["cookieKey2"] = arrayOf("3=3", "4=4", "5=5")
