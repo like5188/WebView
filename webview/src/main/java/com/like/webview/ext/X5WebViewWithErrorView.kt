@@ -1,4 +1,4 @@
-package com.like.webview.core
+package com.like.webview.ext
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,7 +8,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import com.like.webview.listener.X5Listener
+import com.like.webview.core.X5Listener
+import com.like.webview.core.X5WebView
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback

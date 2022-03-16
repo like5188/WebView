@@ -1,4 +1,4 @@
-package com.like.webview.listener
+package com.like.webview.core
 
 import android.graphics.Bitmap
 import android.net.Uri

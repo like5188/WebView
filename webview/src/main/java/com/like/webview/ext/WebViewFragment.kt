@@ -1,4 +1,4 @@
-package com.like.webview.ui
+package com.like.webview.ext
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.like.webview.core.X5WebViewWithErrorViewAndProgressBar
-import com.like.webview.listener.X5Listener
-import com.like.webview.util.*
+import com.like.webview.core.*
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback

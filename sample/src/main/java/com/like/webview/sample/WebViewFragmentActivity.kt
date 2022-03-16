@@ -9,11 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import com.like.common.util.Logger
 import com.like.common.util.selectSinglePhoto
 import com.like.common.util.uploadPath
-import com.like.webview.listener.X5ListenerAdapter
+import com.like.webview.core.*
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
-import com.like.webview.ui.BaseWebViewActivity
-import com.like.webview.ui.WebViewFragmentConfig
-import com.like.webview.util.*
+import com.like.webview.ext.BaseWebViewActivity
+import com.like.webview.ext.WebViewFragmentConfig
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView

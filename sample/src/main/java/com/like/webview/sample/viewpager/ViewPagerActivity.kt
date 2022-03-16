@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentActivity
 import com.like.webview.sample.MyJavascriptInterface
 import com.like.webview.sample.R
 import com.like.webview.sample.databinding.ActivityViewPagerBinding
-import com.like.webview.ui.WebViewFragment
-import com.like.webview.ui.WebViewFragmentConfig
+import com.like.webview.ext.WebViewFragment
+import com.like.webview.ext.WebViewFragmentConfig
 
 class ViewPagerActivity : FragmentActivity() {
     private val mBinding by lazy {

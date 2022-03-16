@@ -1,4 +1,4 @@
-package com.like.webview.util
+package com.like.webview.core
 
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.WebView

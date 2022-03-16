@@ -1,7 +1,8 @@
-package com.like.webview.listener
+package com.like.webview.core
 
 import android.graphics.Bitmap
 import android.net.Uri
+import com.like.webview.core.X5Listener
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
