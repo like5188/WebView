@@ -46,7 +46,7 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
     private val loaded = AtomicBoolean(false)// 懒加载控制
     private var url: String? = null
     private val x5WebViewWithErrorViewAndProgressBar by lazy {
-        X5WebViewWithErrorViewAndProgressBar(requireContext())
+        X5WebViewWithErrorViewAndProgressBar(requireContext().applicationContext)
     }
     private val x5WebView by lazy {
         x5WebViewWithErrorViewAndProgressBar.x5WebViewWithErrorView.x5WebView

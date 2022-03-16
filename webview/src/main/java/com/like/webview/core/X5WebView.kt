@@ -1,6 +1,5 @@
 package com.like.webview.core
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -72,7 +71,7 @@ class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int
             }
         }
         webViewClient = X5WebViewClient(listener)
-        webChromeClient = X5WebChromeClient(context as Activity, listener)
+        webChromeClient = X5WebChromeClient(listener)
         with(settings) {
             // 支持JS
             javaScriptEnabled = true
