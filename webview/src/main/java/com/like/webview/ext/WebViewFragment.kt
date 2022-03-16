@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.like.webview.core.*
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
@@ -104,6 +105,14 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
                         webResourceError: WebResourceError
                     ) {
                         it.x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
+                    }
+
+                    override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+                        it.x5Listener?.onShowCustomView(view, callback)
+                    }
+
+                    override fun onHideCustomView() {
+                        it.x5Listener?.onHideCustomView()
                     }
                 }
 

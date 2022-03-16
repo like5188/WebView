@@ -2,7 +2,8 @@ package com.like.webview.core
 
 import android.graphics.Bitmap
 import android.net.Uri
-import com.like.webview.core.X5Listener
+import android.view.View
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.ValueCallback
@@ -34,5 +35,11 @@ open class X5ListenerAdapter : X5Listener {
     }
 
     override fun onReceivedError(webView: WebView?, webResourceRequest: WebResourceRequest, webResourceError: WebResourceError) {
+    }
+
+    override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+    }
+
+    override fun onHideCustomView() {
     }
 }

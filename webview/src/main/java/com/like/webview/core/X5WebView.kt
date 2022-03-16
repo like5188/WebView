@@ -6,8 +6,10 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.ViewGroup
 import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import com.tencent.smtt.sdk.*
@@ -68,6 +70,14 @@ class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int
 
             override fun onReceivedError(webView: WebView?, webResourceRequest: WebResourceRequest, webResourceError: WebResourceError) {
                 x5Listener?.onReceivedError(webView, webResourceRequest, webResourceError)
+            }
+
+            override fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?) {
+                x5Listener?.onShowCustomView(view, callback)
+            }
+
+            override fun onHideCustomView() {
+                x5Listener?.onHideCustomView()
             }
         }
         webViewClient = X5WebViewClient(listener)
