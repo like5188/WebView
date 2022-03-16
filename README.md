@@ -39,10 +39,8 @@
 
 3、在xml布局文件中使用
     
-    com.like.webview.X5WebView。
+    com.like.webview.core.X5WebView。
 
-    com.like.webview.X5WebViewWithErrorView。带错误视图不带进度条。
+    com.like.webview.ext.X5WebViewWithProgressBar。带进度条。
 
-    com.like.webview.X5WebViewWithErrorViewAndProgressBar。带错误视图带进度条。
-
-4、也可以直接使用：WebViewFragment、SimpleWebViewActivity。也可以继承 BaseWebViewActivity 封装自己的逻辑。（它们都是对 com.like.webview.X5WebViewWithErrorViewAndProgressBar 的封装）
+4、也可以直接使用：WebViewFragment、SimpleWebViewActivity。也可以继承 BaseWebViewActivity 封装自己的逻辑。
