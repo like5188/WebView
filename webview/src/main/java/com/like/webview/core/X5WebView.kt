@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import com.tencent.smtt.export.external.TbsCoreSettings
@@ -31,14 +30,6 @@ open class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr
                 TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE to true
             )
         )
-        // 此处必须用getView()，因为TBS对WebView进行了封装
-        view?.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack()) {
-                goBack()
-                return@setOnKeyListener true
-            }
-            return@setOnKeyListener false
-        }
         val listener = object : X5Listener {
             override fun onShowFileChooser(
                 webView: WebView?,
