@@ -18,7 +18,11 @@ internal class X5WebViewClient(private val mListener: X5Listener?) : WebViewClie
     }
 
     override fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?) {
-        if (mListener?.onReceivedSslError(webView, handler, error) != true) {
+        if (mListener?.onReceivedSslError(webView, handler, error) == true) {
+            // 不要调用super.onReceivedSslError，因为其包含了一条 handler.cancel()，第一次访问时无法加载，第二次以后可以加载
+            // 忽略SSL证书错误，继续加载页面
+            handler?.proceed()
+        } else {
             super.onReceivedSslError(webView, handler, error)
         }
         Log.v(TAG, "onReceivedSslError url=${error?.url}")

@@ -21,7 +21,9 @@ interface X5Listener {
     fun onHideCustomView()
 
     /**
-     * @return true:不调用super.onReceivedSslError，用于测试抓包。
+     * @return
+     * true:不调用super.onReceivedSslError，只调用handler?.proceed()，用于测试抓包。
+     * false:调用super.onReceivedSslError。
      */
     fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean?
 }

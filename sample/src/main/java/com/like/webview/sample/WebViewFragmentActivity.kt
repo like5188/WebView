@@ -14,6 +14,8 @@ import com.like.webview.core.*
 import com.like.webview.sample.databinding.ActivityWebviewFragmentBinding
 import com.like.webview.ext.BaseWebViewActivity
 import com.like.webview.ext.WebViewFragmentConfig
+import com.tencent.smtt.export.external.interfaces.SslError
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -38,8 +40,8 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
 
     override fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig = WebViewFragmentConfig().apply {
         this@WebViewFragmentActivity.x5WebView = webView
-        url = "file:///android_asset/index.html"
-//        url = "http://192.168.0.188/my/userInfo"
+//        url = "file:///android_asset/index.html"
+        url = "http://kcwc.m.cacf.cn/static-kcwc2/my/userInfo"
         progressBarHeight = 3f.dp
         javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(webView)
         cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
@@ -72,6 +74,10 @@ class WebViewFragmentActivity : BaseWebViewActivity() {
                         callback?.onReceiveValue(arrayOf(Uri.fromFile(File(uploadPath))))
                     }
                 }
+                return true
+            }
+
+            override fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean? {
                 return true
             }
         }
