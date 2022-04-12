@@ -22,8 +22,8 @@ interface X5Listener {
 
     /**
      * @return
-     * true:不调用super.onReceivedSslError，只调用handler?.proceed()，用于测试抓包。
-     * false:调用super.onReceivedSslError。
+     * true:忽略错误，不调用super.onReceivedSslError，只调用handler?.proceed()来继续加载页面，用于测试抓包。
+     * false:调用super.onReceivedSslError进行错误处理。
      */
     fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean?
 }
