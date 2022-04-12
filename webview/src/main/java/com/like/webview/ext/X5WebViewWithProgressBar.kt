@@ -12,9 +12,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.like.webview.core.X5Listener
 import com.like.webview.core.X5WebView
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
-import com.tencent.smtt.export.external.interfaces.WebResourceError
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
@@ -78,6 +76,10 @@ class X5WebViewWithProgressBar(context: Context, attrs: AttributeSet? = null, de
 
                 override fun onHideCustomView() {
                     value?.onHideCustomView()
+                }
+
+                override fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean? {
+                    return value?.onReceivedSslError(webView, handler, error)
                 }
             }
         }

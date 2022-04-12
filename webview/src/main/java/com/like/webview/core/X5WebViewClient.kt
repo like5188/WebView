@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import com.tencent.smtt.export.external.interfaces.SslError
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler
 
 import com.tencent.smtt.export.external.interfaces.WebResourceError
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest
@@ -13,6 +15,13 @@ import com.tencent.smtt.sdk.WebViewClient
 internal class X5WebViewClient(private val mListener: X5Listener?) : WebViewClient() {
     companion object {
         private val TAG = X5WebViewClient::class.java.simpleName
+    }
+
+    override fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?) {
+        if (mListener?.onReceivedSslError(webView, handler, error) != true) {
+            super.onReceivedSslError(webView, handler, error)
+        }
+        Log.v(TAG, "onReceivedSslError url=${error?.url}")
     }
 
     //页面开始加载时

@@ -3,9 +3,7 @@ package com.like.webview.core
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
-import com.tencent.smtt.export.external.interfaces.WebResourceError
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
 
@@ -21,4 +19,9 @@ interface X5Listener {
     fun onShowFileChooser(webView: WebView?, callback: ValueCallback<Array<Uri>>?, params: WebChromeClient.FileChooserParams?): Boolean
     fun onShowCustomView(view: View?, callback: IX5WebChromeClient.CustomViewCallback?)
     fun onHideCustomView()
+
+    /**
+     * @return true:不调用super.onReceivedSslError，用于测试抓包。
+     */
+    fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean?
 }

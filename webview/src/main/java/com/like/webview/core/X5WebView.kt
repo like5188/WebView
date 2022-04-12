@@ -8,9 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.tencent.smtt.export.external.TbsCoreSettings
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
-import com.tencent.smtt.export.external.interfaces.WebResourceError
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.*
 
 /**
@@ -69,6 +67,10 @@ open class X5WebView(context: Context, attrs: AttributeSet? = null, defStyleAttr
 
             override fun onHideCustomView() {
                 x5Listener?.onHideCustomView()
+            }
+
+            override fun onReceivedSslError(webView: WebView?, handler: SslErrorHandler?, error: SslError?): Boolean? {
+                return x5Listener?.onReceivedSslError(webView, handler, error)
             }
         }
         webViewClient = X5WebViewClient(listener)
