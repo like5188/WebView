@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.like.webview.core.*
+import com.like.webview.core.X5Listener
+import com.like.webview.core.addCookies
+import com.like.webview.core.addJavascriptInterfaces
+import com.like.webview.core.addLocalStorages
 import com.tencent.smtt.export.external.interfaces.*
 import com.tencent.smtt.sdk.ValueCallback
 import com.tencent.smtt.sdk.WebChromeClient
@@ -145,8 +148,6 @@ class WebViewFragment(private val getWebViewFragmentConfig: (WebViewFragment, We
     override fun onDestroyView() {
         url = null
         loaded.compareAndSet(true, false)
-        clearCookies()
-        x5WebViewWithProgressBar?.clearLocalStorages()
         // 避免造成Fragment内存泄漏：http://42.193.188.64/articles/2021/08/09/1628511669976.html
         x5WebViewWithProgressBar?.destroy()
         x5WebViewWithProgressBar = null
