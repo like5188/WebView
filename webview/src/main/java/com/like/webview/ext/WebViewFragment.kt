@@ -18,63 +18,72 @@ import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebView
 import java.util.concurrent.atomic.AtomicBoolean
 
+
 /*
 生命周期：
 // 打开包含Fragment的Activity
-V/FragmentContainer: onCreate
-V/FragmentContainer: onStart
-V/FragmentContainer: onResume
+E/FragmentContainer: onCreate
+E/FragmentContainer: onStart
+E/FragmentContainer: onResume
 W/Fragment1: onAttach
 W/Fragment1: onCreate
 W/Fragment1: onCreateView
 W/Fragment1: onViewCreated
 W/Fragment1: onActivityCreated
+W/Fragment1: onViewStateRestored
 W/Fragment1: onStart
-E/Fragment1: onResume
-I/Fragment1: onLazyLoadData
+W/Fragment1: onLazyLoadData
+W/Fragment1: onResume
+
 // 转到后台运行
-I/Fragment1: onPause
-V/FragmentContainer: onPause
-I/Fragment1: onStop
-V/FragmentContainer: onStop
-V/FragmentContainer: onSaveInstanceState
+W/Fragment1: onPause
+E/FragmentContainer: onPause
+W/Fragment1: onStop
+E/FragmentContainer: onStop
+W/Fragment1: onSaveInstanceState
+E/FragmentContainer: onSaveInstanceState
+
 // 转到前台运行
-V/FragmentContainer: onRestart
+E/FragmentContainer: onRestart
 W/Fragment1: onStart
-V/FragmentContainer: onStart
-V/FragmentContainer: onResume
-E/Fragment1: onResume
+E/FragmentContainer: onStart
+E/FragmentContainer: onResume
+W/Fragment1: onResume
+
 // 关闭Activity
-I/Fragment1: onPause
-V/FragmentContainer: onPause
-I/Fragment1: onStop
-V/FragmentContainer: onStop
-I/Fragment1: onDestroyView
-I/Fragment1: onDestroy
-I/Fragment1: onDetach
-V/FragmentContainer: onDestroy
+W/Fragment1: onPause
+E/FragmentContainer: onPause
+W/Fragment1: onStop
+E/FragmentContainer: onStop
+W/Fragment1: onDestroyView
+W/Fragment1: onDestroy
+W/Fragment1: onDetach
+E/FragmentContainer: onDestroy
+
 // 旋转屏幕
-I/Fragment1: onPause
-V/FragmentContainer: onPause
-I/Fragment1: onStop
-V/FragmentContainer: onStop
-V/FragmentContainer: onSaveInstanceState
-I/Fragment1: onDestroyView
-I/Fragment1: onDestroy
-I/Fragment1: onDetach
-V/FragmentContainer: onDestroy
+W/Fragment1: onPause
+E/FragmentContainer: onPause
+W/Fragment1: onStop
+E/FragmentContainer: onStop
+W/Fragment1: onSaveInstanceState
+E/FragmentContainer: onSaveInstanceState
+W/Fragment1: onDestroyView
+W/Fragment1: onDestroy
+W/Fragment1: onDetach
+E/FragmentContainer: onDestroy
 W/Fragment1: onAttach
 W/Fragment1: onCreate
-V/FragmentContainer: onCreate
+E/FragmentContainer: onCreate
 W/Fragment1: onCreateView
 W/Fragment1: onViewCreated
 W/Fragment1: onActivityCreated
+W/Fragment1: onViewStateRestored
 W/Fragment1: onStart
-V/FragmentContainer: onStart
-V/FragmentContainer: onRestoreInstanceState
-V/FragmentContainer: onResume
-E/Fragment1: onResume
-I/Fragment1: onLazyLoadData
+E/FragmentContainer: onStart
+E/FragmentContainer: onRestoreInstanceState
+E/FragmentContainer: onResume
+W/Fragment1: onLazyLoadData
+W/Fragment1: onResume
  */
 
 /**
