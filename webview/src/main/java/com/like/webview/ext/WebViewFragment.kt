@@ -20,24 +20,61 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /*
 生命周期：
-E/Logger: WebViewFragmentActivity onCreate
-W/Logger: WebViewFragment onAttach
-W/Logger: WebViewFragment onCreate
-W/Logger: WebViewFragment onCreateView
-W/Logger: WebViewFragment onViewCreated
-W/Logger: WebViewFragment onStart
-E/Logger: WebViewFragmentActivity onStart
-E/Logger: WebViewFragmentActivity onResume
-W/Logger: WebViewFragment onResume
-
-W/Logger: WebViewFragment onPause
-E/Logger: WebViewFragmentActivity onPause
-W/Logger: WebViewFragment onStop
-E/Logger: WebViewFragmentActivity onStop
-W/Logger: WebViewFragment onDestroyView
-W/Logger: WebViewFragment onDestroy
-W/Logger: WebViewFragment onDetach
-E/Logger: WebViewFragmentActivity onDestroy
+// 打开包含Fragment的Activity
+V/FragmentContainer: onCreate
+V/FragmentContainer: onStart
+V/FragmentContainer: onResume
+W/Fragment1: onAttach
+W/Fragment1: onCreate
+W/Fragment1: onCreateView
+W/Fragment1: onViewCreated
+W/Fragment1: onActivityCreated
+W/Fragment1: onStart
+E/Fragment1: onResume
+I/Fragment1: onLazyLoadData
+// 转到后台运行
+I/Fragment1: onPause
+V/FragmentContainer: onPause
+I/Fragment1: onStop
+V/FragmentContainer: onStop
+V/FragmentContainer: onSaveInstanceState
+// 转到前台运行
+V/FragmentContainer: onRestart
+W/Fragment1: onStart
+V/FragmentContainer: onStart
+V/FragmentContainer: onResume
+E/Fragment1: onResume
+// 关闭Activity
+I/Fragment1: onPause
+V/FragmentContainer: onPause
+I/Fragment1: onStop
+V/FragmentContainer: onStop
+I/Fragment1: onDestroyView
+I/Fragment1: onDestroy
+I/Fragment1: onDetach
+V/FragmentContainer: onDestroy
+// 旋转屏幕
+I/Fragment1: onPause
+V/FragmentContainer: onPause
+I/Fragment1: onStop
+V/FragmentContainer: onStop
+V/FragmentContainer: onSaveInstanceState
+I/Fragment1: onDestroyView
+I/Fragment1: onDestroy
+I/Fragment1: onDetach
+V/FragmentContainer: onDestroy
+W/Fragment1: onAttach
+W/Fragment1: onCreate
+V/FragmentContainer: onCreate
+W/Fragment1: onCreateView
+W/Fragment1: onViewCreated
+W/Fragment1: onActivityCreated
+W/Fragment1: onStart
+V/FragmentContainer: onStart
+V/FragmentContainer: onRestoreInstanceState
+V/FragmentContainer: onResume
+E/Fragment1: onResume
+I/Fragment1: onLazyLoadData
  */
 
 /**
