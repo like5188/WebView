@@ -4,16 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.os.Bundle
 import android.util.TypedValue
-import androidx.databinding.DataBindingUtil
 import com.like.webview.R
-import com.like.webview.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.WebView
 
 /**
  * 用于简单显示网页，而不进行交互。
- * 如果需要交互，请继承[BaseWebViewActivity]或者直接使用 [WebViewFragment]。
+ * 如果需要交互，请继承[BaseWebViewActivity]或者[BaseWebViewFragment]。
  */
 class SimpleWebViewActivity : BaseWebViewActivity() {
     companion object {
@@ -46,23 +43,7 @@ class SimpleWebViewActivity : BaseWebViewActivity() {
         }
     }
 
-    private val mBinding by lazy {
-        DataBindingUtil.setContentView<ActivityWebviewBinding>(
-            this,
-            R.layout.activity_webview
-        )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mBinding
-    }
-
-    override fun getFragmentHolderResId(): Int {
-        return R.id.fragment_holder
-    }
-
-    override fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig = WebViewFragmentConfig().apply {
+    override fun getWebViewConfig(webView: WebView): WebViewConfig = WebViewConfig().apply {
         url = intent.getStringExtra(KEY_URL)
         progressBarHeight = intent.getFloatExtra(KEY_PROGRESS_BAR_HEIGHT, 0f)
         progressBarBgColorResId = intent.getIntExtra(KEY_PROGRESS_BAR_BG_COLOR_RES_ID, -1)

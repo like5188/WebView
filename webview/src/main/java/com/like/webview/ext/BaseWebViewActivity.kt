@@ -2,33 +2,46 @@ package com.like.webview.ext
 
 import android.graphics.PixelFormat
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import com.like.webview.R
+import com.like.webview.databinding.ActivityWebviewBinding
 import com.tencent.smtt.sdk.WebView
 
-/**
- * 对 [WebViewFragment] 的封装
- */
 abstract class BaseWebViewActivity : FragmentActivity() {
-    private val webViewFragment: WebViewFragment by lazy {
-        WebViewFragment { webViewFragment, webView ->
-            getWebViewFragmentConfig(webView)
-        }
+    private val mBinding: ActivityWebviewBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.activity_webview)
+    }
+    private val webViewHelper: WebViewHelper by lazy {
+        WebViewHelper()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 网页中的视频，上屏幕的时候，可能出现闪烁的情况，需要如下设置：Activity在onCreate时需要设置:
         window.setFormat(PixelFormat.TRANSLUCENT)
-        supportFragmentManager.beginTransaction().apply {
-            add(getFragmentHolderResId(), webViewFragment)
-        }.commit()
+        webViewHelper.onCreate(this) {
+            getWebViewConfig(it)
+        }
+        mBinding.fl.removeAllViews()
+        mBinding.fl.addView(webViewHelper.x5WebViewWithProgressBar)
     }
 
-    /**
-     * [webViewFragment]的容器资源 id
-     */
-    abstract fun getFragmentHolderResId(): Int
+    override fun onPause() {
+        super.onPause()
+        webViewHelper.onPause()
+    }
 
-    abstract fun getWebViewFragmentConfig(webView: WebView): WebViewFragmentConfig
+    override fun onResume() {
+        super.onResume()
+        webViewHelper.onResume()
+    }
+
+    override fun onDestroy() {
+        webViewHelper.onDestroy()
+        super.onDestroy()
+    }
+
+    abstract fun getWebViewConfig(webView: WebView): WebViewConfig
 
 }

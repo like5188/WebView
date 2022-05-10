@@ -34,13 +34,13 @@
 2、在Application中初始化
 
 ```java
-    QbSdk.initX5Environment(this,null)
+    QbSdk.initX5Environment(this, null)
 ```
 
 3、在xml布局文件中使用
     
     com.like.webview.core.X5WebView。
 
-    com.like.webview.ext.X5WebViewWithProgressBar。带进度条。
+    com.like.webview.ext.X5WebViewWithProgressBar。带顶部条形进度条。
 
-4、也可以直接使用：WebViewFragment、SimpleWebViewActivity。也可以继承 BaseWebViewActivity 封装自己的逻辑。
+4、也可以直接使用：SimpleWebViewActivity 直接显示 url。或者继承 BaseWebViewActivity、BaseWebViewFragment 封装自己的逻辑。

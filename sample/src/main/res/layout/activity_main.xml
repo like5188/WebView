@@ -8,21 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="simpleWebViewActivity"
-        android:text="简单WebViewActivity测试"
+        android:text="SimpleWebViewActivity测试"
         android:textAllCaps="false" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="webViewActivity"
-        android:text="需要交互的WebViewActivity测试"
+        android:onClick="baseWebViewFragment"
+        android:text="BaseWebViewFragment测试"
         android:textAllCaps="false" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="viewPager"
-        android:text="viewPager测试"
+        android:onClick="baseWebViewActivity"
+        android:text="BaseWebViewActivity测试"
         android:textAllCaps="false" />
 
 </LinearLayout>

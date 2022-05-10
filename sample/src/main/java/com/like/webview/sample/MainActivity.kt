@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.like.webview.sample.viewpager.ViewPagerActivity
 import com.like.webview.ext.SimpleWebViewActivity
+import com.like.webview.sample.viewpager.ViewPagerActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,15 +15,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun simpleWebViewActivity(view: View) {
-        SimpleWebViewActivity.start(this, "https://v.qq.com/x/page/c0041x3xse6.html")
+        SimpleWebViewActivity.start(this, "https://cn.bing.com/")
     }
 
-    fun webViewActivity(view: View) {
-        startActivity(Intent(this, WebViewFragmentActivity::class.java))
-    }
-
-    fun viewPager(view: View) {
+    fun baseWebViewFragment(view: View) {
         startActivity(Intent(this, ViewPagerActivity::class.java))
+    }
+
+    fun baseWebViewActivity(view: View) {
+        startActivity(Intent(this, WebViewActivity::class.java))
     }
 
 }
