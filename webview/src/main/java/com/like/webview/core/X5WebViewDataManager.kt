@@ -13,17 +13,13 @@ import kotlin.coroutines.suspendCoroutine
  * @param methodName        js 方法的名字
  * @param params            js 方法的参数
  */
-suspend fun WebView.callJsMethod(methodName: String, params: String? = null): String? = withContext(Dispatchers.Main) {
+suspend fun WebView.callJsMethod(methodName: String, params: Any? = null): String? = withContext(Dispatchers.Main) {
     suspendCoroutine { continuation ->
         if (methodName.isEmpty()) {
             continuation.resume(null)
             return@suspendCoroutine
         }
-        val js = if (params.isNullOrEmpty()) {
-            "javascript:$methodName()"
-        } else {
-            "javascript:$methodName('$params')"
-        }
+        val js = "javascript:$methodName($params)"
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
         // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
         // b)Android 4.4 后才可使用
@@ -39,7 +35,7 @@ suspend fun WebView.callJsMethod(methodName: String, params: String? = null): St
  */
 fun WebView.addLocalStorages(map: Map<String, String>) {
     map.forEach {
-        evaluateJavascript("window.localStorage.setItem('${it.key}','${it.value}');", null)
+        evaluateJavascript("window.localStorage.setItem('${it.key}',${it.value});", null)
     }
 }
 

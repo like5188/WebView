@@ -5,7 +5,7 @@
     <title>webView test</title>
     <script>
 	   function jsMethodNameWithParams(str){
-		    alert("Android 调用了 JS 的 jsMethodNameWithParams 方法，传递的参数：" + str);
+		    alert("Android 调用了 JS 的 jsMethodNameWithParams 方法，传递的参数：" + JSON.stringify(str));
 		    return "3"
 	   }
 

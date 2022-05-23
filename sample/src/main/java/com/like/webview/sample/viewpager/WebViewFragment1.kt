@@ -51,7 +51,7 @@ class WebViewFragment1 : BaseWebViewFragment() {
             lifecycleScope.launch {
                 val result = x5WebView.callJsMethod(
                     "jsMethodNameWithParams",
-                    params.toString()
+                    params
                 )
                 Logger.d("callJSMethodWithParams 返回值：$result")
             }
@@ -87,8 +87,8 @@ class WebViewFragment1 : BaseWebViewFragment() {
     override fun getWebViewConfig(webView: WebView): WebViewConfig {
         return WebViewConfig().apply {
             this@WebViewFragment1.x5WebView = webView
-//        url = "file:///android_asset/index.html"
-            url = "http://kcwc.m.cacf.cn/static-kcwc2/my/userInfo"
+            url = "file:///android_asset/index.html"
+//            url = "http://kcwc.m.cacf.cn/static-kcwc2/my/userInfo"
             progressBarHeight = 3f.dp
             javascriptInterfaceMap["appKcwc"] = MyJavascriptInterface(webView)
             cookieMap["cookieKey1"] = arrayOf("1=1", "2=2")
