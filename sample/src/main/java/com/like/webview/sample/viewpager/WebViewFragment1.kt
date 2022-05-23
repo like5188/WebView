@@ -71,7 +71,7 @@ class WebViewFragment1 : BaseWebViewFragment() {
             Logger.e(getCookie("192.168.0.188"))
         }
         mBinding.btnGetLocalStorages.setOnClickListener {
-            x5WebView.addLocalStorages(mapOf("localStorageKey1" to "3"))
+            x5WebView.addLocalStorages(mapOf("localStorageKey1" to null))
             lifecycleScope.launch {
                 Logger.e(x5WebView.getLocalStorage("localStorageKey1"))
                 Logger.e(x5WebView.getLocalStorage("localStorageKey2"))

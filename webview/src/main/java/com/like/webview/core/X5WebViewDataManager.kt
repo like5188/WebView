@@ -33,7 +33,7 @@ suspend fun WebView.callJsMethod(methodName: String, params: Any? = null): Strin
  * 往浏览器的 localStorage 中写入数据。
  * @param map   key：相同的 key 会覆盖；
  */
-fun WebView.addLocalStorages(map: Map<String, String>) {
+fun WebView.addLocalStorages(map: Map<String, Any?>) {
     map.forEach {
         evaluateJavascript("window.localStorage.setItem('${it.key}',${it.value});", null)
     }
