@@ -19,6 +19,7 @@ suspend fun WebView.callJsMethod(methodName: String, params: Any? = null): Strin
             continuation.resume(null)
             return@suspendCoroutine
         }
+        // 这里会先判断是否存在此方法，避免H5端由于没有注入方法而报错。
         val js = "javascript:if (window.$methodName) $methodName($params)"
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
         // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
