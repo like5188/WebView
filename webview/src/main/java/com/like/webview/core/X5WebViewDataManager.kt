@@ -19,7 +19,7 @@ suspend fun WebView.callJsMethod(methodName: String, params: Any? = null): Strin
             continuation.resume(null)
             return@suspendCoroutine
         }
-        val js = "javascript:$methodName($params)"
+        val js = "javascript:if (window.$methodName) $methodName($params)"
 //        webView.post { webView.loadUrl(jsString) }// Ui线程
         // a)比第一种方法效率更高、使用更简洁，因为该方法的执行不会使页面刷新，而第一种方法（loadUrl ）的执行则会。
         // b)Android 4.4 后才可使用
