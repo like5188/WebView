@@ -79,12 +79,13 @@ internal class X5WebViewClient(private val mListener: X5Listener?) : WebViewClie
         // 这时便可以实现在app内访问网页。
 
         // 如下方案可在非微信内部WebView的H5页面中调出微信支付
-        if (url != null && url.startsWith("weixin://wap/pay?")) {
-            val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
-            intent.data = Uri.parse(url)
-            webView?.context?.startActivity(intent)
-            return true
+        if (url != null) {
+            if (url.startsWith("weixin://wap/pay?") ||
+                url.startsWith("tel:")// 网页中打电话
+            ) {
+                webView?.context?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                return true
+            }
         }
 
         webView?.loadUrl(url)
